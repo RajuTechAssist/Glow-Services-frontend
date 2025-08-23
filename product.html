@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/themify-icons.css">
+  <link rel="stylesheet" href="css/owl.carousel.min.css">
+  <link rel="stylesheet" href="css/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <title>Products — Glow Services</title>
+  <link rel="icon" type="image/x-icon" href="images/favicon.png">
+
+  <style>
+    /* New clean, airy product layout — different from previous mega-menu look */
+    :root{
+      --accent:#f57b74; /* coral */
+      --muted:#9e9e9e;
+      --card-bg:#ffffff;
+      --surface:#fbfbfb;
+      --radius:14px;
+    }
+
+    body{background:var(--surface);} 
+
+    .products-header{
+      text-align:center;
+      padding:60px 20px 30px;
+    }
+    .products-header h1{font-size:44px; margin-bottom:6px; color:#4a4a4a;}
+    .products-header p{color:var(--muted); margin-bottom:0}
+
+    .products-wrap{display:flex; gap:30px; padding:40px 20px 80px; max-width:1200px; margin:0 auto;}
+
+    /* Sidebar filters */
+    .sidebar{
+      width:300px; background:linear-gradient(180deg,#fff, #fff); border-radius:var(--radius); padding:20px; box-shadow:0 6px 20px rgba(0,0,0,.05); position:sticky; top:24px; height:max-content;
+    }
+    .sidebar h4{margin:0 0 10px; color:#333}
+    .filter-group{margin-bottom:18px}
+    .filter-group label{display:block; font-size:14px; color:var(--muted); margin-bottom:8px}
+    .filter-group input[type=checkbox]{margin-right:8px}
+
+    /* subcategory list using details */
+    details{ margin-bottom:10px; }
+    details summary{ cursor:pointer; font-weight:600; color:#444; list-style:none; }
+    details[open] summary{ color:var(--accent); }
+    details .sub-list{ margin-top:10px; padding-left:10px }
+    details .sub-list label{ display:block; margin-bottom:6px; color:#666 }
+
+    /* Products grid (right column) */
+    .products-grid{flex:1}
+    .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+
+    .card-product{
+      background:var(--card-bg);
+      border-radius:12px;
+      padding:0;
+      overflow:hidden;
+      box-shadow:0 8px 28px rgba(0,0,0,.06);
+      transition:transform .18s ease, box-shadow .18s ease;
+      display:flex; flex-direction:column; height:100%;
+    }
+    .card-product:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,.08); }
+
+    .media{
+      position:relative; height:220px; overflow:hidden; display:block;
+    }
+    .media img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    /* small circular play button top-right */
+    .play-btn{
+      position:absolute; right:12px; top:12px; background:rgba(255,255,255,.92); width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 20px rgba(0,0,0,.08);
+    }
+    .play-btn i{ color:var(--accent); font-size:18px }
+
+    .card-body{ padding:18px 20px 20px; flex:1; display:flex; flex-direction:column; }
+    .title{ font-weight:600; color:#333; margin-bottom:8px; }
+    .desc{ color:var(--muted); font-size:14px; margin-bottom:14px; }
+    .price{ color:var(--accent); font-weight:700; margin-bottom:12px }
+
+    .card-actions{ display:flex; gap:10px; align-items:center; margin-top:auto }
+    .btn-primary-custom{ background:var(--accent); color:#fff; padding:10px 14px; border-radius:10px; border:none; font-weight:700; }
+    .btn-ghost{ background:transparent; border:1px solid #eee; padding:8px 12px; border-radius:10px; color:#666 }
+
+    /* responsive */
+    @media (max-width:1100px){ .grid{ grid-template-columns:repeat(2,1fr);} .sidebar{display:none} .products-wrap{padding:20px} }
+    @media (max-width:640px){ .grid{ grid-template-columns:1fr;} .products-header h1{ font-size:30px } }
+
+  </style>
+</head>
+
+<body class="home-one">
+
+  <!-- Header -->
+  <header class="header abs-header">
+    <div class="container">
+      <div class="row align-items-end">
+        <div class="col-md-3">
+          <a href="index.html" class="logo"><img src="images/logo.png" alt=""></a>
+        </div>
+        <div class="col-md-9">
+          <nav class="primary-menu">
+            <a href="javascript:void(0);" class="mobile-menu"><i class="ti-menu"></i></a>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="services.html">service</a></li>
+              <li class="active"><a href="product.html">Product</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- New header -->
+  <section class="products-header">
+    <h1>Discover our curated beauty picks</h1>
+    <p>Less clutter, cleaner cards. Watch short "how-to" clips from each product image — or open full details.</p>
+  </section>
+
+  <div class="products-wrap">
+
+    <!-- Sidebar filters + categories with sub-categories -->
+    <aside class="sidebar" aria-label="Filters">
+      <h4>Categories</h4>
+
+      <!-- Main categories (checkboxes allow quick filter) -->
+      <div class="filter-group">
+        <label><input type="checkbox" value="hair" class="filter"> Hair</label>
+        <label><input type="checkbox" value="skin" class="filter"> Skin</label>
+        <label><input type="checkbox" value="makeup" class="filter"> Makeup</label>
+        <label><input type="checkbox" value="nails" class="filter"> Nails</label>
+        <label><input type="checkbox" value="hairremoval" class="filter"> Hair Removal</label>
+        <label><input type="checkbox" value="appliances" class="filter"> Appliances</label>
+      </div>
+
+      <!-- Sub-categories (collapsible) -->
+      <details>
+        <summary>Hair — sub-categories</summary>
+        <div class="sub-list">
+          <label><input type="checkbox" value="shampoo" class="filter-sub"> Shampoo</label>
+          <label><input type="checkbox" value="conditioner" class="filter-sub"> Conditioner</label>
+          <label><input type="checkbox" value="hair-oil" class="filter-sub"> Hair Oil & Serum</label>
+          <label><input type="checkbox" value="hair-masks" class="filter-sub"> Hair Masks</label>
+          <label><input type="checkbox" value="hair-treatment" class="filter-sub"> Hair Treatments</label>
+          <label><input type="checkbox" value="hair-dryers" class="filter-sub"> Hair Dryers</label>
+          <label><input type="checkbox" value="straighteners" class="filter-sub"> Straighteners</label>
+          <label><input type="checkbox" value="curling-irons" class="filter-sub"> Curling Irons</label>
+          <label><input type="checkbox" value="hair-fall" class="filter-sub"> Hair Fall & Thinning</label>
+          <label><input type="checkbox" value="dandruff" class="filter-sub"> Dandruff</label>
+        </div>
+      </details>
+
+      <details>
+        <summary>Skin — sub-categories</summary>
+        <div class="sub-list">
+          <label><input type="checkbox" value="cleansers" class="filter-sub"> Cleansers</label>
+          <label><input type="checkbox" value="scrubs" class="filter-sub"> Scrubs & Exfoliators</label>
+          <label><input type="checkbox" value="makeup-remover" class="filter-sub"> Makeup Remover</label>
+          <label><input type="checkbox" value="moisturizers" class="filter-sub"> Moisturizers</label>
+          <label><input type="checkbox" value="serums" class="filter-sub"> Serums & Essence</label>
+          <label><input type="checkbox" value="sun-care" class="filter-sub"> Sun Care</label>
+          <label><input type="checkbox" value="skin-brightening" class="filter-sub"> Skin Brightening</label>
+          <label><input type="checkbox" value="acne" class="filter-sub"> Acne Treatment</label>
+        </div>
+      </details>
+
+      <details>
+        <summary>Makeup — sub-categories</summary>
+        <div class="sub-list">
+          <label><input type="checkbox" value="foundations" class="filter-sub"> Foundations</label>
+          <label><input type="checkbox" value="concealers" class="filter-sub"> Concealers</label>
+          <label><input type="checkbox" value="mascaras" class="filter-sub"> Mascaras</label>
+          <label><input type="checkbox" value="eyepalettes" class="filter-sub"> Eye Palettes</label>
+          <label><input type="checkbox" value="lipstick" class="filter-sub"> Lipsticks</label>
+        </div>
+      </details>
+
+      <details>
+        <summary>Nails — sub-categories</summary>
+        <div class="sub-list">
+          <label><input type="checkbox" value="nail-polish" class="filter-sub"> Nail Polish</label>
+          <label><input type="checkbox" value="nail-remover" class="filter-sub"> Nail Polish Remover</label>
+          <label><input type="checkbox" value="gel-extensions" class="filter-sub"> Gel Extensions</label>
+        </div>
+      </details>
+
+      <details>
+        <summary>Hair Removal — sub-categories</summary>
+        <div class="sub-list">
+          <label><input type="checkbox" value="body-waxes" class="filter-sub"> Body Waxes</label>
+          <label><input type="checkbox" value="wax-heaters" class="filter-sub"> Wax Heaters</label>
+          <label><input type="checkbox" value="stripless" class="filter-sub"> Stripless Wax</label>
+        </div>
+      </details>
+
+      <details>
+        <summary>Appliances — sub-categories</summary>
+        <div class="sub-list">
+          <label><input type="checkbox" value="hair-dryer" class="filter-sub"> Hair Dryers</label>
+          <label><input type="checkbox" value="straightener" class="filter-sub"> Hair Straighteners</label>
+          <label><input type="checkbox" value="curling" class="filter-sub"> Curling Iron/ Stylers</label>
+        </div>
+      </details>
+
+      <div style="margin-top:12px;">
+        <button class="btn-primary-custom" id="applyFilters">Apply</button>
+      </div>
+    </aside>
+
+    <!-- Products -->
+    <main class="products-grid" id="products" role="main">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+        <h4 style="margin:0; color:#666">Featured products</h4>
+        <div style="color:var(--muted)">Sort: <a href="#">Popularity</a> | <a href="#">Newest</a></div>
+      </div>
+
+      <div class="grid" id="grid">
+
+        <!-- product card (different visual style) -->
+        <article class="card-product" data-category="hair" data-subcats="shampoo,conditioner,hair-oil" data-price="499" data-brand="rica">
+          <a data-fancybox href="https://www.youtube.com/watch?v=QWUPm0ND7HY" class="media" aria-label="Play how-to video for Revive Shampoo">
+            <img src="images/products/shampoo.jpg" alt="Revive Shampoo">
+            <span class="play-btn" title="Play video"><i class="ti-control-play"></i></span>
+          </a>
+          <div class="card-body">
+            <div class="title">Revive Shampoo</div>
+            <div class="price">₹499</div>
+            <div class="desc">Hydrating shampoo for dry hair. Use twice weekly for best results.</div>
+            <div class="card-actions">
+              <button class="btn-primary-custom" data-product="Revive Shampoo">Add to cart</button>
+              <a href="#" class="btn-ghost" data-toggle="modal" data-target="#productModal" data-title="Revive Shampoo" data-desc="Hydrating shampoo for dry hair." data-video="https://www.youtube.com/watch?v=QWUPm0ND7HY">Details</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card-product" data-category="skin" data-subcats="serums,moisturizers" data-price="899" data-brand="casmara">
+          <a data-fancybox href="https://www.youtube.com/watch?v=QWUPm0ND7HY" class="media" aria-label="Play how-to video for Glow Serum">
+            <img src="images/products/serum.jpg" alt="Glow Serum">
+            <span class="play-btn" title="Play video"><i class="ti-control-play"></i></span>
+          </a>
+          <div class="card-body">
+            <div class="title">Glow Serum</div>
+            <div class="price">₹899</div>
+            <div class="desc">Vitamin C serum for brightening. Apply 3 drops to clean skin at night.</div>
+            <div class="card-actions">
+              <button class="btn-primary-custom" data-product="Glow Serum">Add to cart</button>
+              <a href="#" class="btn-ghost" data-toggle="modal" data-target="#productModal" data-title="Glow Serum" data-desc="Vitamin C serum for brightening." data-video="https://www.youtube.com/watch?v=QWUPm0ND7HY">Details</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card-product" data-category="appliances" data-subcats="wax-heaters,hair-dryer" data-price="2199" data-brand="waxxo">
+          <a data-fancybox href="https://www.youtube.com/watch?v=QWUPm0ND7HY" class="media" aria-label="Play how-to video for Mini Wax Heater">
+            <img src="images/products/waxheater.jpg" alt="Mini Wax Heater">
+            <span class="play-btn" title="Play video"><i class="ti-control-play"></i></span>
+          </a>
+          <div class="card-body">
+            <div class="title">Mini Wax Heater</div>
+            <div class="price">₹2,199</div>
+            <div class="desc">Portable wax heater for salon & home use. Compact and fast-heating.</div>
+            <div class="card-actions">
+              <button class="btn-primary-custom" data-product="Mini Wax Heater">Add to cart</button>
+              <a href="#" class="btn-ghost" data-toggle="modal" data-target="#productModal" data-title="Mini Wax Heater" data-desc="Portable wax heater for salon & home." data-video="https://www.youtube.com/watch?v=QWUPm0ND7HY">Details</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card-product" data-category="nails" data-subcats="nail-polish,gel-extensions" data-price="299" data-brand="ola">
+          <a data-fancybox href="https://www.youtube.com/watch?v=QWUPm0ND7HY" class="media" aria-label="Play how-to video for Classic Red Nail Polish">
+            <img src="images/products/nailpolish.jpg" alt="Classic Red Nail Polish">
+            <span class="play-btn" title="Play video"><i class="ti-control-play"></i></span>
+          </a>
+          <div class="card-body">
+            <div class="title">Classic Red Nail Polish</div>
+            <div class="price">₹299</div>
+            <div class="desc">Long-lasting gel finish. Apply two thin coats for best results.</div>
+            <div class="card-actions">
+              <button class="btn-primary-custom" data-product="Classic Red Nail Polish">Add to cart</button>
+              <a href="#" class="btn-ghost" data-toggle="modal" data-target="#productModal" data-title="Classic Red Nail Polish" data-desc="Long-lasting gel finish." data-video="https://www.youtube.com/watch?v=QWUPm0ND7HY">Details</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Product detail modal (bootstrap) -->
+  <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body" style="padding:0;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position:absolute; right:12px; top:12px; z-index:3;">&times;</button>
+          <div style="padding:24px;">
+            <h3 id="modalTitle"></h3>
+            <p id="modalDesc" style="color:var(--muted)"></p>
+            <div id="modalVideo"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer" style="margin-top:60px;">
+    <div class="container text-center">
+      <a href="index.html" class="logo foo-logo"><img src="images/logo.png" alt=""></a>
+      <p class="copyright">&copy; COPYRIGHT 2019 <a href="https://themeies.com">themeies.com.</a> ALL RIGHTS RESERVED.</p>
+    </div>
+  </footer>
+
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/jquery.fancybox.min.js"></script>
+  <script src="js/scripts.js"></script>
+
+  <script>
+    // Simple filter demo: apply checked filters (supports main categories, brands, price groups and sub-categories)
+    document.getElementById('applyFilters').addEventListener('click', function(){
+      const main = Array.from(document.querySelectorAll('.filter:checked')).map(n=>n.value);
+      const subs = Array.from(document.querySelectorAll('.filter-sub:checked')).map(n=>n.value);
+      const checks = main.concat(subs);
+      const items = document.querySelectorAll('.card-product');
+      if(checks.length===0){ items.forEach(i=>i.style.display='flex'); return; }
+      items.forEach(item=>{
+        const cat = item.getAttribute('data-category');
+        const brand = item.getAttribute('data-brand');
+        const price = parseInt(item.getAttribute('data-price'));
+        const subcats = (item.getAttribute('data-subcats')||'').split(',').map(s=>s.trim()).filter(Boolean);
+        let show = false;
+        for(const c of checks){
+          if(c===cat || c===brand) { show=true; break; }
+          if(subcats.includes(c)) { show=true; break; }
+          if(c==='under500' && price<500) { show=true; break; }
+          if(c==='500to2000' && price>=500 && price<=2000) { show=true; break; }
+        }
+        item.style.display = show ? 'flex' : 'none';
+      });
+    });
+
+    // Modal details (fills content from data attributes)
+    $('#productModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var title = button.data('title');
+      var desc = button.data('desc');
+      var video = button.data('video');
+      var modal = $(this);
+      modal.find('#modalTitle').text(title);
+      modal.find('#modalDesc').text(desc);
+      if(video){
+        modal.find('#modalVideo').html('<a data-fancybox href="'+video+'" class="btn-primary-custom">Play how-to video</a>');
+      } else { modal.find('#modalVideo').html(''); }
+    });
+
+    // Add to cart demo (localStorage)
+    document.querySelectorAll('.btn-primary-custom[data-product]').forEach(btn=>{
+      btn.addEventListener('click', function(){
+        var name = btn.getAttribute('data-product');
+        var cart = JSON.parse(localStorage.getItem('demoCart')||'[]');
+        cart.push(name);
+        localStorage.setItem('demoCart', JSON.stringify(cart));
+        btn.textContent = 'Added';
+        setTimeout(()=> btn.textContent = 'Add to cart',1200);
+      });
+    });
+  </script>
+
+</body>
+</html>
