@@ -1,6 +1,45 @@
+/*================================================================================
+  TABLE OF CONTENTS
+  --------------------------------------------------------------------------------
+  1.  IMPORTS & FONT DEFINITIONS
+  2.  GENERAL RESET & BODY STYLES
+  3.  REUSABLE COMPONENTS & UTILITY CLASSES
+        - Buttons
+        - Video Button
+        - Section Headings
+        - Post/Article Cards
+  4.  HEADER & NAVIGATION
+  5.  PAGE-SPECIFIC SECTIONS
+        - Banner (Hero) Section
+        - About Section
+        - Services Carousel Section
+        - Procedures Section
+        - Testimonial Section
+        - Team Section
+        - Appointment Section
+        - Blog Preview Section
+        - Contact & Map Section
+  6.  INNER PAGE STYLES (BLOG, ETC.)
+        - Blog Details & Comments
+  7.  FORM STYLES
+        - General Form Elements
+        - Appointment Form
+        - Contact Form
+        - Form Messages/Loader
+  8.  FOOTER
+================================================================================*/
+
+
+/* =============================================================================
+   1. IMPORTS & FONT DEFINITIONS
+   ========================================================================== */
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Rufina:400,700&display=swap");
 
+
+/* =============================================================================
+   2. GENERAL RESET & BODY STYLES
+   ========================================================================== */
 * {
   margin: 0;
   padding: 0;
@@ -62,28 +101,15 @@ section {
   width: 100%;
 }
 
-@media screen and (min-width: 768px) {
-  .nopadd-ltf {
-    padding-left: 0;
-  }
 
-  .nopadd-rth {
-    padding-right: 0;
-  }
-
-  .nopadd {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-
-/**
- *  Common CSS
- */
+/* =============================================================================
+   3. REUSABLE COMPONENTS & UTILITY CLASSES
+   ========================================================================== */
 .bg-lightred {
   background-color: #fff9f8;
 }
 
+/* --- Buttons --- */
 .btn {
   background-color: #ff817e;
   border-radius: 0;
@@ -117,6 +143,7 @@ section {
   margin-right: 10px;
 }
 
+/* --- Video Button --- */
 .video-btn {
   color: #555;
   font-size: 15px;
@@ -139,6 +166,7 @@ section {
   width: 44px;
 }
 
+/* --- Section Headings --- */
 .sec-heading {
   margin-bottom: 70px;
   position: relative;
@@ -166,21 +194,80 @@ section {
   margin-bottom: 32px;
 }
 
+.sec-heading p {
+  color: #888;
+  margin-bottom: 0;
+}
+
 @media screen and (max-width: 767px) {
   .sec-heading .sec-title {
     font-size: 33px;
   }
 }
 
-.sec-heading p {
-  color: #888;
-  margin-bottom: 0;
+/* --- Post/Article Cards (Used for Procedures & Blog) --- */
+.post {
+  border: 1px solid #e3e6ea;
+  text-align: center;
+  -webkit-transition: all 300ms ease-in-out;
+  -o-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+  padding: 20px;
+  margin-bottom: 30px;
 }
 
-.head-center {
-  align-items: center !important;
+.post img {
+  margin-bottom: 35px;
 }
 
+.post h4 {
+  margin-bottom: 22px;
+}
+
+.post h4,
+.post h4 a {
+  color: #263a41;
+  font-size: 22px;
+}
+
+.post p {
+  margin-bottom: 39px;
+}
+
+.post .btn {
+  background-color: #30383b;
+  margin-bottom: 30px;
+  padding: 15px;
+}
+
+.post:hover {
+  -webkit-box-shadow: 0 5px 20px #f0f0f0;
+  box-shadow: 0 5px 20px #f0f0f0;
+}
+
+.post:hover .btn {
+  background-color: #ff817e;
+  color: #fff;
+}
+
+/* --- Padding Utility Classes --- */
+@media screen and (min-width: 768px) {
+  .nopadd-ltf {
+    padding-left: 0;
+  }
+  .nopadd-rth {
+    padding-right: 0;
+  }
+  .nopadd {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+
+/* =============================================================================
+   4. HEADER & NAVIGATION
+   ========================================================================== */
 .header {
   position: relative;
 }
@@ -200,6 +287,10 @@ section {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.head-center {
+  align-items: center !important;
+}
+
 .logo {
   display: block;
   max-width: 109px;
@@ -208,39 +299,15 @@ section {
   align-items: center;
 }
 
-.primary-menu,
-.footer .foo-nav {
+.primary-menu {
   position: relative;
 }
 
-.primary-menu .mobile-menu,
-.footer .foo-nav .mobile-menu {
+.primary-menu .mobile-menu {
   display: none;
 }
 
-@media screen and (max-width: 767px) {
-
-  .primary-menu .mobile-menu,
-  .footer .foo-nav .mobile-menu {
-    color: #ff817e;
-    display: block;
-    font-size: 18px;
-    position: absolute;
-    right: 0;
-    top: -30px;
-  }
-}
-
-@media screen and (min-width: 768px) {
-
-  .primary-menu li,
-  .footer .foo-nav li {
-    display: inline-block;
-  }
-}
-
-.primary-menu li a,
-.footer .foo-nav li a {
+.primary-menu li a {
   color: #263a41;
   display: block;
   font-size: 14px;
@@ -249,42 +316,46 @@ section {
   padding: 0 20px;
 }
 
-.primary-menu li a:hover,
-.footer .foo-nav li a:hover {
+.primary-menu li a:hover {
   color: #ff817e;
 }
 
+/* --- Mobile Navigation --- */
 @media screen and (max-width: 767px) {
-
-  .primary-menu ul,
-  .footer .foo-nav ul {
+  .primary-menu .mobile-menu {
+    color: #ff817e;
+    display: block;
+    font-size: 18px;
+    position: absolute;
+    right: 0;
+    top: -30px;
+  }
+  .primary-menu ul {
     background-color: #fcf5ee;
     display: none;
     text-align: center;
     padding: 10px 0;
   }
-
-  .primary-menu li a,
-  .footer .foo-nav li a {
+  .primary-menu li a {
     padding: 10px 15px;
   }
 }
 
+@media screen and (min-width: 768px) {
+  .primary-menu li {
+    display: inline-block;
+  }
+}
+
+
+/* =============================================================================
+   5. PAGE-SPECIFIC SECTIONS
+   ========================================================================== */
+
+/* --- Banner (Hero) Section --- */
 .banner {
   background: url(../images/leaf.png) no-repeat left center/12.5%;
   padding: 12% 0;
-}
-
-@media screen and (max-width: 1199px) {
-  .banner {
-    padding-top: 15%;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .banner {
-    padding-top: 130px;
-  }
 }
 
 .banner span {
@@ -303,36 +374,9 @@ section {
   margin-bottom: 25px;
 }
 
-@media screen and (max-width: 1199px) {
-  .banner h2 {
-    font-size: 49px;
-    line-height: 60px;
-  }
-}
-
-@media screen and (max-width: 479px) {
-  .banner h2 {
-    font-size: 44px;
-    line-height: 54px;
-  }
-}
-
 .banner p {
   color: #555;
   margin-bottom: 50px;
-}
-
-@media screen and (min-width: 480px) {
-  .banner .video-btn {
-    margin-left: 15px;
-  }
-}
-
-@media screen and (max-width: 479px) {
-  .banner .video-btn {
-    display: block;
-    margin-top: 30px;
-  }
 }
 
 .banner .spa-img {
@@ -342,12 +386,43 @@ section {
   top: 0;
 }
 
+@media screen and (max-width: 1199px) {
+  .banner {
+    padding-top: 15%;
+  }
+  .banner h2 {
+    font-size: 49px;
+    line-height: 60px;
+  }
+}
+
 @media screen and (max-width: 767px) {
+  .banner {
+    padding-top: 130px;
+  }
   .banner .spa-img {
     display: none;
   }
 }
 
+@media screen and (max-width: 479px) {
+  .banner h2 {
+    font-size: 44px;
+    line-height: 54px;
+  }
+  .banner .video-btn {
+    display: block;
+    margin-top: 30px;
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .banner .video-btn {
+    margin-left: 15px;
+  }
+}
+
+/* --- About Section --- */
 .about {
   text-align: center;
 }
@@ -377,6 +452,7 @@ section {
   }
 }
 
+/* --- Services Carousel Section --- */
 .service .service-caro {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -437,58 +513,12 @@ section {
   visibility: visible;
 }
 
+/* --- Procedures Section --- */
 .procedures {
   position: relative;
 }
 
-.blog {
-  padding-bottom: 20px;
-}
-
-.post {
-  border: 1px solid #e3e6ea;
-  text-align: center;
-  -webkit-transition: all 300ms ease-in-out;
-  -o-transition: all 300ms ease-in-out;
-  transition: all 300ms ease-in-out;
-  padding: 20px;
-  margin-bottom: 30px;
-}
-
-.post img {
-  margin-bottom: 35px;
-}
-
-.post h4 {
-  margin-bottom: 22px;
-}
-
-.post h4,
-.post h4 a {
-  color: #263a41;
-  font-size: 22px;
-}
-
-.post p {
-  margin-bottom: 39px;
-}
-
-.post .btn {
-  background-color: #30383b;
-  margin-bottom: 30px;
-  padding: 15px;
-}
-
-.post:hover {
-  -webkit-box-shadow: 0 5px 20px #f0f0f0;
-  box-shadow: 0 5px 20px #f0f0f0;
-}
-
-.post:hover .btn {
-  background-color: #ff817e;
-  color: #fff;
-}
-
+/* --- Testimonial Section --- */
 .testimonial .single-tst {
   position: relative;
   text-align: center;
@@ -541,149 +571,10 @@ section {
   width: 8px;
 }
 
-.appointment .v2 {
-  padding-bottom: 0;
-  border-bottom: 1px solid #fdd5d5;
-}
-
-.appointment .appointment-wrap {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-}
-
-.appointment .appointment-wrap figure {
-  -ms-flex-preferred-size: 40%;
-  flex-basis: 40%;
-}
-
-@media screen and (max-width: 1300px) {
-  .appointment .appointment-wrap figure {
-    display: none;
-  }
-}
-
-.appointment .appointment-wrap .appointment-form {
-  -ms-flex-preferred-size: 60%;
-  flex-basis: 60%;
-  padding-left: 100px;
-}
-
-@media screen and (max-width: 1300px) {
-  .appointment .appointment-wrap .appointment-form {
-    -ms-flex-preferred-size: 100%;
-    flex-basis: 100%;
-    padding: 30px 15px;
-  }
-}
-
-.appointment .appointment-wrap .appointment-form form {
-  max-width: 650px;
-  position: relative;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
-
-@media screen and (max-width: 1300px) {
-  .appointment .appointment-wrap .appointment-form form {
-    margin: 0 auto;
-  }
-}
-
-.appointment-form {
-  background-color: #fff9f8;
-}
-
-.appointment-form .form-field {
-  position: relative;
-  width: 100%;
-}
-
-.appointment-form .form-field input,
-.appointment-form .form-field textarea,
-.appointment-form .form-field select {
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid #d4d3d3;
-  color: #999;
-  display: block;
-  font-size: 12px;
-  font-weight: 400;
-  padding: 10px 0;
-  margin-bottom: 30px;
-  width: 100%;
-}
-
-.appointment-form .form-field input::-webkit-input-placeholder,
-.appointment-form .form-field textarea::-webkit-input-placeholder,
-.appointment-form .form-field select::-webkit-input-placeholder {
-  opacity: 1;
-  text-transform: uppercase;
-}
-
-.appointment-form .form-field input:-ms-input-placeholder,
-.appointment-form .form-field textarea:-ms-input-placeholder,
-.appointment-form .form-field select:-ms-input-placeholder {
-  opacity: 1;
-  text-transform: uppercase;
-}
-
-.appointment-form .form-field input::-ms-input-placeholder,
-.appointment-form .form-field textarea::-ms-input-placeholder,
-.appointment-form .form-field select::-ms-input-placeholder {
-  opacity: 1;
-  text-transform: uppercase;
-}
-
-.appointment-form .form-field input::placeholder,
-.appointment-form .form-field textarea::placeholder,
-.appointment-form .form-field select::placeholder {
-  opacity: 1;
-  text-transform: uppercase;
-}
-
-.appointment-form .form-field select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  text-transform: uppercase;
-}
-
-.appointment-form .form-field .select-field {
-  width: 100%;
-}
-
-@media screen and (min-width: 480px) {
-  .appointment-form .form-field.half-width {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-  }
-
-  .appointment-form .form-field.half-width input,
-  .appointment-form .form-field.half-width .select-field {
-    width: 49%;
-  }
-}
-
+/* --- Team Section --- */
 .team .single-memb {
   position: relative;
   width: 100%;
-}
-
-@media screen and (max-width: 767px) {
-  .team .single-memb {
-    margin-bottom: 30px;
-  }
 }
 
 .team .single-memb .memb-details {
@@ -699,19 +590,6 @@ section {
   -o-transition: all 300ms ease-in-out;
   transition: all 300ms ease-in-out;
   z-index: 1;
-}
-
-@media screen and (max-width: 1199px) {
-  .team .single-memb .memb-details {
-    padding: 30px 20px;
-  }
-}
-
-@media screen and (max-width: 991px) {
-  .team .single-memb .memb-details {
-    max-width: 100%;
-    padding: 20px 15px;
-  }
 }
 
 .team .single-memb .memb-details h6 {
@@ -763,6 +641,79 @@ section {
   visibility: visible;
 }
 
+@media screen and (max-width: 1199px) {
+  .team .single-memb .memb-details {
+    padding: 30px 20px;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .team .single-memb .memb-details {
+    max-width: 100%;
+    padding: 20px 15px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .team .single-memb {
+    margin-bottom: 30px;
+  }
+}
+
+/* --- Appointment Section --- */
+.appointment .v2 {
+  padding-bottom: 0;
+  border-bottom: 1px solid #fdd5d5;
+}
+
+.appointment .appointment-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.appointment .appointment-wrap figure {
+  -ms-flex-preferred-size: 40%;
+  flex-basis: 40%;
+}
+
+.appointment .appointment-wrap .appointment-form {
+  -ms-flex-preferred-size: 60%;
+  flex-basis: 60%;
+  padding-left: 100px;
+}
+
+.appointment .appointment-wrap .appointment-form form {
+  max-width: 650px;
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+@media screen and (max-width: 1300px) {
+  .appointment .appointment-wrap figure {
+    display: none;
+  }
+  .appointment .appointment-wrap .appointment-form {
+    -ms-flex-preferred-size: 100%;
+    flex-basis: 100%;
+    padding: 30px 15px;
+  }
+  .appointment .appointment-wrap .appointment-form form {
+    margin: 0 auto;
+  }
+}
+
+/* --- Blog Preview Section --- */
+.blog {
+  padding-bottom: 20px;
+}
+
+/* --- Contact & Map Section --- */
 .contact address {
   color: #888;
   font-size: 14px;
@@ -797,35 +748,6 @@ section {
   width: 50px;
 }
 
-.contact .contact-form {
-  width: 100%;
-}
-
-@media screen and (max-width: 767px) {
-  .contact .contact-form {
-    margin-top: 40px;
-  }
-}
-
-.contact .contact-form input,
-.contact .contact-form textarea {
-  border: 1px solid #e3e6ea;
-  display: block;
-  padding: 10px 20px;
-  margin-bottom: 25px;
-  width: 100%;
-}
-
-.contact .contact-form textarea {
-  resize: none;
-}
-
-@media screen and (max-width: 767px) {
-  .map {
-    padding-top: 0;
-  }
-}
-
 #map {
   position: relative;
   height: 500px;
@@ -839,11 +761,18 @@ section {
 }
 
 @media screen and (max-width: 767px) {
+  .map {
+    padding-top: 0;
+  }
   #map {
     height: 250px;
   }
 }
 
+
+/* =============================================================================
+   6. INNER PAGE STYLES (BLOG, ETC.)
+   ========================================================================== */
 .blog-details-sec .post-featImg {
   margin-bottom: 50px;
 }
@@ -891,12 +820,6 @@ section {
   padding-left: 40px;
 }
 
-@media screen and (max-width: 479px) {
-  .comments ul li {
-    padding-left: 30px;
-  }
-}
-
 .comments ul li h4 {
   color: #1e2528;
   font-size: 16px;
@@ -917,14 +840,6 @@ section {
   font-size: 13px;
   font-weight: 300;
   padding: 0 15px;
-}
-
-@media screen and (max-width: 479px) {
-
-  .comments ul li a,
-  .comments ul li span {
-    padding: 0 5px;
-  }
 }
 
 .comments ul li a:hover {
@@ -953,18 +868,6 @@ section {
   position: relative;
 }
 
-@media screen and (max-width: 575px) {
-  .comments .single-comment {
-    padding-right: 15px;
-  }
-}
-
-@media screen and (max-width: 479px) {
-  .comments .single-comment {
-    padding-left: 40px;
-  }
-}
-
 .comments .user-thumb {
   border-radius: 50%;
   position: absolute;
@@ -978,13 +881,126 @@ section {
   width: 80px;
 }
 
+@media screen and (max-width: 575px) {
+  .comments .single-comment {
+    padding-right: 15px;
+  }
+}
+
 @media screen and (max-width: 479px) {
+  .comments ul li {
+    padding-left: 30px;
+  }
+  .comments ul li a,
+  .comments ul li span {
+    padding: 0 5px;
+  }
+  .comments .single-comment {
+    padding-left: 40px;
+  }
   .comments .user-thumb {
     height: 65px;
     width: 65px;
   }
 }
 
+
+/* =============================================================================
+   7. FORM STYLES
+   ========================================================================== */
+
+/* --- Appointment Form --- */
+.appointment-form {
+  background-color: #fff9f8;
+}
+
+.appointment-form .form-field {
+  position: relative;
+  width: 100%;
+}
+
+.appointment-form .form-field input,
+.appointment-form .form-field textarea,
+.appointment-form .form-field select {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #d4d3d3;
+  color: #999;
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 10px 0;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.appointment-form .form-field input::-webkit-input-placeholder,
+.appointment-form .form-field textarea::-webkit-input-placeholder,
+.appointment-form .form-field select::-webkit-input-placeholder {
+  opacity: 1;
+  text-transform: uppercase;
+}
+
+.appointment-form .form-field input::placeholder,
+.appointment-form .form-field textarea::placeholder,
+.appointment-form .form-field select::placeholder {
+  opacity: 1;
+  text-transform: uppercase;
+}
+
+.appointment-form .form-field select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-transform: uppercase;
+}
+
+.appointment-form .form-field .select-field {
+  width: 100%;
+}
+
+@media screen and (min-width: 480px) {
+  .appointment-form .form-field.half-width {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  }
+  .appointment-form .form-field.half-width input,
+  .appointment-form .form-field.half-width .select-field {
+    width: 49%;
+  }
+}
+
+/* --- Contact Form --- */
+.contact .contact-form {
+  width: 100%;
+}
+
+.contact .contact-form input,
+.contact .contact-form textarea {
+  border: 1px solid #e3e6ea;
+  display: block;
+  padding: 10px 20px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.contact .contact-form textarea {
+  resize: none;
+}
+
+@media screen and (max-width: 767px) {
+  .contact .contact-form {
+    margin-top: 40px;
+  }
+}
+
+/* --- Comment Form --- */
 .comment-form form {
   width: 100%;
   display: block;
@@ -1025,6 +1041,28 @@ section {
   padding: 15px 30px;
 }
 
+/* --- Form Messages/Loader --- */
+.loader {
+  width: auto;
+  display: inline-block;
+  margin-left: 15px;
+}
+
+div#amessage,
+div#message {
+  margin-top: 15px;
+  color: green;
+}
+
+div#message .error_message,
+div#amessage .error_message {
+  color: red;
+}
+
+
+/* =============================================================================
+   8. FOOTER
+   ========================================================================== */
 .footer {
   background-color: #fff9f8;
   padding: 80px 0 60px;
@@ -1036,6 +1074,7 @@ section {
 
 .footer .foo-nav {
   margin: 30px 0;
+  position: relative; /* For consistency with primary-menu */
 }
 
 .footer .foo-social {
@@ -1066,19 +1105,20 @@ section {
   color: #ff817e;
 }
 
-.loader {
-  width: auto;
+/* Footer Navigation shares some styles with primary-menu */
+.footer .foo-nav li {
   display: inline-block;
-  margin-left: 15px;
 }
 
-div#amessage,
-div#message {
-  margin-top: 15px;
-  color: green;
+.footer .foo-nav li a {
+  color: #263a41;
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 0 20px;
 }
 
-div#message .error_message,
-div#amessage .error_message {
-  color: red;
+.footer .foo-nav li a:hover {
+  color: #ff817e;
 }

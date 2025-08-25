@@ -1,128 +1,177 @@
+// This is a common practice in jQuery to create a private scope.
+// It helps avoid conflicts with other libraries that might also use the '$' symbol.
 (function($) {
-    'use strict';
+    'use strict'; // Enforces stricter parsing and error handling in JavaScript.
 
+    // =========================================================================
+    //  INITIALIZE OWL CAROUSEL FOR SERVICES
+    // =========================================================================
+    // Selects the element with the class 'service-caro' and turns it into a carousel.
     $('.service-caro').owlCarousel({
-        loop:false,
-        margin:5,
-        nav:false,
-        responsive:{
-            0:{
-                items:1
+        loop: false,      // Carousel will not loop back to the beginning.
+        margin: 5,        // Space between items in pixels.
+        nav: false,       // Disables the default navigation arrows (prev/next).
+        responsive: {     // Defines how many items to show at different screen widths.
+            0: {          // For screen widths 0px and up...
+                items: 1  // ...show 1 item.
             },
-            600:{
-                items:3
+            600: {        // For screen widths 600px and up...
+                items: 3  // ...show 3 items.
             },
-            1000:{
-                items:4
+            1000: {       // For screen widths 1000px and up...
+                items: 4  // ...show 4 items.
             }
         }
-    })
+    });
 
+    // =========================================================================
+    //  INITIALIZE OWL CAROUSEL FOR TESTIMONIALS
+    // =========================================================================
+    // Selects the element with the class 'test-caro' and turns it into a carousel.
     $('.test-caro').owlCarousel({
-        autoplay:true,
-        dots: true,
-        loop:true,
-        nav:false,
-        items: 1
-    })
+        autoplay: true,   // The carousel will automatically slide.
+        dots: true,       // Shows the small navigation dots at the bottom.
+        loop: true,       // The carousel will loop infinitely.
+        nav: false,       // Disables the navigation arrows.
+        items: 1          // Shows only one item at a time.
+    });
 
+    // =========================================================================
+    //  MOBILE MENU TOGGLE FUNCTIONALITY
+    // =========================================================================
+    // Attaches a click event listener to the element with the class 'mobile-menu'.
     $('.mobile-menu').on('click', function() {
+        // When clicked, it finds the 'ul' inside '.primary-menu' and toggles its visibility
+        // with a smooth sliding animation.
         $('.primary-menu ul').slideToggle();
-    })
+    });
 
 
-    // ====================================
-    //  Contact form
-    // ====================================
-    $('#contact-form').on("submit", function () {
+    // =========================================================================
+    //  CONTACT FORM SUBMISSION (AJAX)
+    // =========================================================================
+    // Intercepts the default 'submit' event of the contact form.
+    $('#contact-form').on("submit", function (e) {
+        // Prevents the default form submission, which would reload the page.
+        e.preventDefault();
+
+        // Get the form's action URL (where the data will be sent).
         var action = $(this).attr('action');
-        // console.log('top');
+
+        // Hide the message display area before sending new data.
         $("#message").slideUp(750, function () {
             $('#message').hide();
+
+            // Show a loading spinner and disable the submit button to prevent multiple submissions.
             $('#submit')
                 .after('<img src="images/ajax-loader.gif" class="loader" />')
                 .attr('disabled', 'disabled');
-            // console.log('Attr');
+
+            // Use jQuery's $.post to send the form data to the server asynchronously.
             $.post(action, {
-                    name: $('#name').val(),
-                    email: $('#email').val(),
-                    subject: $('#subject').val(),
-                    comments: $('#comments').val()
-                },
-                function (data) {
-                    document.getElementById('message').innerHTML = data;
-                    $('#message').slideDown('slow');
-                    setTimeout(function () {
-                        $('#message').slideUp('slow');
-                        console.log('SetTime');
-                    }, 2000)
+                // Collects the data from the form fields.
+                name: $('#name').val(),
+                email: $('#email').val(),
+                subject: $('#subject').val(),
+                comments: $('#comments').val()
+            },
+            function (data) {
+                // This function is the callback that runs after the server responds.
+                // 'data' contains the response from the server.
+                document.getElementById('message').innerHTML = data;
+                $('#message').slideDown('slow'); // Display the server response message.
 
-                    $('#contact-form img.loader').fadeOut('slow', function () {
-                        $(this).remove()
-                    });
-                    $('#submit').removeAttr('disabled');
-                    if (data.match('success') != null)
-                        $('#contact-form').show('slow');
-                    // console.log('Down');
-                }
-            );
+                // Set a timer to automatically hide the message after 2 seconds.
+                setTimeout(function () {
+                    $('#message').slideUp('slow');
+                }, 2000);
 
+                // Remove the loading spinner and re-enable the submit button.
+                $('#contact-form img.loader').fadeOut('slow', function () {
+                    $(this).remove();
+                });
+                $('#submit').removeAttr('disabled');
+            });
         });
-        // console.log('outside');
+
+        // Return false to ensure the default form submission is stopped.
         return false;
     });
 
 
-    // ====================================
-    //  Apint form
-    // ====================================
-    $('#apoint-form').on("submit", function () {
+    // =========================================================================
+    //  APPOINTMENT FORM SUBMISSION (AJAX)
+    // =========================================================================
+    // This function is very similar to the contact form handler above.
+    $('#apoint-form').on("submit", function (e) {
+        // Prevents the default form submission.
+        e.preventDefault();
+
         var action = $(this).attr('action');
-        $("#message").slideUp(750, function () {
-            $('#message').hide();
+
+        // Hide the appointment message display area.
+        $("#amessage").slideUp(750, function () {
+            $('#amessage').hide();
+
+            // Show a loading spinner and disable the appointment submit button.
             $('#asubmit')
                 .after('<img src="images/ajax-loader.gif" class="loader" />')
                 .attr('disabled', 'disabled');
+
+            // Send the appointment form data to the server via POST.
             $.post(action, {
-                    name: $('#name').val(),
-                    email: $('#email').val(),
-                    service: $('#service').val(),
-                    number: $('#number').val(),
-                    date: $('#date').val(),
-                    time: $('#time').val(),
-                    comments: $('#comments').val()
-                },
-                function (data) {
-                    document.getElementById('amessage').innerHTML = data;
-                    $('#amessage').slideDown('slow');
-                    setTimeout(function () {
-                        $('#amessage').slideUp('slow');
-                        console.log('SetTime');
-                    }, 2000)
+                name: $('#name').val(),
+                email: $('#email').val(),
+                service: $('#service').val(),
+                number: $('#number').val(),
+                date: $('#date').val(),
+                time: $('#time').val(),
+                comments: $('#comments').val()
+            },
+            function (data) {
+                // Display the server's response in the '#amessage' div.
+                document.getElementById('amessage').innerHTML = data;
+                $('#amessage').slideDown('slow');
 
-                    $('#apoint-form img.loader').fadeOut('slow', function () {
-                        $(this).remove()
-                    });
-                    $('#submit').removeAttr('disabled');
-                    if (data.match('success') != null)
-                        $('#apoint-form').show('slow');
-                }
-            );
+                // Hide the message after 2 seconds.
+                setTimeout(function () {
+                    $('#amessage').slideUp('slow');
+                }, 2000);
 
+                // Remove the loader and re-enable the submit button.
+                $('#apoint-form img.loader').fadeOut('slow', function () {
+                    $(this).remove();
+                });
+                $('#asubmit').removeAttr('disabled');
+            });
         });
+
         return false;
     });
 
+// End of the jQuery private scope.
+}) (jQuery);
 
-}) (jQuery)
 
+// =========================================================================
+//  VANILLA JS - HEADER SCROLL EFFECT
+// =========================================================================
+// This code is outside the jQuery wrapper and uses modern standard JavaScript.
+
+// Select the header element from the DOM.
 const header = document.querySelector('.abs-header');
-  const threshold = 50;  // pixels scrolled before solid background
+// Define the scroll distance (in pixels) after which the header style changes.
+const threshold = 50;
 
-  window.addEventListener('scroll', () => {
+// Add an event listener that triggers whenever the user scrolls the page.
+window.addEventListener('scroll', () => {
+    // Check if the vertical scroll position is greater than our threshold.
     if (window.scrollY > threshold) {
-      header.classList.add('scrolled');
+        // If it is, add the 'scrolled' class to the header.
+        // This class can be styled in CSS to give the header a solid background.
+        header.classList.add('scrolled');
     } else {
-      header.classList.remove('scrolled');
+        // If it's not, remove the 'scrolled' class, making the header transparent again.
+        header.classList.remove('scrolled');
     }
-  });
+});
