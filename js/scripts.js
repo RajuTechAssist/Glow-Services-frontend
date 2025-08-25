@@ -115,3 +115,14 @@
 
 
 }) (jQuery)
+
+const header = document.querySelector('.abs-header');
+  const threshold = 50;  // pixels scrolled before solid background
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > threshold) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });

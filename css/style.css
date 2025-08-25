@@ -1,18 +1,6 @@
-/*
-    Theme Name: Spa
-    Theme URI: https://themeies.com
-    Author: Themeies
-    Author URI: https://themeies.com
-    Version: 1.0
-    Description: Spa is a Landing HTML5 Template.
-*/
-/*
-    Table of Context
-    -------------------------------
-    01.
-*/
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Rufina:400,700&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -35,12 +23,18 @@ a {
   transition: all 300ms ease-in-out;
 }
 
-a:hover, a:focus {
+a:hover,
+a:focus {
   text-decoration: none;
   outline: 0px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Rufina', serif;
   font-weight: 700;
 }
@@ -72,9 +66,11 @@ section {
   .nopadd-ltf {
     padding-left: 0;
   }
+
   .nopadd-rth {
     padding-right: 0;
   }
+
   .nopadd {
     padding-left: 0;
     padding-right: 0;
@@ -181,33 +177,51 @@ section {
   margin-bottom: 0;
 }
 
+.head-center {
+  align-items: center !important;
+}
+
 .header {
   position: relative;
 }
 
 .header.abs-header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1;
+  z-index: 9999;
+  background-color: transparent;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.abs-header.scrolled {
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .logo {
   display: block;
   max-width: 109px;
+  position: relative;
+  bottom: 7px;
+  align-items: center;
 }
 
-.primary-menu, .footer .foo-nav {
+.primary-menu,
+.footer .foo-nav {
   position: relative;
 }
 
-.primary-menu .mobile-menu, .footer .foo-nav .mobile-menu {
+.primary-menu .mobile-menu,
+.footer .foo-nav .mobile-menu {
   display: none;
 }
 
 @media screen and (max-width: 767px) {
-  .primary-menu .mobile-menu, .footer .foo-nav .mobile-menu {
+
+  .primary-menu .mobile-menu,
+  .footer .foo-nav .mobile-menu {
     color: #ff817e;
     display: block;
     font-size: 18px;
@@ -218,12 +232,15 @@ section {
 }
 
 @media screen and (min-width: 768px) {
-  .primary-menu li, .footer .foo-nav li {
+
+  .primary-menu li,
+  .footer .foo-nav li {
     display: inline-block;
   }
 }
 
-.primary-menu li a, .footer .foo-nav li a {
+.primary-menu li a,
+.footer .foo-nav li a {
   color: #263a41;
   display: block;
   font-size: 14px;
@@ -232,18 +249,23 @@ section {
   padding: 0 20px;
 }
 
-.primary-menu li a:hover, .footer .foo-nav li a:hover {
+.primary-menu li a:hover,
+.footer .foo-nav li a:hover {
   color: #ff817e;
 }
 
 @media screen and (max-width: 767px) {
-  .primary-menu ul, .footer .foo-nav ul {
+
+  .primary-menu ul,
+  .footer .foo-nav ul {
     background-color: #fcf5ee;
     display: none;
     text-align: center;
     padding: 10px 0;
   }
-  .primary-menu li a, .footer .foo-nav li a {
+
+  .primary-menu li a,
+  .footer .foo-nav li a {
     padding: 10px 15px;
   }
 }
@@ -441,7 +463,8 @@ section {
   margin-bottom: 22px;
 }
 
-.post h4, .post h4 a {
+.post h4,
+.post h4 a {
   color: #263a41;
   font-size: 22px;
 }
@@ -580,7 +603,9 @@ section {
   width: 100%;
 }
 
-.appointment-form .form-field input, .appointment-form .form-field textarea, .appointment-form .form-field select {
+.appointment-form .form-field input,
+.appointment-form .form-field textarea,
+.appointment-form .form-field select {
   background-color: transparent;
   border: none;
   border-bottom: 1px solid #d4d3d3;
@@ -593,22 +618,30 @@ section {
   width: 100%;
 }
 
-.appointment-form .form-field input::-webkit-input-placeholder, .appointment-form .form-field textarea::-webkit-input-placeholder, .appointment-form .form-field select::-webkit-input-placeholder {
+.appointment-form .form-field input::-webkit-input-placeholder,
+.appointment-form .form-field textarea::-webkit-input-placeholder,
+.appointment-form .form-field select::-webkit-input-placeholder {
   opacity: 1;
   text-transform: uppercase;
 }
 
-.appointment-form .form-field input:-ms-input-placeholder, .appointment-form .form-field textarea:-ms-input-placeholder, .appointment-form .form-field select:-ms-input-placeholder {
+.appointment-form .form-field input:-ms-input-placeholder,
+.appointment-form .form-field textarea:-ms-input-placeholder,
+.appointment-form .form-field select:-ms-input-placeholder {
   opacity: 1;
   text-transform: uppercase;
 }
 
-.appointment-form .form-field input::-ms-input-placeholder, .appointment-form .form-field textarea::-ms-input-placeholder, .appointment-form .form-field select::-ms-input-placeholder {
+.appointment-form .form-field input::-ms-input-placeholder,
+.appointment-form .form-field textarea::-ms-input-placeholder,
+.appointment-form .form-field select::-ms-input-placeholder {
   opacity: 1;
   text-transform: uppercase;
 }
 
-.appointment-form .form-field input::placeholder, .appointment-form .form-field textarea::placeholder, .appointment-form .form-field select::placeholder {
+.appointment-form .form-field input::placeholder,
+.appointment-form .form-field textarea::placeholder,
+.appointment-form .form-field select::placeholder {
   opacity: 1;
   text-transform: uppercase;
 }
@@ -635,6 +668,7 @@ section {
     -ms-flex-pack: justify;
     justify-content: space-between;
   }
+
   .appointment-form .form-field.half-width input,
   .appointment-form .form-field.half-width .select-field {
     width: 49%;
@@ -656,7 +690,7 @@ section {
   background-color: #fff;
   -webkit-box-shadow: 0 5px 20px #f0f0f0;
   box-shadow: 0 5px 20px #f0f0f0;
-  max-width: calc( 100% - 60px);
+  max-width: calc(100% - 60px);
   margin: -50px auto 0;
   padding: 30px;
   position: relative;
@@ -773,7 +807,8 @@ section {
   }
 }
 
-.contact .contact-form input, .contact .contact-form textarea {
+.contact .contact-form input,
+.contact .contact-form textarea {
   border: 1px solid #e3e6ea;
   display: block;
   padding: 10px 20px;
@@ -875,7 +910,8 @@ section {
   margin-bottom: 10px;
 }
 
-.comments ul li a, .comments ul li span {
+.comments ul li a,
+.comments ul li span {
   color: #6c6c6f;
   display: inline-block;
   font-size: 13px;
@@ -884,7 +920,9 @@ section {
 }
 
 @media screen and (max-width: 479px) {
-  .comments ul li a, .comments ul li span {
+
+  .comments ul li a,
+  .comments ul li span {
     padding: 0 5px;
   }
 }
@@ -966,7 +1004,8 @@ section {
   margin-bottom: 10px;
 }
 
-.comment-form input, .comment-form textarea {
+.comment-form input,
+.comment-form textarea {
   background: transparent;
   border-radius: 3px;
   border: 1px solid #e3e6ea;
@@ -1025,4 +1064,21 @@ section {
 
 .footer .copyright a {
   color: #ff817e;
+}
+
+.loader {
+  width: auto;
+  display: inline-block;
+  margin-left: 15px;
+}
+
+div#amessage,
+div#message {
+  margin-top: 15px;
+  color: green;
+}
+
+div#message .error_message,
+div#amessage .error_message {
+  color: red;
 }
