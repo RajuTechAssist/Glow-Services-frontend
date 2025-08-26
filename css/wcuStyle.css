@@ -276,7 +276,12 @@ p.service_text{
   transform: translateY(-50%); /* Precisely centers the image vertically */
   width: 650px;              /* Fixed width for better control */
   height: auto;
-  opacity: 0.5;              /* Makes it subtle and not overpowering */
+  opacity: 0.5;
+  cursor: pointer;              /* Makes it subtle and not overpowering */
+}
+
+.section-bg-image:hover{
+    opacity: 1;
 }
 
 /* 3. Ensure the main content is on top */
@@ -313,4 +318,30 @@ p.service_text{
     max-width: 100%;
     margin-bottom: 40px;
   }
+}
+
+.certified-icon{
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    bottom: 10px;
+}
+
+.premium-icon{
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+.Affordable-icon{
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    bottom: 10px;
 }
