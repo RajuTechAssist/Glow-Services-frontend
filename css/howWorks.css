@@ -1,199 +1,300 @@
- body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #fff;
-    }
+/* =======================================================
+   NEW RESPONSIVE 'HOW IT WORKS' TIMELINE STYLES
+   ======================================================= */
 
-    h2 {
-      text-align: center;
-      margin: 40px 0;
-      font-size: 2.5rem;
-      color: #333;
-    }
-
-    .timeline {
-      position: relative;
-      width: 90%;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 40px 0;
-    }
-
-    /* Vertical Center Line */
-    .timeline::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 4px;
-      background: #e0e0e0;
-    }
-
-
-    .timeline-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 40px 0;
-    }
-
-    /* Service (left side) */
-    .timeline-item .service {
-      width: 40%;
-      text-align: right;
-      padding: 15px 20px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-      position: relative;
-    }
-
-    /* Connector Dot for Service */
-    .timeline-item .service::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: -12px;
-      transform: translateY(-50%);
-      width: 14px;
-      height: 14px;
-      background: #ff817e;
-      border-radius: 50%;
-      z-index: 2;
-    }
-
-    /* Product (right side) */
-    .timeline-item .product {
-      width: 40%;
-      text-align: left;
-      padding: 15px 20px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-      position: relative;
-    }
-
-    /* Connector Dot for Product */
-    .timeline-item .product::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: -12px;
-      transform: translateY(-50%);
-      width: 14px;
-      height: 14px;
-      background: #ff817e;
-      border-radius: 50%;
-      z-index: 2;
-    }
-
-    .title {
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: #222;
-    }
-
-    .desc {
-      font-size: 0.95rem;
-      color: #666;
-    }
-
-    /* Labels above the two sides */
-.timeline .labels {
-  position: relative;
-  height: 0;                 /* no extra height, just for positioning badges */
+/* --- Main Section & Wrapper --- */
+.how-it-works {
+  padding: 80px 0;
 }
-.timeline .label-left,
-.timeline .label-right {
+.container h2{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.how-it-works .section-subtitle {
+  text-align: center;
+  color: #888;
+  margin-bottom: 60px;
+}
+
+.timeline-wrapper {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* --- The Center Line (Desktop Only) --- */
+.timeline-center-line {
   position: absolute;
-  top: -26px;                /* sits just above the first row */
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: .85rem;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: calc(100% - 40px);
   background: #fde8f3;
+  border-radius: 3px;
+}
+
+/* --- The Two Columns --- */
+.timeline-column {
+  flex-basis: 46%; /* Each column takes up 46% width */
+  display: flex;
+  flex-direction: column;
+  gap: 50px; /* Space between cards in a column */
+}
+
+/* --- Labels (Services/Products) --- */
+.timeline-label {
+  /* text-align: center; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Rufina', serif;
+  font-size: 1.5rem;
+  color: #1e2528;
+  margin-bottom: 20px;
+    background: #fff9f8;
   color: #ff817e;
-  letter-spacing: .2px;
-}
-.timeline .label-left  { left: 5%;  }  /* “Services” over left side  */
-.timeline .label-right { right: 5%; }  /* “Products” over right side */
-
-/* Horizontal connectors from cards to the single center line
-   Assumes each side card is width: 40% (as in your code). */
-.timeline-item { position: relative; }
-.timeline-item::before,
-.timeline-item::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 2px;
-  background: #e0e0e0;
-  z-index: 1;
-}
-/* Left connector: from end of left card (40%) to center (50%) */
-.timeline-item::before { left: 40%; right: 50%; }
-/* Right connector: from center (50%) to start of right card (60%) */
-.timeline-item::after  { left: 50%; right: 40%; }
-
-/* Optional: keep cards above the connectors for a clean overlap */
-.timeline-item .service,
-.timeline-item .product { z-index: 2; }
-
-/* Scroll-in animation */
-.reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
-.reveal.in { opacity: 1; transform: none; }
-
-/* hide old connector-dots if you used ::after previously */
-.timeline-item .service::after,
-.timeline-item .product::after { display: none !important; }
-
-/* make service/product containers relative so icon can be absolute */
-.timeline-item .service,
-.timeline-item .product {
-  position: relative;
-  z-index: 2; /* keep cards above connectors */
+  border: 1px solid #ff817e;
 }
 
-/* reserve inner edge space so icon sits outside card visually */
-.timeline-item .service { padding-right: 84px; } /* space for right-side icon */
-.timeline-item .product { padding-left: 84px; }  /* space for left-side icon */
+.timeline .label-left  { left: 10%; }
+.timeline .label-right { right: 10%; }
 
-/* icon circle positioned at the inner middle of the card */
-.timeline-item .service .icon,
-.timeline-item .product .icon {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
+/* --- The Timeline Cards --- */
+.timeline-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
   background: #fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  z-index: 4; /* above connectors and cards */
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.07);
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.timeline-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* place icon on right edge of left card (services) */
-.timeline-item .service .icon { right: -28px; }
-
-/* place icon on left edge of right card (products) */
-.timeline-item .product .icon { left: -28px; }
-
-/* icon glyph styling */
-.timeline-item .icon i {
-  font-size: 22px;
-  color: #ff817e; /* accent color - change if needed */
-  line-height: 1;
+.timeline-card.service {
+  text-align: right;
+  flex-direction: row-reverse; /* Puts icon on the right */
+}
+.timeline-card.product {
+  text-align: left;
 }
 
-/* small tweak: keep title spacing clear */
-.timeline-item .service .title,
-.timeline-item .product .title { margin-top: 6px; }
+/* --- Connecting Dots and Lines (Desktop Only) --- */
+.timeline-card::before, .timeline-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: -1;
+}
 
+.timeline-card.service::after { /* The connecting line */
+  right: -8%;
+  width: 8%;
+  height: 2px;
+  background-color: #fdd5d5;
+}
+.timeline-card.service::before { /* The dot */
+  right: -9%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #ff817e;
+  border: 4px solid #fff;
+}
+
+.timeline-card.product::after { /* The connecting line */
+  left: -8%;
+  width: 8%;
+  height: 2px;
+  background-color: #fdd5d5;
+}
+.timeline-card.product::before { /* The dot */
+  left: -9%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #ff817e;
+  border: 4px solid #fff;
+}
+
+/* --- Card Content (Icon, Title, Desc) --- */
+.timeline-card .icon {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #fff9f8;
+  border: 2px solid #ff817e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.timeline-card .icon i {
+  font-size: 24px;
+  color: #ff817e;
+}
+.timeline-card .content {
+  flex-grow: 1;
+}
+.timeline-card .title {
+  font-family: 'Rufina', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #263a41;
+  margin-bottom: 8px;
+}
+.timeline-card .desc {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #6c6c6f;
+}
+
+/* =======================================================
+   FIX & ENHANCEMENT for CTA BUTTONS
+   ======================================================= */
+
+   .btn1{
+        border: 3px solid #ff817e;
+    color: #ff817e;
+    height: 60px;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-weight: 600;
+    text-decoration-color: orangered;
+   }
+
+/* --- 1. The Container for the Buttons --- */
+.timeline-cta {
+  text-align: center;
+  margin-top: 60px;
+  /* Add this to enable the parent-hover effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+/* --- 2. Base Styling for BOTH Buttons --- */
+.timeline-cta .btn1 {
+  margin: 0; /* Remove default margin if any */
+  min-width: 220px;
+  /* This transition is key for all smooth animations */
+  transition: all 0.3s ease;
+}
+
+/* --- 3. The "Deactivation" Effect --- */
+/* When you hover over the container, make BOTH buttons fade slightly */
+.timeline-cta:hover .btn1 {
+  opacity: 0.6;
+  transform: scale(0.98); /* Optional: slight shrink effect */
+}
+
+/* --- 4. The "Activation" Effect --- */
+/* When you hover over a SPECIFIC button, make IT fully visible and pop */
+.timeline-cta .btn1:hover {
+  opacity: 1;
+  transform: scale(1.03); /* Optional: slight grow effect */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Add a shadow for emphasis */
+}
+
+/* --- 5. Specific Hover Color for the SOLID Button --- */
+/* This targets the button that is NOT the outline button */
+.timeline-cta .btn1:hover {
+  background-color: #ff817e; /* A slightly darker, richer pink */
+  border-color: #e86765;
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- 6. Specific Hover Color for the OUTLINE Button --- */
+.timeline-cta .btn-outline:hover {
+  background-color: #ff817e; /* Fill with the brand color */
+  color: #fff; /* Make the text white */
+}
+
+
+/* 1. This is the STARTING state of the element (hidden) */
+.reveal {
+  opacity: 0;
+  transform: translateY(25px); /* Start slightly lower */
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* The animation itself */
+}
+
+/* 2. This is the FINAL state of the element (visible) */
+/* The JavaScript adds the '.in' class to trigger this */
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0); /* Move back to its original position */
+}
+
+/* =======================================================
+   RESPONSIVE STYLES for NEW TIMELINE
+   ======================================================= */
+
+/* --- Mobile View (< 768px) --- */
+@media (max-width: 767px) {
+  /* Stack the columns vertically */
+  .timeline-wrapper {
+    flex-direction: column;
+    gap: 60px; /* Creates space between the Services and Products sections */
+  }
+  
+  /* Hide the desktop center line and connecting lines/dots */
+  .timeline-center-line,
+  .timeline-card::before,
+  .timeline-card::after {
+    display: none;
+  }
+  
+  /* Make sure columns take up full width */
+  .timeline-column {
+    flex-basis: 100%;
+  }
+
+  /* Stack CTA buttons for easier tapping */
+  .timeline-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  .timeline-cta .btn1 {
+    width: 90%;
+    margin: 0;
+  }
+}
+
+/* --- VERY Small Screen Fixes (< 375px) --- */
+@media (max-width: 375px) {
+  .timeline-card {
+    padding: 20px;
+    gap: 15px; /* Reduce space between icon and text */
+  }
+  .timeline-card .icon {
+    width: 50px;
+    height: 50px;
+  }
+  .timeline-card .icon i {
+    font-size: 20px;
+  }
+  .timeline-card .title {
+    font-size: 1.2rem;
+  }
+  .timeline-card .desc {
+    font-size: 0.9rem;
+  }
+}
