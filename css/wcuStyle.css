@@ -4,6 +4,12 @@
            align-items: center;
            /* margin-bottom: 20px; */
        }
+       .wcutext{
+        background: #ff817e;
+        border-radius: 2px solid;
+        text-align: center;
+        border: 2px solid #ff817e;
+       }
        
        h1,
         h2,
