@@ -6,7 +6,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: linear-gradient(100deg, #ff817e, #f5cdd8); /* Soft gradient background */
+  background: linear-gradient(100deg, #fbe6e6); /* Soft gradient background */
   border-radius: 20px;
   padding: 30px 20px;
   box-shadow: 0 10px 30px rgba(255, 129, 126, 0.1);
