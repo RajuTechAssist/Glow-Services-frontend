@@ -175,3 +175,111 @@ window.addEventListener('scroll', () => {
         header.classList.remove('scrolled');
     }
 });
+
+// =========================================================================
+
+// ---------- Guard to prevent double-init ----------
+if (!window.__glowNavInit) {
+  window.__glowNavInit = true;
+
+  (function () {
+    // <-- paste the entire new nav JS here (the IIFE from my previous message)
+    document.addEventListener('DOMContentLoaded', function () {
+      const header = document.getElementById('header');
+      if (!header) return;
+
+      const nav = header.querySelector('nav');
+
+      // Find mobile bars button (svg data-icon="bars" in markup)
+      const mobileBtn = header.querySelector('button svg[data-icon="bars"]') ? header.querySelector('button svg[data-icon="bars"]').closest('button') : null;
+
+      // Toggle mobile nav
+      if (mobileBtn && nav) {
+        mobileBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          header.classList.toggle('show-mobile-nav');  // used by CSS to show nav
+          // toggle the hidden class for older tailwind usage
+          nav.classList.toggle('hidden');
+        });
+      }
+
+      // Dropdown parents (.relative.group)
+      const dropdowns = Array.from(header.querySelectorAll('.relative.group'));
+
+      dropdowns.forEach(drop => {
+        const btn = drop.querySelector('button');
+        if (!btn) return;
+
+        btn.setAttribute('aria-haspopup', 'true');
+        btn.setAttribute('aria-expanded', 'false');
+
+        btn.addEventListener('click', function (ev) {
+          ev.stopPropagation();
+          // Close other dropdowns
+          dropdowns.forEach(other => {
+            if (other !== drop) {
+              other.classList.remove('open');
+              const ob = other.querySelector('button');
+              if (ob) ob.setAttribute('aria-expanded', 'false');
+            }
+          });
+
+          // Toggle this dropdown
+          const opened = drop.classList.toggle('open');
+          btn.setAttribute('aria-expanded', String(opened));
+        });
+
+        // prevent clicking inside the dropdown items from closing it
+        const menu = drop.querySelector('.absolute');
+        if (menu) menu.addEventListener('click', ev => ev.stopPropagation());
+      });
+
+      // Close everything when clicking outside
+      document.addEventListener('click', function () {
+        dropdowns.forEach(d => {
+          d.classList.remove('open');
+          const b = d.querySelector('button');
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+        if (header.classList.contains('show-mobile-nav')) {
+          header.classList.remove('show-mobile-nav');
+          if (nav) nav.classList.add('hidden');
+        }
+      });
+
+      // Close on escape
+      document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape' || ev.key === 'Esc') {
+          dropdowns.forEach(d => d.classList.remove('open'));
+          dropdowns.forEach(d => {
+            const b = d.querySelector('button');
+            if (b) b.setAttribute('aria-expanded', 'false');
+          });
+          if (header.classList.contains('show-mobile-nav')) {
+            header.classList.remove('show-mobile-nav');
+            if (nav) nav.classList.add('hidden');
+          }
+        }
+      });
+
+      // On resize: if we cross into desktop width, make sure mobile nav is closed
+      let prevWidth = window.innerWidth;
+      window.addEventListener('resize', function () {
+        const w = window.innerWidth;
+        if (prevWidth < 1024 && w >= 1024) {
+          header.classList.remove('show-mobile-nav');
+          if (nav) nav.classList.remove('hidden');
+          dropdowns.forEach(d => d.classList.remove('open'));
+        }
+        if (prevWidth >= 1024 && w < 1024) {
+          if (nav) nav.classList.add('hidden');
+        }
+        prevWidth = w;
+      });
+
+    }); // DOMContentLoaded
+    // end of pasted script
+  })();
+
+} // end guard
+

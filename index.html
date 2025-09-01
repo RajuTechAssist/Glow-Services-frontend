@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/custom-sections.css">
   <link rel="stylesheet" href="css/complete-aboutUS.css">
+    <link rel="stylesheet" href="css/header-style.css">
 
 
   <!-- =========================
@@ -36,27 +37,186 @@
   <!-- =========================
     HEADER SECTION
     ============================== -->
-  <header class="header abs-header">
-    <div class="container">
-      <div class="row align-items-end head-center">
-        <div class="col-md-2">
-          <!-- Site Logo -->
-          <a href="index.html" class="logo">
-            <img src="images/logo5.png" alt="Glow Services Logo">
-          </a>
+  <header id="header" class="bg-white/95 backdrop-blur-md fixed top-0 w-full z-50 border-b border-pink-100">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <div class="bg-gradient-to-r from-pink-400 to-rose-400 p-2 rounded-full mr-3">
+            <i class="text-white text-lg" data-fa-i2svg=""><svg class="svg-inline--fa fa-sparkles" aria-hidden="true"
+                focusable="false" data-prefix="fas" data-icon="sparkles" role="img" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512" data-fa-i2svg="">
+                <g class="missing">
+                  <path fill="currentColor"
+                    d="M156.5,447.7l-12.6,29.5c-18.7-9.5-35.9-21.2-51.5-34.9l22.7-22.7C127.6,430.5,141.5,440,156.5,447.7z M40.6,272H8.5 c1.4,21.2,5.4,41.7,11.7,61.1L50,321.2C45.1,305.5,41.8,289,40.6,272z M40.6,240c1.4-18.8,5.2-37,11.1-54.1l-29.5-12.6 C14.7,194.3,10,216.7,8.5,240H40.6z M64.3,156.5c7.8-14.9,17.2-28.8,28.1-41.5L69.7,92.3c-13.7,15.6-25.5,32.8-34.9,51.5 L64.3,156.5z M397,419.6c-13.9,12-29.4,22.3-46.1,30.4l11.9,29.8c20.7-9.9,39.8-22.6,56.9-37.6L397,419.6z M115,92.4 c13.9-12,29.4-22.3,46.1-30.4l-11.9-29.8c-20.7,9.9-39.8,22.6-56.8,37.6L115,92.4z M447.7,355.5c-7.8,14.9-17.2,28.8-28.1,41.5 l22.7,22.7c13.7-15.6,25.5-32.9,34.9-51.5L447.7,355.5z M471.4,272c-1.4,18.8-5.2,37-11.1,54.1l29.5,12.6 c7.5-21.1,12.2-43.5,13.6-66.8H471.4z M321.2,462c-15.7,5-32.2,8.2-49.2,9.4v32.1c21.2-1.4,41.7-5.4,61.1-11.7L321.2,462z M240,471.4c-18.8-1.4-37-5.2-54.1-11.1l-12.6,29.5c21.1,7.5,43.5,12.2,66.8,13.6V471.4z M462,190.8c5,15.7,8.2,32.2,9.4,49.2h32.1 c-1.4-21.2-5.4-41.7-11.7-61.1L462,190.8z M92.4,397c-12-13.9-22.3-29.4-30.4-46.1l-29.8,11.9c9.9,20.7,22.6,39.8,37.6,56.9 L92.4,397z M272,40.6c18.8,1.4,36.9,5.2,54.1,11.1l12.6-29.5C317.7,14.7,295.3,10,272,8.5V40.6z M190.8,50 c15.7-5,32.2-8.2,49.2-9.4V8.5c-21.2,1.4-41.7,5.4-61.1,11.7L190.8,50z M442.3,92.3L419.6,115c12,13.9,22.3,29.4,30.5,46.1 l29.8-11.9C470,128.5,457.3,109.4,442.3,92.3z M397,92.4l22.7-22.7c-15.6-13.7-32.8-25.5-51.5-34.9l-12.6,29.5 C370.4,72.1,384.4,81.5,397,92.4z">
+                  </path>
+                  <circle fill="currentColor" cx="256" cy="364" r="28">
+                    <animate attributeType="XML" repeatCount="indefinite" dur="2s" attributeName="r"
+                      values="28;14;28;28;14;28;"></animate>
+                    <animate attributeType="XML" repeatCount="indefinite" dur="2s" attributeName="opacity"
+                      values="1;0;1;1;0;1;"></animate>
+                  </circle>
+                  <path fill="currentColor" opacity="1"
+                    d="M263.7,312h-16c-6.6,0-12-5.4-12-12c0-71,77.4-63.9,77.4-107.8c0-20-17.8-40.2-57.4-40.2c-29.1,0-44.3,9.6-59.2,28.7 c-3.9,5-11.1,6-16.2,2.4l-13.1-9.2c-5.6-3.9-6.9-11.8-2.6-17.2c21.2-27.2,46.4-44.7,91.2-44.7c52.3,0,97.4,29.8,97.4,80.2 c0,67.6-77.4,63.5-77.4,107.8C275.7,306.6,270.3,312,263.7,312z">
+                    <animate attributeType="XML" repeatCount="indefinite" dur="2s" attributeName="opacity"
+                      values="1;0;0;0;0;1;"></animate>
+                  </path>
+                  <path fill="currentColor" opacity="0"
+                    d="M232.5,134.5l7,168c0.3,6.4,5.6,11.5,12,11.5h9c6.4,0,11.7-5.1,12-11.5l7-168c0.3-6.8-5.2-12.5-12-12.5h-23 C237.7,122,232.2,127.7,232.5,134.5z">
+                    <animate attributeType="XML" repeatCount="indefinite" dur="2s" attributeName="opacity"
+                      values="0;0;1;1;0;0;"></animate>
+                  </path>
+                </g>
+              </svg></i>
+          </div>
+          <h1 class="text-2xl font-playfair font-bold text-gray-900">Glow Services</h1>
         </div>
-        <div class="col-md-9">
-          <!-- Main Navigation -->
-          <nav class="primary-menu">
-            <a href="javascript:void(0);" class="mobile-menu"><i class="ti-menu"></i></a>
-            <ul>
-              <li class="active"><a href="index.html">Home</a></li>
-              <li><a href="about.html">About</a></li>
-              <li><a href="services.html">Service</a></li>
-              <li><a href="product.html">Product</a></li>
-              <li><a href="contact.html">Contact</a></li>
-            </ul>
-          </nav>
+
+        <nav class="hidden lg:flex items-center space-x-8">
+          <div class="relative group">
+            <button id="services-btn" aria-controls="services-menu" class="flex items-center justify-between w-full text-gray-700 hover:text-pink-600 font-medium transition-colors">
+              Services
+              <i class="ml-1 text-xs" aria-hidden="true"><svg
+                  class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas"
+                  data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                  data-fa-i2svg="">
+                  <path fill="currentColor"
+                    d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z">
+                  </path>
+                </svg></i>
+            </button>
+            <div
+              id="services-menu" role="menu" class="absolute top-full left-0 mt-2 lg:w-64 w-full bg-white rounded-xl shadow-xl border border-pink-100 opacity-0 invisible lg:group-hover:opacity-100 lg:group-hover:visible transition-all">
+              <div class="p-4">
+                <span
+                  class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-colors cursor-pointer">
+                  <i class="mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-spa" aria-hidden="true"
+                      focusable="false" data-prefix="fas" data-icon="spa" role="img" xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 576 512" data-fa-i2svg="">
+                      <path fill="currentColor"
+                        d="M183.1 235.3c33.7 20.7 62.9 48.1 85.8 80.5c7 9.9 13.4 20.3 19.1 31c5.7-10.8 12.1-21.1 19.1-31c22.9-32.4 52.1-59.8 85.8-80.5C437.6 207.8 490.1 192 546 192h9.9c11.1 0 20.1 9 20.1 20.1C576 360.1 456.1 480 308.1 480H288 267.9C119.9 480 0 360.1 0 212.1C0 201 9 192 20.1 192H30c55.9 0 108.4 15.8 153.1 43.3zM301.5 37.6c15.7 16.9 61.1 71.8 84.4 164.6c-38 21.6-71.4 50.8-97.9 85.6c-26.5-34.8-59.9-63.9-97.9-85.6c23.2-92.8 68.6-147.7 84.4-164.6C278 33.9 282.9 32 288 32s10 1.9 13.5 5.6z">
+                      </path>
+                    </svg></i>Signature Facials
+                </span>
+                <span
+                  class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-colors cursor-pointer">
+                  <i class="mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-hand-sparkles" aria-hidden="true"
+                      focusable="false" data-prefix="fas" data-icon="hand-sparkles" role="img"
+                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg="">
+                      <path fill="currentColor"
+                        d="M320 0c17.7 0 32 14.3 32 32V240c0 8.8 7.2 16 16 16s16-7.2 16-16V64c0-17.7 14.3-32 32-32s32 14.3 32 32V240c0 8.8 7.2 16 16 16s16-7.2 16-16V128c0-17.7 14.3-32 32-32s32 14.3 32 32V323.1c-11.9 4.8-21.3 14.9-25 27.8l-8.9 31.2L478.9 391C460.6 396.3 448 413 448 432c0 18.9 12.5 35.6 30.6 40.9C448.4 497.4 409.9 512 368 512H348.8c-59.6 0-116.9-22.9-160-64L76.4 341c-16-15.2-16.6-40.6-1.4-56.6s40.6-16.6 56.6-1.4l60.5 57.6c0-1.5-.1-3.1-.1-4.6V64c0-17.7 14.3-32 32-32s32 14.3 32 32V240c0 8.8 7.2 16 16 16s16-7.2 16-16V32c0-17.7 14.3-32 32-32zm-7.3 326.6c-1.1-3.9-4.7-6.6-8.7-6.6s-7.6 2.7-8.7 6.6L288 352l-25.4 7.3c-3.9 1.1-6.6 4.7-6.6 8.7s2.7 7.6 6.6 8.7L288 384l7.3 25.4c1.1 3.9 4.7 6.6 8.7 6.6s7.6-2.7 8.7-6.6L320 384l25.4-7.3c3.9-1.1 6.6-4.7 6.6-8.7s-2.7-7.6-6.6-8.7L320 352l-7.3-25.4zM104 120l48.3 13.8c4.6 1.3 7.7 5.5 7.7 10.2s-3.1 8.9-7.7 10.2L104 168 90.2 216.3c-1.3 4.6-5.5 7.7-10.2 7.7s-8.9-3.1-10.2-7.7L56 168 7.7 154.2C3.1 152.9 0 148.7 0 144s3.1-8.9 7.7-10.2L56 120 69.8 71.7C71.1 67.1 75.3 64 80 64s8.9 3.1 10.2 7.7L104 120zM584 408l48.3 13.8c4.6 1.3 7.7 5.5 7.7 10.2s-3.1 8.9-7.7 10.2L584 456l-13.8 48.3c-1.3 4.6-5.5 7.7-10.2 7.7s-8.9-3.1-10.2-7.7L536 456l-48.3-13.8c-4.6-1.3-7.7-5.5-7.7-10.2s3.1-8.9 7.7-10.2L536 408l13.8-48.3c1.3-4.6 5.5-7.7 10.2-7.7s8.9 3.1 10.2 7.7L584 408z">
+                      </path>
+                    </svg></i>Manicure &amp; Pedicure
+                </span>
+                <span
+                  class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-colors cursor-pointer">
+                  <i class="mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-scissors" aria-hidden="true"
+                      focusable="false" data-prefix="fas" data-icon="scissors" role="img"
+                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                      <path fill="currentColor"
+                        d="M256 192l-39.5-39.5c4.9-12.6 7.5-26.2 7.5-40.5C224 50.1 173.9 0 112 0S0 50.1 0 112s50.1 112 112 112c14.3 0 27.9-2.7 40.5-7.5L192 256l-39.5 39.5c-12.6-4.9-26.2-7.5-40.5-7.5C50.1 288 0 338.1 0 400s50.1 112 112 112s112-50.1 112-112c0-14.3-2.7-27.9-7.5-40.5L499.2 76.8c7.1-7.1 7.1-18.5 0-25.6c-28.3-28.3-74.1-28.3-102.4 0L256 192zm22.6 150.6L396.8 460.8c28.3 28.3 74.1 28.3 102.4 0c7.1-7.1 7.1-18.5 0-25.6L342.6 278.6l-64 64zM64 112a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm48 240a48 48 0 1 1 0 96 48 48 0 1 1 0-96z">
+                      </path>
+                    </svg></i>Hair Styling
+                </span>
+                <span
+                  class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-colors cursor-pointer">
+                  <i class="mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-eye" aria-hidden="true"
+                      focusable="false" data-prefix="fas" data-icon="eye" role="img" xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 576 512" data-fa-i2svg="">
+                      <path fill="currentColor"
+                        d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z">
+                      </path>
+                    </svg></i>Lash &amp; Brow
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="relative group">
+            <button id="services-btn" aria-controls="services-menu" class="flex items-center justify-between w-full text-gray-700 hover:text-pink-600 font-medium transition-colors">
+              Products
+              <i class="ml-1 text-xs" aria-hidden="true"><svg
+                  class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas"
+                  data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                  data-fa-i2svg="">
+                  <path fill="currentColor"
+                    d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z">
+                  </path>
+                </svg></i>
+            </button>
+            <div
+              id="services-menu" role="menu" class="absolute top-full left-0 mt-2 lg:w-64 w-full bg-white rounded-xl shadow-xl border border-pink-100 opacity-0 invisible lg:group-hover:opacity-100 lg:group-hover:visible transition-all">
+              <div class="p-4">
+                <span
+                  class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-colors cursor-pointer">
+                  <i class="mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-droplet" aria-hidden="true"
+                      focusable="false" data-prefix="fas" data-icon="droplet" role="img"
+                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg="">
+                      <path fill="currentColor"
+                        d="M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0h1.8c9.6 0 18.5 4.2 24.5 11.7C253.8 57.7 384 228.8 384 320c0 106-86 192-192 192zM96 336c0-8.8-7.2-16-16-16s-16 7.2-16 16c0 61.9 50.1 112 112 112c8.8 0 16-7.2 16-16s-7.2-16-16-16c-44.2 0-80-35.8-80-80z">
+                      </path>
+                    </svg></i>Skincare Essentials
+                </span>
+                <span
+                  class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-colors cursor-pointer">
+                  <i class="mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-palette" aria-hidden="true"
+                      focusable="false" data-prefix="fas" data-icon="palette" role="img"
+                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                      <path fill="currentColor"
+                        d="M512 256c0 .9 0 1.8 0 2.7c-.4 36.5-33.6 61.3-70.1 61.3H344c-26.5 0-48 21.5-48 48c0 3.4 .4 6.7 1 9.9c2.1 10.2 6.5 20 10.8 29.9c6.1 13.8 12.1 27.5 12.1 42c0 31.8-21.6 60.7-53.4 62c-3.5 .1-7 .2-10.6 .2C114.6 512 0 397.4 0 256S114.6 0 256 0S512 114.6 512 256zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm0-96a32 32 0 1 0 0-64 32 32 0 1 0 0 64zM288 96a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm96 96a32 32 0 1 0 0-64 32 32 0 1 0 0 64z">
+                      </path>
+                    </svg></i>Makeup Collection
+                </span>
+                <span
+                  class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-colors cursor-pointer">
+                  <i class="mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-bottle-droplet" aria-hidden="true"
+                      focusable="false" data-prefix="fas" data-icon="bottle-droplet" role="img"
+                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg="">
+                      <path fill="currentColor"
+                        d="M96 0C82.7 0 72 10.7 72 24s10.7 24 24 24c4.4 0 8 3.6 8 8v64.9c0 12.2-7.2 23.1-17.2 30.1C53.7 174.1 32 212.5 32 256V448c0 35.3 28.7 64 64 64H224c35.3 0 64-28.7 64-64V256c0-43.5-21.7-81.9-54.8-105c-10-7-17.2-17.9-17.2-30.1V56c0-4.4 3.6-8 8-8c13.3 0 24-10.7 24-24s-10.7-24-24-24l-8 0 0 0 0 0H104l0 0 0 0L96 0zm64 382c-26.5 0-48-20.1-48-45c0-16.8 22.1-48.1 36.3-66.4c6-7.8 17.5-7.8 23.5 0C185.9 288.9 208 320.2 208 337c0 24.9-21.5 45-48 45z">
+                      </path>
+                    </svg></i>Hair Care
+                </span>
+                <span
+                  class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-colors cursor-pointer">
+                  <i class="mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-gift" aria-hidden="true"
+                      focusable="false" data-prefix="fas" data-icon="gift" role="img" xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512" data-fa-i2svg="">
+                      <path fill="currentColor"
+                        d="M190.5 68.8L225.3 128H224 152c-22.1 0-40-17.9-40-40s17.9-40 40-40h2.2c14.9 0 28.8 7.9 36.3 20.8zM64 88c0 14.4 3.5 28 9.6 40H32c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32H480c17.7 0 32-14.3 32-32V160c0-17.7-14.3-32-32-32H438.4c6.1-12 9.6-25.6 9.6-40c0-48.6-39.4-88-88-88h-2.2c-31.9 0-61.5 16.9-77.7 44.4L256 85.5l-24.1-41C215.7 16.9 186.1 0 154.2 0H152C103.4 0 64 39.4 64 88zm336 0c0 22.1-17.9 40-40 40H288h-1.3l34.8-59.2C329.1 55.9 342.9 48 357.8 48H360c22.1 0 40 17.9 40 40zM32 288V464c0 26.5 21.5 48 48 48H224V288H32zM288 512H432c26.5 0 48-21.5 48-48V288H288V512z">
+                      </path>
+                    </svg></i>Gift Sets
+                </span>
+              </div>
+            </div>
+          </div>
+          <span class="text-gray-700 hover:text-pink-600 font-medium transition-colors cursor-pointer">About</span>
+          <span class="text-gray-700 hover:text-pink-600 font-medium transition-colors cursor-pointer">Reviews</span>
+          <span class="text-gray-700 hover:text-pink-600 font-medium transition-colors cursor-pointer">Contact</span>
+        </nav>
+
+        <div class="flex items-center space-x-4">
+          <button class="hidden md:flex items-center text-gray-700 hover:text-pink-600 transition-colors">
+            <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-phone" aria-hidden="true" focusable="false"
+                data-prefix="fas" data-icon="phone" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                data-fa-i2svg="">
+                <path fill="currentColor"
+                  d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z">
+                </path>
+              </svg></i>
+            <span class="font-medium">(555) 123-GLOW</span>
+          </button>
+          <button
+            class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6 py-2 rounded-full font-medium transition-all shadow-lg hover:shadow-xl">
+            Book Now
+          </button>
+          <button class="lg:hidden text-gray-700">
+            <i class="text-xl" data-fa-i2svg=""><svg class="svg-inline--fa fa-bars" aria-hidden="true" focusable="false"
+                data-prefix="fas" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                data-fa-i2svg="">
+                <path fill="currentColor"
+                  d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z">
+                </path>
+              </svg></i>
+          </button>
         </div>
       </div>
     </div>

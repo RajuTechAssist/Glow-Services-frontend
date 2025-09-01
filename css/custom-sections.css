@@ -262,3 +262,185 @@ g.missing { display:none; }
   box-shadow: var(--tw-shadow) !important;
 }
 /* --- END FIX --- */
+
+
+/* ---------- Dropdown click support ---------- */
+/* Make dropdown visible when parent has .open */
+.relative.group.open > .absolute {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important; /* if you add translateY in your transitions */
+  pointer-events: auto; /* allow clicking inside */
+}
+
+/* Smooth transition if your dropdown uses transition-all */
+.relative.group > .absolute {
+  transition: opacity .18s ease, visibility .18s ease, transform .18s ease;
+  transform: translateY(.25rem); /* small drop in effect when hidden */
+  pointer-events: none;
+}
+
+/* rotate the little chevron when open (keeps your group-hover rotate behavior) */
+/* 1) Smooth transition + correct origin for chevron */
+.relative.group > button i,
+.relative.group > button svg {
+  transition: transform .18s ease;
+  transform-origin: center;
+}
+
+/* 2) Rotate only the <i> wrapper on hover or when .open */
+.relative.group:hover > button i,
+.relative.group.open > button i {
+  transform: rotate(180deg);
+}
+
+/* 3) Ensure the inner svg itself does NOT rotate (prevents double-rotation) */
+.relative.group > button svg {
+  transform: rotate(0deg) !important;
+}
+
+
+/* If some other rule forces pointer-events off, ensure dropdown items are clickable */
+.relative.group.open .p-4,
+.relative.group.open .p-4 > span {
+  pointer-events: auto;
+}
+
+/* Mobile: show nav when .show-mobile-nav is applied to header */
+#header.show-mobile-nav nav.hidden {
+  display: block !important;
+}
+@media (min-width: 1024px) {
+  /* keep original desktop behavior */
+  #header.show-mobile-nav nav.hidden { display: none !important; }
+}
+
+
+/* ===== Dropdown click/open state support ===== */
+.relative.group.open > .absolute {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto;
+}
+
+/* default transition for dropdowns */
+.relative.group > .absolute {
+  transition: opacity .18s ease, visibility .18s ease, transform .18s ease;
+  transform: translateY(.25rem);
+  pointer-events: none;
+}
+
+/* Rotate chevron when open (applies to SVG inside button) */
+.relative.group button svg,
+.relative.group button i {
+  transition: transform .18s ease;
+}
+.relative.group.open > button svg,
+.relative.group.open > button i {
+  transform: rotate(180deg);
+}
+
+/* Ensure dropdown content clickable */
+.relative.group.open .p-4,
+.relative.group.open .p-4 > span {
+  pointer-events: auto;
+}
+
+/* ===== Mobile nav / responsive layout ===== */
+
+/* Hide mobile nav by default (keeps tailwind hidden lg:flex behavior) */
+@media (max-width: 1023px) {
+  /* When header has .show-mobile-nav or when nav is removed 'hidden', we show the nav */
+  #header.show-mobile-nav nav,
+  #header nav:not(.hidden) {
+    display: block !important;
+  }
+
+  /* Make nav a stacked panel under header */
+  #header nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 48;
+    display: none; /* toggled by JS / show-mobile-nav */
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(6px);
+    padding: 0.75rem 1rem;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    border-top: 1px solid rgba(249, 204, 220, 0.6); /* subtle pink border */
+    flex-direction: column;
+    gap: .35rem;
+  }
+
+  /* Make each nav entry full-width */
+  #header nav > .relative.group,
+  #header nav > span,
+  #header nav > .relative.group > button {
+    width: 100%;
+  }
+
+  /* Buttons inside mobile nav: left aligned and expand */
+  #header nav > .relative.group > button,
+  #header nav > span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .65rem .9rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  /* Dropdown menus become accordion content on mobile */
+  #header nav .absolute {
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    box-shadow: none;
+    border: none;
+    margin-top: 0;
+    padding: 0;
+    pointer-events: auto;
+    display: none; /* we'll show when parent .open */
+  }
+
+  #header nav .relative.group.open > .absolute {
+    display: block;
+  }
+
+  /* Inner dropdown items full width and indented */
+  #header nav .absolute .p-4 {
+    padding: 0.25rem 0;
+  }
+  #header nav .absolute .p-4 > span {
+    display: block;
+    padding: .65rem .9rem;
+    padding-left: 1.1rem;
+    border-radius: .375rem;
+  }
+
+  /* Spacing for non-dropdown links */
+  #header nav > span {
+    padding: .65rem .9rem;
+  }
+}
+
+/* ===== Tablet tweaks (optional) ===== */
+@media (min-width: 640px) and (max-width: 1023px) {
+  #header nav {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* ===== Desktop: ensure original behaviour preserved, but animate slightly ===== */
+@media (min-width: 1024px) {
+  /* keep original absolute dropdown width but allow responsiveness */
+  .relative.group > .absolute {
+    width: 16rem; /* 64 */
+    left: 0;
+  }
+}
