@@ -283,3 +283,161 @@ if (!window.__glowNavInit) {
 
 } // end guard
 
+// ---------- Products multi-level toggle (safe to append) ----------
+if (!window.__glowProductsInit) {
+  window.__glowProductsInit = true;
+
+  (function () {
+    document.addEventListener('DOMContentLoaded', function () {
+      const productsMenu = document.getElementById('products-menu');
+      if (!productsMenu) return;
+
+      // Helper to close all sublists at a given root
+      function closeAll(root, selector) {
+        Array.from(root.querySelectorAll(selector)).forEach(el => {
+          el.classList.remove('open');
+          // set aria-expanded if it's a button
+          const btn = el.querySelector('button') || el.closest('.prod-cat') && el.closest('.prod-cat').querySelector('button');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
+      }
+
+      // Toggle main categories
+      Array.from(productsMenu.querySelectorAll('.prod-cat-btn')).forEach(btn => {
+        btn.addEventListener('click', function (ev) {
+          ev.stopPropagation();
+          const targetId = btn.getAttribute('data-target');
+          const container = document.getElementById(targetId);
+          if (!container) return;
+
+          const prodCat = container.closest('.prod-cat');
+          const isOpen = prodCat.classList.toggle('open');
+          btn.setAttribute('aria-expanded', String(isOpen));
+
+          // close other main categories (optional — keeps UI tidy)
+          Array.from(productsMenu.querySelectorAll('.prod-cat')).forEach(other => {
+            if (other !== prodCat) {
+              other.classList.remove('open');
+              const obtn = other.querySelector('.prod-cat-btn');
+              if (obtn) obtn.setAttribute('aria-expanded', 'false');
+            }
+          });
+        });
+      });
+
+      // Toggle subcategories that have further sub-sub lists
+      Array.from(productsMenu.querySelectorAll('.subcat-btn')).forEach(sbtn => {
+        sbtn.addEventListener('click', function (ev) {
+          ev.stopPropagation();
+          const tid = sbtn.getAttribute('data-target');
+          const submenu = document.getElementById(tid);
+          if (!submenu) return;
+          const subWrap = submenu.closest('.subcat');
+          const open = subWrap.classList.toggle('open');
+          sbtn.setAttribute('aria-expanded', String(open));
+
+          // close sibling subcats within same main category
+          const parentList = subWrap.parentElement;
+          if (parentList) {
+            Array.from(parentList.querySelectorAll('.subcat')).forEach(sib => {
+              if (sib !== subWrap) {
+                sib.classList.remove('open');
+                const sb = sib.querySelector('.subcat-btn');
+                if (sb) sb.setAttribute('aria-expanded', 'false');
+              }
+            });
+          }
+        });
+      });
+
+      // Close all product menu lists when clicking outside
+      document.addEventListener('click', function (ev) {
+        // if click is outside productsMenu, close
+        if (!productsMenu.contains(ev.target)) {
+          Array.from(productsMenu.querySelectorAll('.prod-cat')).forEach(pc => pc.classList.remove('open'));
+          Array.from(productsMenu.querySelectorAll('.subcat')).forEach(sc => sc.classList.remove('open'));
+          // reset aria
+          Array.from(productsMenu.querySelectorAll('.prod-cat-btn, .subcat-btn')).forEach(b => b.setAttribute('aria-expanded', 'false'));
+        }
+      });
+
+      // Close on esc
+      document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape' || ev.key === 'Esc') {
+          Array.from(productsMenu.querySelectorAll('.prod-cat, .subcat')).forEach(el => el.classList.remove('open'));
+          Array.from(productsMenu.querySelectorAll('.prod-cat-btn, .subcat-btn')).forEach(b => b.setAttribute('aria-expanded', 'false'));
+        }
+      });
+
+      // If the site switches from mobile to desktop, make sure accordions are reset (optional)
+      let prevW = window.innerWidth;
+      window.addEventListener('resize', function () {
+        const w = window.innerWidth;
+        if (prevW < 1024 && w >= 1024) {
+          // close mobile accordions (desktop hover will handle)
+          Array.from(productsMenu.querySelectorAll('.prod-cat, .subcat')).forEach(el => el.classList.remove('open'));
+          Array.from(productsMenu.querySelectorAll('.prod-cat-btn, .subcat-btn')).forEach(b => b.setAttribute('aria-expanded', 'false'));
+        }
+        prevW = w;
+      });
+
+    }); // DOM ready
+  })();
+}
+
+
+// ---------- Products menu runtime height fallback ----------
+(function(){
+  // run after DOM ready
+  document.addEventListener('DOMContentLoaded', function () {
+    const productsBtn = document.querySelector('#products-btn');
+    const productsMenu = document.querySelector('#products-menu');
+    const header = document.getElementById('header');
+
+    if (!productsBtn || !productsMenu) return;
+
+    function setProductsMenuHeight() {
+      // compute how much vertical space is available beneath header
+      const headerBottom = header ? header.getBoundingClientRect().bottom : 64;
+      const viewportH = window.innerHeight;
+      // keep a 20px gap bottom
+      const avail = Math.max(120, viewportH - headerBottom - 20);
+      // limit not more than 70% of viewport
+      const max = Math.min(avail, Math.round(viewportH * 0.7));
+      productsMenu.style.maxHeight = max + 'px';
+      productsMenu.style.overflowY = 'auto';
+      productsMenu.style.webkitOverflowScrolling = 'touch';
+    }
+
+    // apply when Products button is clicked or hovered (desktop)
+    productsBtn.addEventListener('click', function (e) {
+      // give the CSS time to show menu (if using hover) then set height
+      setTimeout(setProductsMenuHeight, 50);
+    });
+
+    // on mouseenter (desktop hover)
+    productsBtn.addEventListener('mouseenter', setProductsMenuHeight);
+
+    // also adjust on resize / orientationchange
+    window.addEventListener('resize', setProductsMenuHeight);
+    window.addEventListener('orientationchange', setProductsMenuHeight);
+
+    // If your dropdown opens via adding .open class somewhere, observe mutations and set height
+    const obs = new MutationObserver(function(mutations){
+      for (const m of mutations) {
+        if (m.type === 'attributes' && (m.attributeName === 'class' || m.attributeName === 'style')) {
+          // if menu is visible (not invisible)
+          const vis = window.getComputedStyle(productsMenu).visibility;
+          if (vis !== 'hidden') {
+            setProductsMenuHeight();
+          }
+        }
+      }
+    });
+    obs.observe(productsMenu, { attributes: true, attributeFilter: ['class', 'style'] });
+
+    // initial
+    setProductsMenuHeight();
+  });
+})();
+

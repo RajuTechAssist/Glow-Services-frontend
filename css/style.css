@@ -1122,3 +1122,255 @@ div#amessage .error_message {
 .footer .foo-nav li a:hover {
   color: #ff817e;
 }
+
+/* ---------- Make dropdown menus scrollable ---------- */
+/* Desktop dropdown (absolute position) */
+#services-menu,
+#products-menu,
+.relative.group > .absolute {
+  /* limit height so long lists fit in viewport */
+  max-height: 60vh;          /* adjust as needed (e.g. 50vh / 70vh) */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* smooth momentum scrolling on iOS */
+}
+
+/* Mobile accordion (static position inside nav) */
+@media (max-width: 1023px) {
+  /* ensure the accordion area can scroll inside the mobile nav panel */
+  #services-menu,
+  #products-menu,
+  #header nav .absolute {
+    max-height: calc(100vh - 140px); /* header / spacing accounted for */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* make items not stretch the parent (so scrolling works nicely) */
+  #services-menu .p-4,
+  #products-menu .p-4 {
+    display: block;
+  }
+}
+
+/* Optional: thin subtle scrollbar styling (WebKit browsers) */
+#services-menu::-webkit-scrollbar,
+#products-menu::-webkit-scrollbar,
+.relative.group > .absolute::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+#services-menu::-webkit-scrollbar-thumb,
+#products-menu::-webkit-scrollbar-thumb,
+.relative.group > .absolute::-webkit-scrollbar-thumb {
+  background: rgba(219, 39, 119, 0.12); /* subtle pink */
+  border-radius: 8px;
+}
+#services-menu::-webkit-scrollbar-track,
+#products-menu::-webkit-scrollbar-track,
+.relative.group > .absolute::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* ---------- Multi-level products dropdown styling ---------- */
+
+/* hide/show helpers */
+#products-menu .subcat-list,
+#products-menu .subsub-list {
+  display: none;
+}
+#products-menu .prod-cat.open > .subcat-list,
+#products-menu .subcat.open > .subsub-list {
+  display: block;
+}
+
+/* chevron rotation */
+#products-menu .chev {
+  transition: transform .18s ease;
+  transform-origin: center;
+  color: rgba(156,163,175,1); /* gray-400 */
+}
+#products-menu .prod-cat.open > button .chev,
+#products-menu .subcat.open > button .chev {
+  transform: rotate(180deg);
+  color: currentColor;
+}
+
+/* spacing & look */
+#products-menu .prod-cat { border-bottom: 1px solid rgba(249, 204, 220, 0.06); }
+#products-menu .prod-cat-btn { background: transparent; border: none; padding: .35rem 0; cursor: pointer; width: 100%; text-align: left; }
+#products-menu a { text-decoration: none; }
+
+/* small screens: make nested lists scroll nicely inside the mobile nav */
+@media (max-width: 1023px) {
+  #products-menu { max-height: calc(100vh - 140px); overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  #products-menu .prod-cat-btn { padding-left: .25rem; padding-right: .25rem; }
+  #products-menu .subcat-list { padding-left: .5rem; }
+  #products-menu .subsub-list { padding-left: .75rem; }
+}
+
+/* desktop: widths */
+@media (min-width: 1024px) {
+  #products-menu { width: 20rem; } /* lg:w-80 */
+}
+
+/* small visual polish */
+#products-menu .prod-cat-btn:hover,
+#products-menu .subcat-btn:hover,
+#products-menu a:hover { color: #db2777; background: rgba(255,241,245,0.6); border-radius: .375rem; }
+
+
+/* ---------- Fix products dropdown size + scrolling ---------- */
+
+/* Keep dropdown compact on desktop and limit its height with scrolling */
+#products-menu {
+  /* force a max-width so it doesn't stretch full page */
+  max-width: 20rem !important;   /* 20rem = 320px (change if you prefer wider) */
+  width: auto !important;
+
+  /* limit height so it fits the screen and allow scrolling */
+  max-height: 60vh;              /* desktop max height */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* smooth iOS scrolling */
+
+  /* visual polish */
+  box-sizing: border-box;
+  padding-right: 0.25rem; /* small room for scrollbar */
+}
+
+/* For mobile sizes keep slightly taller limit (inside mobile nav) */
+@media (max-width: 1023px) {
+  #products-menu {
+    max-width: none !important;
+    width: 100% !important;
+    /* subtract header + some breathing room */
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+  }
+}
+
+/* Make sure inner containers don't force larger width */
+#products-menu .p-4 {
+  box-sizing: border-box;
+  width: 270px;
+}
+
+/* Constrain chevron sizes (they were rendering very large) */
+/* Target only our product chevrons so we don't affect other chevrons */
+#products-menu .chev {
+  width: 1.1rem;    /* ~18px */
+  height: 1.1rem;
+  flex-shrink: 0;
+  display: inline-block;
+  transition: transform .18s ease;
+  transform-origin: center;
+}
+
+/* Prevent other global rules rotating/scaling SVGs inside buttons */
+#products-menu button > svg:not(.chev),
+#products-menu button > i > svg:not(.chev) {
+  transform: none !important;
+}
+
+/* chevron rotation when open */
+#products-menu .prod-cat.open > button .chev,
+#products-menu .subcat.open > button .chev {
+  transform: rotate(180deg);
+}
+
+/* Show visible scrollbar (thin) */
+#products-menu::-webkit-scrollbar {
+  width: 10px;
+}
+#products-menu::-webkit-scrollbar-thumb {
+  background: rgba(219, 39, 119, 0.14);
+  border-radius: 8px;
+}
+#products-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* If other .absolute rules override sizing, be explicit for products */
+.relative.group > #products-menu,
+#header #products-menu {
+  left: 0;
+}
+
+/* Optional: reduce inner large paddings that may force height */
+#products-menu .prod-cat-btn,
+#products-menu .subcat-btn,
+#products-menu .subcategory,
+#products-menu a {
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+
+/* === Make Products dropdown scroll like Services (paste at end of stylesheet) === */
+
+/* Ensure parent won't clip the absolute dropdown */
+.relative.group, #header {
+  overflow: visible !important;
+}
+
+/* Keep products dropdown compact and scrollable (desktop) */
+#products-menu {
+  position: absolute !important;
+  left: 0 !important;
+  top: 100% !important;
+
+  max-width: 20rem !important;   /* match Services' compact width */
+  width: auto !important;
+  box-sizing: border-box !important;
+
+  /* scrolling */
+  max-height: 60vh !important;   /* desktop max height */
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+
+  padding-right: .25rem !important; /* room for scrollbar */
+}
+
+/* Make the inner p-4 area also constrained (prevents inner expansion) */
+#products-menu > .p-4 {
+  box-sizing: border-box !important;
+  max-height: calc(60vh - 1rem) !important;
+  overflow-y: auto !important;
+  padding-right: 0 !important;
+}
+
+/* Mobile: full width but still scrollable */
+@media (max-width: 1023px) {
+  #products-menu {
+    max-width: none !important;
+    width: 93% !important;
+    max-height: calc(100vh - 140px) !important;
+  }
+  #products-menu > .p-4 {
+    max-height: calc(100vh - 200px) !important;
+    width: auto !important;
+  }
+}
+
+/* Subtle thin scrollbar (WebKit) similar to Services */
+#products-menu::-webkit-scrollbar { width: 8px; height: 8px; }
+#products-menu::-webkit-scrollbar-thumb {
+  background: rgba(219,39,119,0.12);
+  border-radius: 8px;
+}
+#products-menu::-webkit-scrollbar-track { background: transparent; }
+
+/* Small polish: reduce vertical padding so more items fit before scroll */
+#products-menu .p-4 .block,
+#products-menu a,
+#products-menu .subcategory,
+#products-menu .prod-cat-btn {
+  padding-top: .45rem !important;
+  padding-bottom: .45rem !important;
+}
+
+/* Protect chevrons from being huge (if any) */
+#products-menu .chev { width: 1.05rem; height: 1.05rem; flex-shrink: 0; }
+
+/* Safety: avoid accidental overrides by other rules */
+#header #products-menu,
+.relative.group > #products-menu {
+  left: 0 !important;
+}
