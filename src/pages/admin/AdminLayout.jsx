@@ -1,121 +1,91 @@
-import React from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LogOut, User, Settings, Home } from 'lucide-react';
+import React, { useState } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
+import { Bell, User, Menu } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
+import AdminSidebar from '../../components/admin/AdminSidebar';
 
 const AdminLayout = () => {
-  const { adminUser, adminLogout } = useAdminAuth();
-  const navigate = useNavigate();
+  const { adminUser } = useAdminAuth();
+  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const handleLogout = () => {
-    if (window.confirm('Are you sure you want to logout?')) {
-      adminLogout();
-      navigate('/admin/login');
-    }
+  // Get current page name
+  const getCurrentPageName = () => {
+    const path = location.pathname;
+    if (path === '/admin/dashboard') return 'Dashboard';
+    if (path.startsWith('/admin/services')) return 'Services';
+    if (path.startsWith('/admin/products')) return 'Products';
+    if (path.startsWith('/admin/customers')) return 'Customers';
+    if (path.startsWith('/admin/bookings')) return 'Bookings';
+    if (path.startsWith('/admin/staff')) return 'Staff';
+    if (path.startsWith('/admin/orders')) return 'Orders';
+    if (path.startsWith('/admin/inventory')) return 'Inventory';
+    if (path.startsWith('/admin/analytics')) return 'Analytics';
+    if (path.startsWith('/admin/reviews')) return 'Reviews';
+    if (path.startsWith('/admin/marketing')) return 'Marketing';
+    if (path.startsWith('/admin/settings')) return 'Settings';
+    return 'Admin Dashboard';
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 text-white flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex">
+      
+      {/* Sidebar Component */}
+      <AdminSidebar 
+        isOpen={sidebarOpen} 
+        onClose={() => setSidebarOpen(false)} 
+      />
+
+      {/* Main content area */}
+      <div className="flex-1 flex flex-col min-w-0 lg:ml-0">
         
-        {/* Admin Info */}
-        <div className="p-6 border-b border-gray-700">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center">
-              <User className="h-6 w-6 text-white" />
-            </div>
-            <div>
-              <h3 className="font-semibold">{adminUser?.fullName || 'Admin'}</h3>
-              <p className="text-sm text-gray-400">{adminUser?.role || 'Administrator'}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 px-4 py-6 space-y-2">
-          <NavLink 
-            to="/admin/services" 
-            className={({isActive}) => 
-              `flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                isActive 
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white' 
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-              }`
-            }
-          >
-            <Settings className="h-5 w-5" />
-            <span>Manage Services</span>
-          </NavLink>
-
-          <NavLink 
-            to="/admin/products" 
-            className={({isActive}) => 
-              `flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                isActive 
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white' 
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-              }`
-            }
-          >
-            <Settings className="h-5 w-5" />
-            <span>Manage Products</span>
-          </NavLink>
-
-          <NavLink 
-            to="/admin/customers" 
-            className={({isActive}) => 
-              `flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                isActive 
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white' 
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-              }`
-            }
-          >
-            <User className="h-5 w-5" />
-            <span>Manage Customers</span>
-          </NavLink>
-
-          <div className="border-t border-gray-700 pt-4 mt-6">
-            <button
-              onClick={() => navigate('/')}
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-all duration-200 w-full"
-            >
-              <Home className="h-5 w-5" />
-              <span>Back to Website</span>
-            </button>
-          </div>
-        </nav>
-
-        {/* Logout Button */}
-        <div className="p-4 border-t border-gray-700">
-          <button 
-            onClick={handleLogout}
-            className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-red-600 hover:text-white transition-all duration-200 w-full"
-          >
-            <LogOut className="h-5 w-5" />
-            <span>Logout</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 bg-gray-100">
-        {/* Header */}
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
+        {/* Top header bar */}
+        <div className="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+            
+            {/* Left side - Mobile menu + Page title */}
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Welcome, {adminUser?.fullName || 'Admin'}</span>
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="lg:hidden p-2 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              >
+                <Menu className="h-6 w-6" />
+              </button>
+
+              {/* Page title */}
+              <h1 className="text-2xl font-bold text-gray-900">
+                {getCurrentPageName()}
+              </h1>
+            </div>
+            
+            {/* Right side - Actions & User */}
+            <div className="flex items-center space-x-4">
+              
+              {/* Notifications */}
+              <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full relative focus:outline-none focus:ring-2 focus:ring-pink-500">
+                <Bell className="h-5 w-5" />
+                <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
+              </button>
+              
+              {/* User info */}
+              <div className="flex items-center space-x-3">
+                <span className="text-sm font-medium text-gray-700 hidden sm:block">
+                  {adminUser?.fullName || 'Admin'}
+                </span>
+                <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center">
+                  <User className="h-4 w-4 text-white" />
+                </div>
+              </div>
             </div>
           </div>
-        </header>
-        
-        {/* Page Content */}
-        <div className="p-6">
-          <Outlet />
         </div>
-      </main>
+
+        {/* Page content */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

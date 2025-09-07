@@ -1,5 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate  } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AdminAuthProvider } from './context/AdminAuthContext';
+import { CustomerAuthProvider } from './context/CustomerAuthContext';
+import ProtectedAdminRoute from './components/ProtectedAdminRoute';
+import ProtectedCustomerRoute from './components/ProtectedCustomerRoute';
+
+// User components
 import Header from './components/layout/header';
 import HeroSection from './components/sections/HeroSection';
 import WhyChooseSection from './components/sections/WhyChooseSection';
@@ -16,10 +22,9 @@ import Footer from './components/sections/Footer';
 import { CartProvider } from './context/CartContext';
 import CheckoutPage from './pages/CheckoutPage';
 
-import { AdminAuthProvider } from './context/AdminAuthContext';
-import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 
-// Admin Pages
+
+// Admin components
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
 import ServicesAdminPage from './pages/admin/ServicesAdminPage';
@@ -28,6 +33,16 @@ import ProductsAdminPage from './pages/admin/ProductsAdminPage';
 import ProductForm from './pages/admin/ProductForm';
 import CustomersAdminPage from './pages/admin/CustomersAdminPage';
 import CustomerForm from './pages/admin/CustomerForm';
+
+// Customer components
+import CustomerLogin from './pages/customer/CustomerLogin';
+import CustomerRegister from './pages/customer/CustomerRegister';
+import CustomerLayout from './pages/customer/CustomerLayout';
+import CustomerDashboard from './pages/customer/CustomerDashboard';
+import CustomerProfile from './pages/customer/CustomerProfile';
+import CustomerOrders from './pages/customer/CustomerOrders';
+import CustomerRewards from './pages/customer/CustomerRewards';
+import CustomerHistory from './pages/customer/CustomerHistory';
 
 // Import the new About Page
 import AboutPage from './pages/AboutPage';
@@ -77,53 +92,123 @@ const Contact = () => (
 function App() {
   return (
     <AdminAuthProvider>
-    <CartProvider>
-      <Router>
-        <div className="App">
-          <Header />
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/services" element={<ServicesPage />} />
-              <Route path="/services/:slug" element={<ServiceDetailPage />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
+      <CustomerAuthProvider>
+        <CartProvider>
+          <Router>
+            <div className="App">
+              <main>
+                <Routes>
+                  <Route path="/" element={
+                    <div className="min-h-screen bg-white">
+                      <Header />
+                      <HeroSection />
+                      <WhyChooseSection />
+                      <HowItWorksSection />
+                      <ServicesSection />
+                      <ProductsSection />
+                      <AboutSection />
+                      <TestimonialsSection />
+                      <CallToActionSection />
+                      <NewsletterSection />
+                      <BlogSection />
+                      <ContactSection />
 
-              {/* Admin Login (Public) */}
-              <Route path="/admin/login" element={<AdminLogin />} />
+                      {/* We'll add more sections here */}
+                    </div>
+                  } />
+                  <Route path="/about" element={
+                    <div className="min-h-screen bg-white">
+                      <Header />
+                      <AboutPage />
+                      <Footer />
+                    </div>
+                  } />
+                  <Route path="/services" element={
+                    <div className="min-h-screen bg-white">
+                      <Header />
+                      <ServicesPage />
+                      <Footer />
+                    </div>
+                  } />
+                  <Route path="/services/:slug" element={
+                    <div className="min-h-screen bg-white">
+                      <Header />
+                      <ServiceDetailPage />
+                      <Footer />
+                    </div>
+                  } />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/blog" element={
+                    <div className="min-h-screen bg-white">
+                      <Header />
+                      <BlogSection />
+                      <Footer />
+                    </div>
+                  } />
+                  <Route path="/contact" element={
+                    <div className="min-h-screen bg-white">
+                      <Header />
+                      <ContactSection />
+                      <Footer />
+                    </div>
+                  } />
+                  <Route path="/checkout" element={
+                    <div className="min-h-screen bg-white">
+                      <Header />
+                      <CheckoutPage />
+                      <Footer />
+                    </div>
+                  } />
 
-               {/* Protected Admin Routes */}
-              <Route path="/admin" element={
-                <ProtectedAdminRoute>
-                  <AdminLayout />
-                </ProtectedAdminRoute>
-              }>
-                <Route index element={<Navigate to="/admin/services" replace />} />
-                <Route path="services" element={<ServicesAdminPage />} />
-                <Route path="services/create" element={<ServiceForm />} />
-                <Route path="services/edit/:slug" element={<ServiceForm />} />
+                  {/* Admin Login (Public) */}
+                  <Route path="/admin/login" element={<AdminLogin />} />
 
-                <Route path="/admin/products" element={<ProductsAdminPage />} />
-                <Route path="products" element={<ProductsAdminPage />} />
-                <Route path="/admin/products/create" element={<ProductForm />} />
-                <Route path="/admin/products/edit/:id" element={<ProductForm />} />
+                  {/* Protected Admin Routes */}
+                  <Route path="/admin" element={
+                    <ProtectedAdminRoute>
+                      <AdminLayout />
+                    </ProtectedAdminRoute>
+                  }>
+                    <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                    <Route path="services" element={<ServicesAdminPage />} />
+                    <Route path="services/create" element={<ServiceForm />} />
+                    <Route path="services/edit/:slug" element={<ServiceForm />} />
 
-                <Route path="customers" element={<CustomersAdminPage />} />
-                <Route path="/admin/customers" element={<CustomersAdminPage />} />
-                <Route path="/admin/customers/create" element={<CustomerForm />} />
-                <Route path="/admin/customers/edit/:id" element={<CustomerForm />} />
-              </Route>
+                    <Route path="/admin/products" element={<ProductsAdminPage />} />
+                    <Route path="products" element={<ProductsAdminPage />} />
+                    <Route path="/admin/products/create" element={<ProductForm />} />
+                    <Route path="/admin/products/edit/:id" element={<ProductForm />} />
 
-            </Routes>
+                    <Route path="customers" element={<CustomersAdminPage />} />
+                    <Route path="/admin/customers" element={<CustomersAdminPage />} />
+                    <Route path="/admin/customers/create" element={<CustomerForm />} />
+                    <Route path="/admin/customers/edit/:id" element={<CustomerForm />} />
+                  </Route>
 
-          </main>
-          <Footer />
-        </div>
-      </Router>
-    </CartProvider>
+                  {/* CUSTOMER AUTH ROUTES - Public */}
+                  <Route path="/customer/login" element={<CustomerLogin />} />
+                  <Route path="/customer/register" element={<CustomerRegister />} />
+                  {/* PROTECTED CUSTOMER ROUTES */}
+                  <Route path="/customer" element={
+                    <ProtectedCustomerRoute>
+                      <CustomerLayout />
+                    </ProtectedCustomerRoute>
+                  }>
+                    <Route index element={<Navigate to="/customer/dashboard" replace />} />
+                    <Route path="dashboard" element={<CustomerDashboard />} />
+                    <Route path="profile" element={<CustomerProfile />} />
+                    <Route path="orders" element={<CustomerOrders />} />
+                    <Route path="rewards" element={<CustomerRewards />} />
+                    <Route path="history" element={<CustomerHistory />} />
+                  </Route>
+
+                </Routes>
+
+              </main>
+            </div>
+          </Router>
+        </CartProvider>
+      </CustomerAuthProvider>
     </AdminAuthProvider>
   );
 }

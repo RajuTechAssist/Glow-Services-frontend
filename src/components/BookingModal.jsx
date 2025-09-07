@@ -6,18 +6,18 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
     // Date & Time
     selectedDate: '',
     selectedTime: '',
-    
+
     // Location
     serviceLocation: 'home', // 'home' or 'salon'
     address: '',
     city: '',
     pincode: '',
-    
+
     // Customer Details
     fullName: '',
     phone: '',
     email: '',
-    
+
     // Additional
     specialInstructions: '',
     paymentMethod: 'cod' // 'cod', 'online'
@@ -35,17 +35,17 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
   const getAvailableDates = () => {
     const dates = [];
     const today = new Date();
-    
+
     for (let i = 1; i <= 30; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
-      
+
       // Skip Sundays (day 0)
       if (date.getDay() !== 0) {
         dates.push(date.toISOString().split('T')[0]);
       }
     }
-    
+
     return dates;
   };
 
@@ -76,9 +76,9 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
       totalPrice: service.price * quantity,
       bookingData: bookingData
     };
-    
+
     console.log('Booking Details:', bookingDetails);
-    
+
     // For now, just show alert
     alert(`Booking confirmed! 
     
@@ -89,7 +89,7 @@ Location: ${bookingData.serviceLocation === 'home' ? 'Home Service' : 'Salon Vis
 Total: ₹${service.price * quantity}
 
 We will call you at ${bookingData.phone} to confirm the booking.`);
-    
+
     onClose();
   };
 
@@ -114,21 +114,19 @@ We will call you at ${bookingData.phone} to confirm the booking.`);
               <X className="h-6 w-6" />
             </button>
           </div>
-          
+
           {/* Step Indicator */}
           <div className="flex items-center mt-4 space-x-2">
             {[1, 2, 3, 4].map((step) => (
               <div key={step} className="flex items-center">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                  step <= currentStep 
-                    ? 'bg-pink-500 text-white' 
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${step <= currentStep
+                    ? 'bg-pink-500 text-white'
                     : 'bg-gray-200 text-gray-600'
-                }`}>
+                  }`}>
                   {step}
                 </div>
-                {step < 4 && <div className={`w-8 h-1 mx-2 ${
-                  step < currentStep ? 'bg-pink-500' : 'bg-gray-200'
-                }`} />}
+                {step < 4 && <div className={`w-8 h-1 mx-2 ${step < currentStep ? 'bg-pink-500' : 'bg-gray-200'
+                  }`} />}
               </div>
             ))}
           </div>
@@ -162,11 +160,10 @@ We will call you at ${bookingData.phone} to confirm the booking.`);
                       <button
                         key={date}
                         onClick={() => handleInputChange('selectedDate', date)}
-                        className={`p-3 rounded-lg border text-sm transition-all duration-200 ${
-                          isSelected
+                        className={`p-3 rounded-lg border text-sm transition-all duration-200 ${isSelected
                             ? 'border-pink-500 bg-pink-50 text-pink-700'
                             : 'border-gray-200 hover:border-pink-300 hover:bg-pink-25'
-                        }`}
+                          }`}
                       >
                         <div className="font-medium">
                           {dateObj.toLocaleDateString('en-US', { weekday: 'short' })}
@@ -190,11 +187,10 @@ We will call you at ${bookingData.phone} to confirm the booking.`);
                       <button
                         key={time}
                         onClick={() => handleInputChange('selectedTime', time)}
-                        className={`p-3 rounded-lg border text-sm font-medium transition-all duration-200 ${
-                          isSelected
+                        className={`p-3 rounded-lg border text-sm font-medium transition-all duration-200 ${isSelected
                             ? 'border-pink-500 bg-pink-50 text-pink-700'
                             : 'border-gray-200 hover:border-pink-300 hover:bg-pink-25'
-                        }`}
+                          }`}
                       >
                         {time}
                       </button>
@@ -218,11 +214,10 @@ We will call you at ${bookingData.phone} to confirm the booking.`);
               <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={() => handleInputChange('serviceLocation', 'home')}
-                  className={`p-6 rounded-xl border-2 text-center transition-all duration-200 ${
-                    bookingData.serviceLocation === 'home'
+                  className={`p-6 rounded-xl border-2 text-center transition-all duration-200 ${bookingData.serviceLocation === 'home'
                       ? 'border-pink-500 bg-pink-50'
                       : 'border-gray-200 hover:border-pink-300'
-                  }`}
+                    }`}
                 >
                   <div className="text-2xl mb-2">🏠</div>
                   <div className="font-medium">Home Service</div>
@@ -231,11 +226,10 @@ We will call you at ${bookingData.phone} to confirm the booking.`);
 
                 <button
                   onClick={() => handleInputChange('serviceLocation', 'salon')}
-                  className={`p-6 rounded-xl border-2 text-center transition-all duration-200 ${
-                    bookingData.serviceLocation === 'salon'
+                  className={`p-6 rounded-xl border-2 text-center transition-all duration-200 ${bookingData.serviceLocation === 'salon'
                       ? 'border-pink-500 bg-pink-50'
                       : 'border-gray-200 hover:border-pink-300'
-                  }`}
+                    }`}
                 >
                   <div className="text-2xl mb-2">🏪</div>
                   <div className="font-medium">Visit Salon</div>
@@ -256,7 +250,7 @@ We will call you at ${bookingData.phone} to confirm the booking.`);
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                     />
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
@@ -285,92 +279,51 @@ We will call you at ${bookingData.phone} to confirm the booking.`);
           )}
 
           {/* Step 3: Customer Details */}
+          {/* Account Creation Option */}
           {currentStep === 3 && (
-            <div className="space-y-6">
-              <div className="text-center">
-                <User className="h-12 w-12 text-pink-500 mx-auto mb-4" />
-                <h4 className="text-xl font-bold text-gray-900 mb-2">Your Details</h4>
-                <p className="text-gray-600">We need these to confirm your booking</p>
-              </div>
+            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+              <h4 className="font-medium text-blue-900 mb-2">Create Your Account</h4>
+              <p className="text-blue-700 text-sm mb-4">
+                Create an account to track your bookings, earn loyalty points, and get exclusive offers!
+              </p>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-                  <input
-                    type="text"
-                    value={bookingData.fullName}
-                    onChange={(e) => handleInputChange('fullName', e.target.value)}
-                    placeholder="Enter your full name"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  />
-                </div>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={bookingData.createAccount || false}
+                  onChange={(e) => handleInputChange('createAccount', e.target.checked)}
+                  className="w-4 h-4 text-pink-600 rounded focus:ring-pink-500"
+                />
+                <span className="ml-2 text-sm text-blue-900">Yes, create my account</span>
+              </label>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                  <input
-                    type="tel"
-                    value={bookingData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    placeholder="Enter your phone number"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                  <input
-                    type="email"
-                    value={bookingData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    placeholder="Enter your email address"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Special Instructions (Optional)</label>
-                  <textarea
-                    value={bookingData.specialInstructions}
-                    onChange={(e) => handleInputChange('specialInstructions', e.target.value)}
-                    placeholder="Any specific requirements or instructions..."
-                    rows={3}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
-                  <div className="grid grid-cols-2 gap-4">
-                    <button
-                      onClick={() => handleInputChange('paymentMethod', 'cod')}
-                      className={`p-4 rounded-lg border-2 text-center transition-all duration-200 ${
-                        bookingData.paymentMethod === 'cod'
-                          ? 'border-pink-500 bg-pink-50'
-                          : 'border-gray-200 hover:border-pink-300'
-                      }`}
-                    >
-                      <div className="text-2xl mb-2">💵</div>
-                      <div className="font-medium">Cash on Delivery</div>
-                      <div className="text-sm text-gray-600">Pay after service</div>
-                    </button>
-
-                    <button
-                      onClick={() => handleInputChange('paymentMethod', 'online')}
-                      className={`p-4 rounded-lg border-2 text-center transition-all duration-200 ${
-                        bookingData.paymentMethod === 'online'
-                          ? 'border-pink-500 bg-pink-50'
-                          : 'border-gray-200 hover:border-pink-300'
-                      }`}
-                    >
-                      <div className="text-2xl mb-2">💳</div>
-                      <div className="font-medium">Online Payment</div>
-                      <div className="text-sm text-gray-600">Pay now securely</div>
-                    </button>
+              {bookingData.createAccount && (
+                <div className="mt-4 space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Create Password</label>
+                    <input
+                      type="password"
+                      value={bookingData.password || ''}
+                      onChange={(e) => handleInputChange('password', e.target.value)}
+                      placeholder="Choose a secure password"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                    <input
+                      type="password"
+                      value={bookingData.confirmPassword || ''}
+                      onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                      placeholder="Confirm your password"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    />
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
+
 
           {/* Step 4: Confirmation */}
           {currentStep === 4 && (
@@ -387,7 +340,7 @@ We will call you at ${bookingData.phone} to confirm the booking.`);
                   <span className="text-gray-600">Service:</span>
                   <span className="font-medium">{service.name}</span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-600">Date:</span>
                   <span className="font-medium">
@@ -399,46 +352,46 @@ We will call you at ${bookingData.phone} to confirm the booking.`);
                     })}
                   </span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-600">Time:</span>
                   <span className="font-medium">{bookingData.selectedTime}</span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-600">Location:</span>
                   <span className="font-medium">
                     {bookingData.serviceLocation === 'home' ? 'Home Service' : 'Salon Visit'}
                   </span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-600">Duration:</span>
                   <span className="font-medium">{service.duration}</span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-600">Quantity:</span>
                   <span className="font-medium">{quantity}</span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-600">Customer:</span>
                   <span className="font-medium">{bookingData.fullName}</span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-600">Phone:</span>
                   <span className="font-medium">{bookingData.phone}</span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-600">Payment:</span>
                   <span className="font-medium">
                     {bookingData.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment'}
                   </span>
                 </div>
-                
+
                 <div className="border-t pt-4">
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total Amount:</span>
@@ -468,7 +421,7 @@ We will call you at ${bookingData.phone} to confirm the booking.`);
               <div className="text-sm text-gray-600">Total Amount</div>
               <div className="text-2xl font-bold text-pink-600">₹{totalPrice}</div>
             </div>
-            
+
             <div className="flex space-x-3">
               {currentStep > 1 && (
                 <button
@@ -478,7 +431,7 @@ We will call you at ${bookingData.phone} to confirm the booking.`);
                   Previous
                 </button>
               )}
-              
+
               {currentStep < 4 ? (
                 <button
                   onClick={handleNextStep}

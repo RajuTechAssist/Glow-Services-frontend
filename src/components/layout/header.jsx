@@ -6,6 +6,10 @@ import styles from './Header.module.css';
 import { useCart } from '../../context/CartContext';
 import CartDropdown from '../../components/CartDropdown';
 
+import { useCustomerAuth } from '../../context/CustomerAuthContext';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,13 +19,16 @@ const Header = () => {
   const [showCartDropdown, setShowCartDropdown] = useState(false);
   const { getTotalItems } = useCart();
   const cartRef = useRef(null);
+  const { isCustomerLoggedIn, customerUser } = useCustomerAuth();
+  const navigate = useNavigate();
+
 
 
   // Refs for dropdown management
   const servicesRef = useRef(null);
   const productsRef = useRef(null);
 
-   useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (cartRef.current && !cartRef.current.contains(event.target)) {
         setShowCartDropdown(false);
@@ -61,7 +68,7 @@ const Header = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (servicesRef.current && !servicesRef.current.contains(event.target) &&
-          productsRef.current && !productsRef.current.contains(event.target)) {
+        productsRef.current && !productsRef.current.contains(event.target)) {
         setOpenDropdown(null);
       }
     };
@@ -120,7 +127,7 @@ const Header = () => {
           <nav className={styles.nav}>
             <Link to="/" className={styles.navLink}>Home</Link>
             <Link to="/about" className={styles.navLink}>About</Link>
-            
+
             {/* Services Dropdown */}
             <div className={styles.dropdown} ref={servicesRef}>
               <button
@@ -130,12 +137,12 @@ const Header = () => {
                 Services
                 <ChevronDown className={`${styles.chevron} ${openDropdown === 'services' ? styles.chevronOpen : ''}`} />
               </button>
-              
+
               <div className={`${styles.dropdownMenu} ${openDropdown === 'services' ? styles.dropdownMenuOpen : ''}`}>
                 <div className="px-4 py-2 border-b border-gray-100">
                   <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">OUR SERVICES</h3>
                 </div>
-                
+
                 {services.length > 0 ? (
                   <div className="py-2">
                     {services.map((service) => (
@@ -151,7 +158,7 @@ const Header = () => {
                         </div>
                       </Link>
                     ))}
-                    
+
                     <div className="border-t border-gray-100 mt-2 pt-2">
                       <Link
                         to="/services"
@@ -179,12 +186,12 @@ const Header = () => {
                 Products
                 <ChevronDown className={`${styles.chevron} ${openDropdown === 'products' ? styles.chevronOpen : ''}`} />
               </button>
-              
+
               <div className={`${styles.dropdownMenu} ${openDropdown === 'products' ? styles.dropdownMenuOpen : ''}`}>
                 <div className="px-4 py-2 border-b border-gray-100">
                   <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">PRODUCT CATEGORIES</h3>
                 </div>
-                
+
                 <div className="py-2">
                   {productCategories.map((category) => (
                     <div key={category.slug} className="px-4 py-2">
@@ -209,7 +216,7 @@ const Header = () => {
                       </div>
                     </div>
                   ))}
-                  
+
                   <div className="border-t border-gray-100 mt-2 pt-2">
                     <Link
                       to="/products"
@@ -231,26 +238,49 @@ const Header = () => {
           <div className={styles.rightSection}>
             {/* Shopping Cart */}
             <div className="relative" ref={cartRef}>
-              <button 
+              <button
                 onClick={() => setShowCartDropdown(!showCartDropdown)}
                 className={styles.cartButton}
               >
                 <ShoppingBag className="h-5 w-5" />
                 <span className={styles.cartBadge}>{getTotalItems()}</span>
               </button>
-              
-              <CartDropdown 
-                isOpen={showCartDropdown} 
-                onClose={() => setShowCartDropdown(false)} 
+
+              <CartDropdown
+                isOpen={showCartDropdown}
+                onClose={() => setShowCartDropdown(false)}
               />
             </div>
 
             {/* Authentication Section */}
             <div className={styles.authSection}>
-              <Link to="/login" className={styles.loginLink}>
-                <User className="h-4 w-4 mr-1 inline" />
-                Login
-              </Link>
+              {/* Authentication Section */}
+              <div className={styles.authSection}>
+                {isCustomerLoggedIn ? (
+                  <button
+                    onClick={() => navigate('/customer/dashboard')}
+                    className={styles.loginLink}
+                  >
+                    Hi, {customerUser.fullName.split(' ')[0]}
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => navigate('/customer/login')}
+                      className={styles.loginLink}
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={() => navigate('/customer/register')}
+                      className={styles.loginLink}
+                    >
+                      Register
+                    </button>
+                  </>
+                )}
+              </div>
+
               <Link to="/book" className={styles.bookButton}>
                 Book Now
               </Link>
