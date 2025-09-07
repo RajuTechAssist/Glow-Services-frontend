@@ -7,6 +7,8 @@ import {
   Calendar,
   Sparkles,
   ChevronLeft,
+  Award,
+  Zap,
   ChevronRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -345,14 +347,55 @@ const ServicesSection = () => {
               </button>
             </div>
 
+            {/* View All Products CTA */}
             <div className={`text-center transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <Link
-                to="/services"
-                className="group inline-flex items-center space-x-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
-              >
-                <span>View All Services</span>
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
+              <div className="bg-white rounded-3xl p-12 shadow-xl border border-gray-100">
+                <div className="flex items-center justify-center space-x-4 mb-6">
+                  <div className="flex items-center space-x-2">
+                    <Award className="h-6 w-6 text-purple-500" />
+                    <span className="text-purple-600 font-medium">Premium Brands</span>
+                  </div>
+                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                  <div className="flex items-center space-x-2">
+                    <Zap className="h-6 w-6 text-pink-500" />
+                    <span className="text-pink-600 font-medium">Fast Delivery</span>
+                  </div>
+                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                  <div className="flex items-center space-x-2">
+                    <Star className="h-6 w-6 text-yellow-500" />
+                    <span className="text-yellow-600 font-medium">Top Rated</span>
+                  </div>
+                </div>
+
+                <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                  Explore Our Complete Beauty Collection
+                </h3>
+                <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                  Browse through our extensive catalog of 200+ premium beauty products.
+                  From skincare essentials to makeup must-haves - find everything you need.
+                </p>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                  <Link
+                    to="/services"
+                    className="group inline-flex items-center space-x-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <span>View All Services</span>
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Link>
+
+                  <div className="flex items-center space-x-4 text-gray-600">
+                    <span className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-sm">200+ Products</span>
+                    </span>
+                    <span className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-sm">Free Shipping ₹999+</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </>
         )}

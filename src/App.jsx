@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate  } from 'react-router-dom';
 import Header from './components/layout/header';
 import HeroSection from './components/sections/HeroSection';
 import WhyChooseSection from './components/sections/WhyChooseSection';
@@ -15,6 +15,19 @@ import ContactSection from './components/sections/ContactSection';
 import Footer from './components/sections/Footer';
 import { CartProvider } from './context/CartContext';
 import CheckoutPage from './pages/CheckoutPage';
+
+import { AdminAuthProvider } from './context/AdminAuthContext';
+import ProtectedAdminRoute from './components/ProtectedAdminRoute';
+
+// Admin Pages
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminLayout from './pages/admin/AdminLayout';
+import ServicesAdminPage from './pages/admin/ServicesAdminPage';
+import ServiceForm from './pages/admin/ServiceForm';
+import ProductsAdminPage from './pages/admin/ProductsAdminPage';
+import ProductForm from './pages/admin/ProductForm';
+import CustomersAdminPage from './pages/admin/CustomersAdminPage';
+import CustomerForm from './pages/admin/CustomerForm';
 
 // Import the new About Page
 import AboutPage from './pages/AboutPage';
@@ -35,7 +48,7 @@ const Home = () => (
     <NewsletterSection />
     <BlogSection />
     <ContactSection />
-    
+
     {/* We'll add more sections here */}
   </div>
 );
@@ -63,26 +76,55 @@ const Contact = () => (
 
 function App() {
   return (
+    <AdminAuthProvider>
     <CartProvider>
-    <Router>
-      <div className="App">
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/services/:slug" element={<ServiceDetailPage />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+      <Router>
+        <div className="App">
+          <Header />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/services" element={<ServicesPage />} />
+              <Route path="/services/:slug" element={<ServiceDetailPage />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+
+              {/* Admin Login (Public) */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+
+               {/* Protected Admin Routes */}
+              <Route path="/admin" element={
+                <ProtectedAdminRoute>
+                  <AdminLayout />
+                </ProtectedAdminRoute>
+              }>
+                <Route index element={<Navigate to="/admin/services" replace />} />
+                <Route path="services" element={<ServicesAdminPage />} />
+                <Route path="services/create" element={<ServiceForm />} />
+                <Route path="services/edit/:slug" element={<ServiceForm />} />
+
+                <Route path="/admin/products" element={<ProductsAdminPage />} />
+                <Route path="products" element={<ProductsAdminPage />} />
+                <Route path="/admin/products/create" element={<ProductForm />} />
+                <Route path="/admin/products/edit/:id" element={<ProductForm />} />
+
+                <Route path="customers" element={<CustomersAdminPage />} />
+                <Route path="/admin/customers" element={<CustomersAdminPage />} />
+                <Route path="/admin/customers/create" element={<CustomerForm />} />
+                <Route path="/admin/customers/edit/:id" element={<CustomerForm />} />
+              </Route>
+
+            </Routes>
+
+          </main>
+          <Footer />
+        </div>
+      </Router>
     </CartProvider>
+    </AdminAuthProvider>
   );
 }
 
