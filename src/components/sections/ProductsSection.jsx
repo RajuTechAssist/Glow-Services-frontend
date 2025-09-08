@@ -1,20 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Star,
-  Heart,
-  ShoppingCart,
-  ArrowRight,
-  Eye,
-  Sparkles,
+import { Link } from 'react-router-dom';
+import {
+  Star, ShoppingCart, Heart, ArrowRight, Package, Sparkles, TrendingUp,
   Award,
   Zap
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import ProductsApi from '../../services/ProductsApiService';
 
 const ProductsSection = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [likedProducts, setLikedProducts] = useState(new Set());
+  const [isVisible, setIsVisible] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const sectionRef = useRef(null);
+  const carouselRef = useRef(null);
+  const intervalRef = useRef(null);
 
   // Intersection Observer for animations
   useEffect(() => {
@@ -34,6 +36,72 @@ const ProductsSection = () => {
     return () => observer.disconnect();
   }, []);
 
+  // ✅ Fetch top 4 featured products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        console.log('🔄 ProductsSection: Fetching featured products...');
+
+        const featuredProducts = await ProductsApi.getFeaturedProducts();
+        console.log('📦 ProductsSection: Products received:', featuredProducts);
+
+        if (Array.isArray(featuredProducts) && featuredProducts.length > 0) {
+          // Take top 4 products for the section
+          setProducts(featuredProducts.slice(0, 4));
+        } else {
+          console.warn('⚠️ ProductsSection: No featured products found');
+          setProducts([]);
+        }
+      } catch (err) {
+        console.error('❌ ProductsSection: Error fetching products:', err);
+        setError('Failed to load products. Please try again later.');
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // ✅ Infinite scroll carousel
+  useEffect(() => {
+    if (products.length > 0) {
+      intervalRef.current = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+      }, 4000); // Auto-scroll every 4 seconds
+
+      return () => {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
+      };
+    }
+  }, [products.length]);
+
+  // Manual carousel navigation
+  const goToSlide = (index) => {
+    setCurrentIndex(index);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+      }, 4000);
+    }
+  };
+
+  const nextSlide = () => {
+    const newIndex = (currentIndex + 1) % products.length;
+    goToSlide(newIndex);
+  };
+
+  const prevSlide = () => {
+    const newIndex = currentIndex === 0 ? products.length - 1 : currentIndex - 1;
+    goToSlide(newIndex);
+  };
+
   const toggleLike = (productId) => {
     const newLiked = new Set(likedProducts);
     if (newLiked.has(productId)) {
@@ -44,247 +112,375 @@ const ProductsSection = () => {
     setLikedProducts(newLiked);
   };
 
-  // Featured products only (for home page)
-  const featuredProducts = [
-    {
-      id: 1,
-      name: 'Vitamin C Brightening Serum',
-      brand: 'GlowLab Professional',
-      description: 'Advanced vitamin C formula that brightens, evens skin tone, and provides antioxidant protection.',
-      price: 2499,
-      originalPrice: 3200,
-      rating: 4.9,
-      reviews: 1247,
-      image: '/images/vitamin-c-serum.jpg',
-      badges: ['Bestseller', 'Professional Grade'],
-      features: ['20% Vitamin C', 'Hyaluronic Acid', 'Anti-aging', 'Brightening'],
-      gradient: 'from-orange-400 to-yellow-500',
-      category: 'Skincare'
-    },
-    {
-      id: 2,
-      name: 'Luxury Hair Repair Mask',
-      brand: 'Salon Elite',
-      description: 'Intensive hair treatment mask with keratin and argan oil for damaged and dry hair repair.',
-      price: 1899,
-      originalPrice: 2400,
-      rating: 4.8,
-      reviews: 892,
-      image: '/images/hair-mask.jpg',
-      badges: ['Editor\'s Choice', 'Salon Quality'],
-      features: ['Keratin Protein', 'Argan Oil', 'Deep Repair', 'Shine Boost'],
-      gradient: 'from-purple-500 to-pink-500',
-      category: 'Hair Care'
-    },
-    {
-      id: 3,
-      name: 'Premium Foundation Set',
-      brand: 'Beauty Pro',
-      description: 'Full coverage foundation with primer and setting powder for a flawless, long-lasting finish.',
-      price: 3299,
-      originalPrice: 4200,
-      rating: 4.9,
-      reviews: 1456,
-      image: '/images/foundation-set.jpg',
-      badges: ['Complete Set', 'Long-wearing'],
-      features: ['Full Coverage', '16hr Wear', 'SPF 30', '3-piece Set'],
-      gradient: 'from-rose-500 to-pink-600',
-      category: 'Makeup'
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <Star
+          key={i}
+          className={`w-4 h-4 ${i < Math.floor(rating)
+            ? 'text-yellow-400 fill-current'
+            : 'text-gray-300'
+            }`}
+        />
+      );
     }
-  ];
+    return stars;
+  };
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(price);
+  };
+
+  const getProductImage = (product) => {
+    if (product.images && product.images.length > 0) {
+      return product.images[0];
+    }
+
+    // Fallback gradient based on category
+    const gradients = {
+      skincare: 'from-rose-400 via-pink-400 to-rose-500',
+      makeup: 'from-fuchsia-400 via-pink-400 to-rose-500',
+      haircare: 'from-purple-400 via-fuchsia-400 to-pink-500',
+      'bath-body': 'from-violet-400 via-purple-400 to-violet-500',
+      fragrance: 'from-pink-300 via-rose-300 to-pink-400',
+      'nail-care': 'from-rose-400 via-pink-400 to-fuchsia-500',
+      tools: 'from-indigo-400 via-purple-400 to-indigo-500',
+      mens: 'from-gray-500 via-blue-500 to-indigo-500',
+      'sun-care': 'from-yellow-400 via-orange-400 to-red-400',
+      specialty: 'from-purple-500 via-indigo-500 to-purple-600',
+      natural: 'from-green-400 via-emerald-400 to-teal-500'
+    };
+
+    return gradients[product.category] || 'from-pink-400 via-purple-400 to-indigo-500';
+  };
+
+  const getProductIcon = (category) => {
+    const icons = {
+      skincare: '🧴', makeup: '💄', haircare: '💇', 'bath-body': '🛁',
+      fragrance: '🌸', 'nail-care': '💅', tools: '🎀', mens: '🧔',
+      'sun-care': '☀️', specialty: '💎', natural: '🌿'
+    };
+    return icons[category] || '✨';
+  };
 
   return (
-    <section 
+    <section
       ref={sectionRef}
-      className="py-24 bg-gradient-to-br from-gray-50 to-purple-50 relative overflow-hidden"
+      className="py-20 bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50"
     >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ec4899' fill-opacity='0.05'%3E%3Cpath d='m0 40l40-40v40z'/%3E%3C/g%3E%3C/svg%3E")`,
-        }}></div>
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className={`inline-flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <ShoppingCart className="h-5 w-5 text-purple-500" />
-            <span className="text-purple-600 font-medium tracking-wide uppercase text-sm">
-              Featured Products
-            </span>
+          <div className="flex justify-center items-center mb-6">
+            <div className="p-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl shadow-xl">
+              <Package className="w-8 h-8 text-white" />
+            </div>
           </div>
 
-          <h2 className={`text-5xl lg:text-6xl font-bold text-gray-900 mb-6 transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            Premium beauty
-            <span className="block bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 bg-clip-text text-transparent">
-              products delivered
-            </span>
+          <h2 className={`text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-6 transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+            }`}>
+            Featured Products
           </h2>
 
-          <p className={`text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            Discover our handpicked collection of premium beauty products from top international brands. 
+          <p className={`text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+            }`}>
+            Discover our handpicked collection of premium beauty products from top international brands.
             Professional quality, delivered to your doorstep.
           </p>
         </div>
 
-        {/* Featured Products Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {featuredProducts.map((product, index) => (
-            <div
-              key={product.id}
-              className={`bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 group ${isVisible ? `opacity-100 translate-y-0` : 'opacity-0 translate-y-8'}`}
-              style={{ animationDelay: `${400 + index * 150}ms` }}
+        {/* Products Content */}
+        {loading ? (
+          <div className="text-center py-16">
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-pink-100 to-purple-100 rounded-full">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-pink-500 mr-3"></div>
+              <span className="text-pink-700 font-medium">Loading our amazing products...</span>
+            </div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">😔</div>
+            <h3 className="text-xl font-bold text-gray-800 mb-2">Oops! Something went wrong</h3>
+            <p className="text-gray-600 mb-6">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-300"
             >
-              {/* Product Image with Gradient Overlay */}
-              <div className={`h-64 bg-gradient-to-br ${product.gradient} flex items-center justify-center relative overflow-hidden`}>
-                <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
-                
-                {/* Badges */}
-                <div className="absolute top-4 left-4 space-y-2">
-                  {product.badges.map((badge, idx) => (
-                    <div key={idx} className="bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-xs font-semibold">
-                      {badge}
+              Try Again
+            </button>
+          </div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="text-8xl mb-6">🛍️</div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">No Featured Products</h3>
+            <p className="text-gray-600 mb-8">We're working on adding more products for you.</p>
+            <Link
+              to="/products"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-300"
+            >
+              <Package className="w-5 h-5 mr-2" />
+              Browse All Products
+            </Link>
+          </div>
+        ) : (
+          <>
+            {/* ✅ Infinite Scroll Carousel */}
+            <div className="relative mb-16">
+              <div
+                ref={carouselRef}
+                className="overflow-hidden rounded-3xl bg-white shadow-2xl border border-pink-100"
+              >
+                <div
+                  className="flex transition-transform duration-700 ease-in-out"
+                  style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                >
+                  {products.map((product, index) => (
+                    <div key={product.id} className="w-full flex-shrink-0">
+                      <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
+                        {/* Product Image */}
+                        <div className="relative">
+                          <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-pink-100 to-purple-100 shadow-xl">
+                            {product.images && product.images.length > 0 ? (
+                              <img
+                                src={product.images[0]}
+                                alt={product.name}
+                                className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+                              />
+                            ) : (
+                              <div className={`w-full h-full bg-gradient-to-br ${getProductImage(product)} flex flex-col items-center justify-center text-white`}>
+                                <div className="text-8xl mb-4">{getProductIcon(product.category)}</div>
+                                <div className="text-2xl font-bold text-center px-4">{product.name}</div>
+                              </div>
+                            )}
+
+                            {/* Product Badges */}
+                            <div className="absolute top-4 left-4 flex flex-col gap-2">
+                              {product.featured && (
+                                <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                                  <Sparkles className="w-4 h-4 inline mr-1" />
+                                  Featured
+                                </div>
+                              )}
+                              {product.popular && (
+                                <div className="bg-gradient-to-r from-pink-400 to-rose-400 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                                  <TrendingUp className="w-4 h-4 inline mr-1" />
+                                  Popular
+                                </div>
+                              )}
+                              {product.onSale && (
+                                <div className="bg-gradient-to-r from-red-400 to-pink-400 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                                  🔥 Sale
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Like Button */}
+                            <button
+                              onClick={() => toggleLike(product.id)}
+                              className="absolute top-4 right-4 p-3 bg-white/95 backdrop-blur-sm rounded-full hover:bg-white transition-all duration-300 shadow-lg transform hover:scale-110"
+                            >
+                              <Heart
+                                className={`w-6 h-6 transition-colors duration-300 ${likedProducts.has(product.id)
+                                  ? 'text-red-500 fill-current'
+                                  : 'text-pink-400 hover:text-red-400'
+                                  }`}
+                              />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Product Info */}
+                        <div className="flex flex-col justify-center">
+                          <div className="mb-4">
+                            {product.brand && (
+                              <p className="text-purple-600 font-semibold mb-2 text-lg">
+                                {product.brand}
+                              </p>
+                            )}
+                            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+                              {product.name}
+                            </h3>
+
+                            {/* Rating */}
+                            <div className="flex items-center gap-4 mb-6">
+                              <div className="flex items-center">
+                                {renderStars(product.rating)}
+                                <span className="ml-2 text-lg font-semibold text-gray-700">
+                                  {product.rating}
+                                </span>
+                              </div>
+                              <span className="text-gray-600">
+                                ({product.reviewCount} reviews)
+                              </span>
+                            </div>
+
+                            {/* Description */}
+                            <p className="text-gray-600 text-lg leading-relaxed mb-6">
+                              {product.description}
+                            </p>
+
+                            {/* Features */}
+                            {product.features && product.features.length > 0 && (
+                              <div className="mb-6">
+                                <h4 className="font-bold text-gray-900 mb-3">Key Benefits:</h4>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                  {product.features.slice(0, 4).map((feature, idx) => (
+                                    <div key={idx} className="flex items-center text-sm text-gray-600">
+                                      <div className="w-2 h-2 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full mr-2"></div>
+                                      {feature}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Price & Actions */}
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="flex items-center gap-3 mb-2">
+                                  <span className="text-3xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+                                    {formatPrice(product.price)}
+                                  </span>
+                                  {product.originalPrice && product.originalPrice > product.price && (
+                                    <>
+                                      <span className="text-xl text-gray-500 line-through">
+                                        {formatPrice(product.originalPrice)}
+                                      </span>
+                                      <span className="bg-green-100 text-green-800 text-sm font-bold px-3 py-1 rounded-full">
+                                        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                                      </span>
+                                    </>
+                                  )}
+                                </div>
+
+                                {product.stockQuantity > 0 ? (
+                                  <p className="text-green-600 text-sm font-medium">
+                                    ✓ In Stock ({product.stockQuantity} available)
+                                  </p>
+                                ) : (
+                                  <p className="text-red-600 text-sm font-medium">
+                                    Out of Stock
+                                  </p>
+                                )}
+                              </div>
+
+                              <div className="flex gap-3">
+                                <Link
+                                  to={`/products/${product.slug}`}
+                                  className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105"
+                                >
+                                  View Details
+                                </Link>
+                                <button
+                                  className="p-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl font-semibold hover:from-pink-600 hover:to-rose-600 transition-all duration-300 transform hover:scale-105"
+                                  disabled={product.stockQuantity === 0}
+                                >
+                                  <ShoppingCart className="w-5 h-5" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
-
-                {/* Like Button */}
-                <button 
-                  onClick={() => toggleLike(product.id)}
-                  className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-300 group"
-                >
-                  <Heart 
-                    className={`h-5 w-5 transition-colors duration-300 ${
-                      likedProducts.has(product.id) 
-                        ? 'text-red-500 fill-red-500' 
-                        : 'text-white group-hover:text-red-300'
-                    }`} 
-                  />
-                </button>
-
-                {/* Product Visual */}
-                <div className="relative z-10 text-center">
-                  <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <Sparkles className="h-10 w-10 text-white" />
-                  </div>
-                  <div className="text-white/90 font-medium text-sm">{product.category}</div>
-                </div>
               </div>
 
-              {/* Product Content */}
-              <div className="p-6">
-                {/* Brand & Rating */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className="text-sm text-purple-600 font-medium">{product.brand}</div>
-                  <div className="flex items-center space-x-1">
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-current" />
-                      ))}
-                    </div>
-                    <span className="text-gray-500 text-sm">({product.reviews})</span>
-                  </div>
-                </div>
+              {/* Carousel Navigation */}
+              {products.length > 1 && (
+                <>
+                  {/* Previous Button */}
+                  <button
+                    onClick={prevSlide}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/95 backdrop-blur-sm rounded-full shadow-xl hover:bg-white transition-all duration-300 z-10 hover:scale-110"
+                  >
+                    <ArrowRight className="w-6 h-6 text-gray-700 rotate-180" />
+                  </button>
 
-                {/* Product Name */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors duration-300">
-                  {product.name}
-                </h3>
+                  {/* Next Button */}
+                  <button
+                    onClick={nextSlide}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/95 backdrop-blur-sm rounded-full shadow-xl hover:bg-white transition-all duration-300 z-10 hover:scale-110"
+                  >
+                    <ArrowRight className="w-6 h-6 text-gray-700" />
+                  </button>
 
-                {/* Description */}
-                <p className="text-gray-600 mb-4 leading-relaxed">
-                  {product.description}
-                </p>
-
-                {/* Features */}
-                <div className="mb-6">
-                  <div className="flex flex-wrap gap-2">
-                    {product.features.map((feature, idx) => (
-                      <span 
-                        key={idx} 
-                        className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium"
-                      >
-                        {feature}
-                      </span>
+                  {/* Dots Indicator */}
+                  <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3">
+                    {products.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => goToSlide(index)}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${currentIndex === index
+                          ? 'bg-gradient-to-r from-pink-500 to-purple-600 scale-125'
+                          : 'bg-white/70 hover:bg-white'
+                          }`}
+                      />
                     ))}
                   </div>
-                </div>
+                </>
+              )}
+            </div>
 
-                {/* Pricing */}
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <span className="text-3xl font-bold text-gray-900">₹{product.price}</span>
-                    <span className="text-lg text-gray-400 line-through ml-2">₹{product.originalPrice}</span>
-                    <div className="text-sm text-green-600 font-medium">
-                      Save ₹{product.originalPrice - product.price}
-                    </div>
+            {/* Call to Action */}
+            <div className={`text-center transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              <div className="bg-white rounded-3xl p-12 shadow-xl border border-gray-100">
+                <div className="flex items-center justify-center space-x-4 mb-6">
+                  <div className="flex items-center space-x-2">
+                    <Award className="h-6 w-6 text-purple-500" />
+                    <span className="text-purple-600 font-medium">Premium Brands</span>
+                  </div>
+                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                  <div className="flex items-center space-x-2">
+                    <Zap className="h-6 w-6 text-pink-500" />
+                    <span className="text-pink-600 font-medium">Fast Delivery</span>
+                  </div>
+                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                  <div className="flex items-center space-x-2">
+                    <Star className="h-6 w-6 text-yellow-500" />
+                    <span className="text-yellow-600 font-medium">Top Rated</span>
                   </div>
                 </div>
 
-                {/* Add to Cart Button */}
-                <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-4 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center space-x-2 group-hover:scale-105">
-                  <ShoppingCart className="h-5 w-5" />
-                  <span>Add to Cart</span>
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+                <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                  Explore Our Complete Beauty Collection
+                </h3>
+                <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                  Browse through our extensive catalog of 200+ premium beauty products.
+                  From skincare essentials to makeup must-haves - find everything you need.
+                </p>
 
-        {/* View All Products CTA */}
-        <div className={`text-center transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="bg-white rounded-3xl p-12 shadow-xl border border-gray-100">
-            <div className="flex items-center justify-center space-x-4 mb-6">
-              <div className="flex items-center space-x-2">
-                <Award className="h-6 w-6 text-purple-500" />
-                <span className="text-purple-600 font-medium">Premium Brands</span>
-              </div>
-              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-              <div className="flex items-center space-x-2">
-                <Zap className="h-6 w-6 text-pink-500" />
-                <span className="text-pink-600 font-medium">Fast Delivery</span>
-              </div>
-              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-              <div className="flex items-center space-x-2">
-                <Star className="h-6 w-6 text-yellow-500" />
-                <span className="text-yellow-600 font-medium">Top Rated</span>
-              </div>
-            </div>
+                <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                  <Link
+                    to="/services"
+                    className="group inline-flex items-center space-x-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <span>View All Services</span>
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Link>
 
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
-              Explore Our Complete Beauty Collection
-            </h3>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Browse through our extensive catalog of 200+ premium beauty products. 
-              From skincare essentials to makeup must-haves - find everything you need.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <Link
-                to="/products"
-                className="group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-2"
-              >
-                <Eye className="h-5 w-5" />
-                <span>View All Products</span>
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-              
-              <div className="flex items-center space-x-4 text-gray-600">
-                <span className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm">200+ Products</span>
-                </span>
-                <span className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm">Free Shipping ₹999+</span>
-                </span>
+                  <div className="flex items-center space-x-4 text-gray-600">
+                    <span className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-sm">200+ Products</span>
+                    </span>
+                    <span className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-sm">Free Shipping ₹999+</span>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </section>
   );

@@ -64,7 +64,7 @@ const ProductsPage = () => {
         setSearchParams(params);
     }, [selectedCategory, searchTerm, setSearchParams]);
 
-    // ✅ SYNC STATE WITH URL CHANGES
+    // SYNC STATE WITH URL CHANGES
     useEffect(() => {
         const urlCategory = searchParams.get('category') || 'all';
         const urlSearch = searchParams.get('search') || '';

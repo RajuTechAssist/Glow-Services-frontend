@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, } from 'react-router-dom';
 import { ChevronDown, Menu, X, User, ShoppingBag } from 'lucide-react';
 import ApiService from '../../services/api';
 import styles from './Header.module.css';
