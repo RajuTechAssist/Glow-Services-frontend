@@ -13,11 +13,16 @@ import {
     TrendingUp,
     Zap
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import ProductsApi from '../services/ProductsApiService';
 import { productCategories, sortOptions, getCategoryById } from '../utils/ProductCategories';
 
 const ProductsPage = () => {
+    // PARAMETER HANDLING
+    const [searchParams, setSearchParams] = useSearchParams();
+    const urlCategory = searchParams.get('category') || 'all';
+    const urlSearch = searchParams.get('search') || '';
+
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('popular');
@@ -47,6 +52,27 @@ const ProductsPage = () => {
         return () => observer.disconnect();
     }, []);
 
+    // ✅ UPDATE URL WHEN FILTERS CHANGE
+    useEffect(() => {
+        const params = new URLSearchParams();
+        if (selectedCategory && selectedCategory !== 'all') {
+            params.set('category', selectedCategory);
+        }
+        if (searchTerm) {
+            params.set('search', searchTerm);
+        }
+        setSearchParams(params);
+    }, [selectedCategory, searchTerm, setSearchParams]);
+
+    // ✅ SYNC STATE WITH URL CHANGES
+    useEffect(() => {
+        const urlCategory = searchParams.get('category') || 'all';
+        const urlSearch = searchParams.get('search') || '';
+
+        setSelectedCategory(urlCategory);
+        setSearchTerm(urlSearch);
+    }, [searchParams]);
+
     // Fetch products
     useEffect(() => {
         const fetchProducts = async () => {
@@ -55,7 +81,11 @@ const ProductsPage = () => {
                 setError(null);
                 console.log('🔄 ProductsPage: Fetching products:', { selectedCategory, searchTerm, sortBy });
 
-                const data = await ProductsApi.getAllProducts(selectedCategory, searchTerm, sortBy);
+                // Use the correct category parameter
+                const categoryParam = selectedCategory === 'all' ? null : selectedCategory;
+                const searchParam = searchTerm || null;
+
+                const data = await ProductsApi.getAllProducts(categoryParam, searchParam, sortBy);
                 console.log('📦 ProductsPage: Products received:', data);
 
                 if (Array.isArray(data)) {
@@ -92,11 +122,10 @@ const ProductsPage = () => {
             stars.push(
                 <Star
                     key={i}
-                    className={`w-4 h-4 ${
-                        i < Math.floor(rating) 
-                            ? 'text-yellow-400 fill-current' 
+                    className={`w-4 h-4 ${i < Math.floor(rating)
+                            ? 'text-yellow-400 fill-current'
                             : 'text-gray-300'
-                    }`}
+                        }`}
                 />
             );
         }
@@ -159,7 +188,7 @@ const ProductsPage = () => {
                             <Package className="w-8 h-8 text-white ml-3 animate-pulse" />
                         </div>
                         <p className="text-lg md:text-xl text-pink-100 max-w-3xl mx-auto leading-relaxed">
-                            Discover our curated collection of premium beauty products from top brands. 
+                            Discover our curated collection of premium beauty products from top brands.
                             From skincare essentials to makeup must-haves, find everything you need to enhance your natural beauty! ✨
                         </p>
                     </div>
@@ -220,11 +249,10 @@ const ProductsPage = () => {
                                         <button
                                             key={category.id}
                                             onClick={() => setSelectedCategory(category.id)}
-                                            className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${
-                                                selectedCategory === category.id
+                                            className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${selectedCategory === category.id
                                                     ? `bg-gradient-to-r ${category.color} text-white shadow-lg border-2 border-transparent`
                                                     : 'bg-gradient-to-r from-pink-50 to-purple-50 hover:from-pink-100 hover:to-purple-100 border-2 border-pink-200 hover:border-purple-300 text-gray-700'
-                                            }`}
+                                                }`}
                                         >
                                             <span className="text-xl mr-4">{category.icon}</span>
                                             <div className="flex-1">
@@ -257,11 +285,10 @@ const ProductsPage = () => {
                                                 console.log('🔄 Sorting by:', option.id);
                                                 setSortBy(option.id);
                                             }}
-                                            className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${
-                                                sortBy === option.id
+                                            className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${sortBy === option.id
                                                     ? `bg-gradient-to-r ${option.color} text-white shadow-lg border-2 border-transparent`
                                                     : 'bg-gradient-to-r from-gray-50 to-indigo-50 hover:from-indigo-50 hover:to-purple-50 border-2 border-gray-200 hover:border-indigo-300 text-gray-700'
-                                            }`}
+                                                }`}
                                         >
                                             <span className="text-xl mr-4">{option.icon}</span>
                                             <span className="font-semibold flex-1">{option.name}</span>
@@ -283,9 +310,9 @@ const ProductsPage = () => {
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900 flex items-center">
                                         <Sparkles className="w-6 h-6 text-pink-500 mr-2" />
-                                        {searchTerm ? `Search Results for "${searchTerm}"` : 
-                                         selectedCategory === 'all' ? 'All Products' : 
-                                         getCategoryById(selectedCategory)?.name}
+                                        {searchTerm ? `Search Results for "${searchTerm}"` :
+                                            selectedCategory === 'all' ? 'All Products' :
+                                                getCategoryById(selectedCategory)?.name}
                                     </h2>
                                     <p className="text-pink-600 mt-2 flex items-center">
                                         <Package className="w-4 h-4 mr-1" />
@@ -335,9 +362,8 @@ const ProductsPage = () => {
                                     {products.map((product, index) => (
                                         <div
                                             key={product.id || product.slug}
-                                            className={`bg-white rounded-2xl shadow-xl border border-pink-100 hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-[1.02] ${
-                                                isVisible ? 'animate-fade-in' : 'opacity-0'
-                                            }`}
+                                            className={`bg-white rounded-2xl shadow-xl border border-pink-100 hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-[1.02] ${isVisible ? 'animate-fade-in' : 'opacity-0'
+                                                }`}
                                             style={{ animationDelay: `${index * 100}ms` }}
                                         >
                                             {/* Product Image */}
@@ -382,11 +408,10 @@ const ProductsPage = () => {
                                                     className="absolute top-3 right-3 p-2.5 bg-white/95 backdrop-blur-sm rounded-full hover:bg-white transition-all duration-300 shadow-lg transform hover:scale-110"
                                                 >
                                                     <Heart
-                                                        className={`w-5 h-5 transition-colors duration-300 ${
-                                                            likedProducts.has(product.id)
+                                                        className={`w-5 h-5 transition-colors duration-300 ${likedProducts.has(product.id)
                                                                 ? 'text-red-500 fill-current'
                                                                 : 'text-pink-400 hover:text-red-400'
-                                                        }`}
+                                                            }`}
                                                     />
                                                 </button>
                                             </div>
@@ -455,7 +480,7 @@ const ProductsPage = () => {
                                                     >
                                                         View Details
                                                     </Link>
-                                                    <button 
+                                                    <button
                                                         className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-3 rounded-xl font-semibold hover:from-pink-600 hover:to-rose-600 transition-all duration-300 transform hover:scale-105"
                                                         disabled={product.stockQuantity === 0}
                                                     >

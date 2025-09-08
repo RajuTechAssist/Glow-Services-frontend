@@ -8,6 +8,7 @@ import CartDropdown from '../../components/CartDropdown';
 
 import { useCustomerAuth } from '../../context/CustomerAuthContext';
 import { useNavigate } from 'react-router-dom';
+import ProductsApi from '../../services/ProductsApiService';
 
 
 
@@ -21,6 +22,8 @@ const Header = () => {
   const cartRef = useRef(null);
   const { isCustomerLoggedIn, customerUser } = useCustomerAuth();
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+
 
 
 
@@ -55,6 +58,21 @@ const Header = () => {
     fetchServices();
   }, []);
 
+  // Fetch products for dropdown
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const featuredProducts = await ProductsApi.getFeaturedProducts();
+        setProducts(featuredProducts.slice(0, 6));
+      } catch (error) {
+        console.error('Error fetching products for header:', error);
+        setProducts([]);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
@@ -80,10 +98,12 @@ const Header = () => {
     setOpenDropdown(openDropdown === dropdown ? null : dropdown);
   };
 
+  // ✅ UPDATED: Product categories with proper routing
   const productCategories = [
     {
       name: 'Skincare',
       slug: 'skincare',
+      icon: '🧴',
       subcategories: [
         { name: 'Cleansers', slug: 'cleansers' },
         { name: 'Serums', slug: 'serums' },
@@ -94,16 +114,18 @@ const Header = () => {
     {
       name: 'Makeup',
       slug: 'makeup',
+      icon: '💄',
       subcategories: [
         { name: 'Foundation', slug: 'foundation' },
         { name: 'Eye Makeup', slug: 'eye-makeup' },
         { name: 'Lips', slug: 'lips' },
-        { name: 'Tools', slug: 'tools' }
+        { name: 'Tools', slug: 'makeup-tools' }
       ]
     },
     {
       name: 'Hair Care',
-      slug: 'hair-care',
+      slug: 'haircare',
+      icon: '💇',
       subcategories: [
         { name: 'Shampoo', slug: 'shampoo' },
         { name: 'Conditioner', slug: 'conditioner' },
@@ -112,6 +134,15 @@ const Header = () => {
       ]
     }
   ];
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(price);
+  };
 
   return (
     <header className={`${styles.header} ${isScrolled ? styles.headerScrolled : ''}`}>
@@ -196,17 +227,17 @@ const Header = () => {
                   {productCategories.map((category) => (
                     <div key={category.slug} className="px-4 py-2">
                       <Link
-                        to={`/products/${category.slug}`}
+                        to={`/products?category=${category.slug}`}
                         className="block font-medium text-gray-900 hover:text-pink-600 transition-colors duration-200 mb-2"
                         onClick={() => setOpenDropdown(null)}
                       >
-                        {category.name}
+                        {category.icon} {category.name}
                       </Link>
                       <div className="grid grid-cols-2 gap-2">
                         {category.subcategories.map((sub) => (
                           <Link
                             key={sub.slug}
-                            to={`/products/${category.slug}/${sub.slug}`}
+                            to={`/products?category=${category.slug}&search=${sub.name}`}
                             className="text-sm text-gray-600 hover:text-pink-600 transition-colors duration-200"
                             onClick={() => setOpenDropdown(null)}
                           >
@@ -229,6 +260,7 @@ const Header = () => {
                 </div>
               </div>
             </div>
+
 
             <Link to="/blog" className={styles.navLink}>Blog</Link>
             <Link to="/contact" className={styles.navLink}>Contact</Link>
