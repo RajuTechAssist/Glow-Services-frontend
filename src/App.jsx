@@ -46,8 +46,14 @@ import CustomerHistory from './pages/customer/CustomerHistory';
 
 // Import the new About Page
 import AboutPage from './pages/AboutPage';
+// Services
 import ServicesPage from './pages/ServicesPage';
 import ServiceDetailPage from './pages/ServiceDetailPage';
+
+// NEW: Products
+import ProductsPage from './pages/ProductsPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+
 
 // Home Page Component
 const Home = () => (
@@ -137,7 +143,23 @@ function App() {
                       <Footer />
                     </div>
                   } />
-                  <Route path="/products" element={<Products />} />
+                  {/* ===== NEW: PRODUCTS ROUTES ===== */}
+                  <Route path="/products" element={
+                    <div className="min-h-screen bg-white">
+                      <Header />
+                      <ProductsPage />
+                      <Footer />
+                    </div>
+                  } />
+
+                  <Route path="/products/:slug" element={
+                    <div className="min-h-screen bg-white">
+                      <Header />
+                      <ProductDetailPage />
+                      <Footer />
+                    </div>
+                  } />
+
                   <Route path="/blog" element={
                     <div className="min-h-screen bg-white">
                       <Header />

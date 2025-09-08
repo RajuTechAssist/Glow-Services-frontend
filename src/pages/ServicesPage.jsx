@@ -399,11 +399,12 @@ const ServicesPage = () => {
                         {/* Service Image */}
                         <div className="lg:w-80 h-64 lg:h-80 relative overflow-hidden bg-gradient-to-br from-pink-100 to-purple-100">
                           <img
-                            src={`/images/services/${service.category}-service.png`}
-                            alt={service.name}
+                            src={`/images/services/${services.serviceCategories}-service.png`}
+                            alt={services.name}
                             className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
                             onError={(e) => {
-                              e.target.src = '/images/services/facial-service.png'; // Fallback
+                              e.target.src = '/images/services/facial-service.png'; // 
+                              
                             }}
                           />
                           <button

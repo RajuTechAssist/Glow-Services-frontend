@@ -132,7 +132,7 @@ const HeroSection = () => {
               {/* Main Hero Image */}
               <div className="relative bg-gradient-to-br from-pink-100 to-rose-100 rounded-3xl p-8 shadow-2xl">
                 <img
-                  src="/images/service/indianBride2.png"
+                  src="/images/services/indianBride2.png"
                   alt="Professional beauty service"
                   className="w-full h-auto rounded-2xl object-cover"
                   onError={(e) => {
