@@ -118,7 +118,7 @@ function App() {
                       <NewsletterSection />
                       <BlogSection />
                       <ContactSection />
-
+                      <Footer />
                       {/* We'll add more sections here */}
                     </div>
                   } />
