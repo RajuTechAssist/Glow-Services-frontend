@@ -8,7 +8,7 @@ const CustomersAdminPage = () => {
 
   const fetchCustomers = async () => {
     setLoading(true);
-    const res = await fetch('http://localhost:8081/api/admin/customers');
+    const res = await fetch('https://glow-services.onrender.com/api/admin/customers');
     const data = await res.json();
     setCustomers(data);
     setLoading(false);
@@ -20,7 +20,7 @@ const CustomersAdminPage = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this customer?')) return;
-    await fetch(`http://localhost:8081/api/admin/customers/${id}`, { method: 'DELETE' });
+    await fetch(`https://glow-services.onrender.com/api/admin/customers/${id}`, { method: 'DELETE' });
     fetchCustomers();
   };
 

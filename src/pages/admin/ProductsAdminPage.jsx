@@ -10,7 +10,7 @@ const ProductsAdminPage = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8081/api/admin/products');
+      const res = await fetch('https://glow-services.onrender.com/api/admin/products');
       const data = await res.json();
       setProducts(data);
     } catch (err) {
@@ -26,7 +26,7 @@ const ProductsAdminPage = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this product?')) return;
-    await fetch(`http://localhost:8081/api/admin/products/${id}`, { method: 'DELETE' });
+    await fetch(`https://glow-services.onrender.com/api/admin/products/${id}`, { method: 'DELETE' });
     fetchProducts();
   };
 

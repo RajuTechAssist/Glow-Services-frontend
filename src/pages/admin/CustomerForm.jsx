@@ -29,7 +29,7 @@ const CustomerForm = () => {
 
   const fetchCustomer = async () => {
     setLoading(true);
-    const res = await fetch(`http://localhost:8081/api/admin/customers/${id}`);
+    const res = await fetch(`https://glow-services.onrender.com/api/admin/customers/${id}`);
     const data = await res.json();
     setForm(data);
     setLoading(false);
@@ -41,8 +41,8 @@ const CustomerForm = () => {
     e.preventDefault();
     setSaving(true);
     const url = isEdit 
-      ? `http://localhost:8081/api/admin/customers/${id}`
-      : 'http://localhost:8081/api/admin/customers';
+      ? `https://glow-services.onrender.com/api/admin/customers/${id}`
+      : 'https://glow-services.onrender.com/api/admin/customers';
     const method = isEdit ? 'PUT' : 'POST';
 
     await fetch(url, {

@@ -39,7 +39,7 @@ const ProductForm = () => {
 
   const fetchProduct = async () => {
     setLoading(true);
-    const res = await fetch(`http://localhost:8081/api/admin/products/${id}`);
+    const res = await fetch(`https://glow-services.onrender.com/api/admin/products/${id}`);
     const data = await res.json();
     setForm(data);
     setLoading(false);
@@ -68,8 +68,8 @@ const ProductForm = () => {
     e.preventDefault();
     setSaving(true);
     const url = isEdit 
-      ? `http://localhost:8081/api/admin/products/${id}`
-      : 'http://localhost:8081/api/admin/products';
+      ? `https://glow-services.onrender.com/api/admin/products/${id}`
+      : 'https://glow-services.onrender.com/api/admin/products';
     const method = isEdit ? 'PUT' : 'POST';
 
     await fetch(url, {

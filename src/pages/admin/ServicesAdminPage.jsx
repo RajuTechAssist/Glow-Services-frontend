@@ -25,7 +25,7 @@ const ServicesAdminPage = () => {
   const handleDelete = async (slug) => {
     if (!window.confirm('Delete this service?')) return;
     try {
-      await fetch(`http://localhost:8081/api/admin/services/${slug}`, { method: 'DELETE' });
+      await fetch(`https://glow-services.onrender.com/api/admin/services/${slug}`, { method: 'DELETE' });
       fetchServices();
     } catch (err) {
       console.error(err);

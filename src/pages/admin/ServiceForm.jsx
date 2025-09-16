@@ -60,7 +60,7 @@ const ServiceForm = () => {
   const fetchService = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8081/api/services/${slug}`);
+      const response = await fetch(`https://glow-services.onrender.com/api/services/${slug}`);
       if (response.ok) {
         const service = await response.json();
         setFormData({
@@ -158,8 +158,8 @@ const ServiceForm = () => {
 
     try {
       const url = isEdit 
-        ? `http://localhost:8081/api/admin/services/${slug}`
-        : 'http://localhost:8081/api/admin/services';
+        ? `https://glow-services.onrender.com/api/admin/services/${slug}`
+        : 'https://glow-services.onrender.com/api/admin/services';
       
       const method = isEdit ? 'PUT' : 'POST';
       
