@@ -43,7 +43,7 @@ const AdminLogin = () => {
         setSuccess('');
 
         try {
-            console.log('Making POST request to login endpoint...');
+            console.log('🔄 Making POST request to login...');
 
             const response = await fetch('https://glow-services.onrender.com/api/admin/login', {
                 method: 'POST', // ✅ Explicitly POST
@@ -55,35 +55,26 @@ const AdminLogin = () => {
                 credentials: 'include'
             });
 
-            console.log('Response status:', response.status);
+            const data = await response.json();
+            console.log('📦 Login response:', data);
 
-            let data = null;
-            try {
-                data = await response.json();
-                console.log('Response data:', data);
-            } catch (parseErr) {
-                console.error('JSON parse error:', parseErr);
-                throw new Error('Invalid response format from server');
-            }
-
-            if (response.ok) {
+            if (response.ok && data.status === 'success') {
                 setSuccess('Login successful! Redirecting...');
 
                 // Store admin info
                 localStorage.setItem('adminUser', JSON.stringify(data));
+                localStorage.setItem('adminToken', data.token);
                 localStorage.setItem('isAdminLoggedIn', 'true');
 
-                // Redirect after short delay
                 setTimeout(() => {
-                    navigate('/admin/services');
+                    navigate('/admin/dashboard');
                 }, 1000);
             } else {
-                const errorMessage = data?.message || `Server error: ${response.status}`;
-                setError(errorMessage);
+                setError(data.message || 'Login failed');
             }
         } catch (err) {
-            console.error('Login error:', err);
-            setError('Network error. Please check if the server is running on port 8081.');
+            console.error('❌ Login error:', err);
+            setError('Network error. Please check server connection.');
         } finally {
             setLoading(false);
         }

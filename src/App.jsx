@@ -207,6 +207,12 @@ function App() {
                     <Route path="/admin/customers" element={<CustomersAdminPage />} />
                     <Route path="/admin/customers/create" element={<CustomerForm />} />
                     <Route path="/admin/customers/edit/:id" element={<CustomerForm />} />
+
+                 
+                    <Route path="/admin/categories" element={<CategoriesAdminPage />} />
+                    <Route path="/admin/categories/create" element={<CategoryForm />} />
+                    <Route path="/admin/categories/edit/:id" element={<CategoryForm />} />
+
                   </Route>
 
                   {/* CUSTOMER AUTH ROUTES - Public */}
@@ -228,7 +234,7 @@ function App() {
 
                 </Routes>
 
-              <KeepAlive />
+                <KeepAlive />
               </main>
             </div>
           </Router>

@@ -6,7 +6,7 @@ const ServiceForm = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const isEdit = Boolean(slug);
-  
+
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -153,43 +153,42 @@ const ServiceForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // ✅ Prevent GET request
     setSaving(true);
 
     try {
-      const url = isEdit 
+      const url = isEdit
         ? `https://glow-services.onrender.com/api/admin/services/${slug}`
         : 'https://glow-services.onrender.com/api/admin/services';
-      
-      const method = isEdit ? 'PUT' : 'POST';
-      
+
       const response = await fetch(url, {
-        method,
+        method: isEdit ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
         },
         body: JSON.stringify({
           ...formData,
           price: parseFloat(formData.price),
-          originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : null,
-          reviews: parseInt(formData.reviews),
-          rating: parseFloat(formData.rating)
+          originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : null
         })
       });
 
       if (response.ok) {
-        alert(isEdit ? 'Service updated successfully!' : 'Service created successfully!');
+        alert(`Service ${isEdit ? 'updated' : 'created'} successfully!`);
         navigate('/admin/services');
       } else {
-        throw new Error('Failed to save service');
+        const errorData = await response.json();
+        throw new Error(errorData.message || `HTTP ${response.status}`);
       }
     } catch (error) {
-      console.error('Error saving service:', error);
-      alert('Failed to save service');
+      console.error('❌ Error saving service:', error);
+      alert('Failed to save service: ' + error.message);
     } finally {
       setSaving(false);
     }
   };
+
 
   if (loading) {
     return (
@@ -221,7 +220,7 @@ const ServiceForm = () => {
         {/* Basic Information */}
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Basic Information</h2>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -319,7 +318,7 @@ const ServiceForm = () => {
         {/* Description */}
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Description</h2>
-          
+
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -353,7 +352,7 @@ const ServiceForm = () => {
         {/* Features */}
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Features</h2>
-          
+
           <div className="space-y-4">
             <div className="flex space-x-3">
               <input
@@ -372,7 +371,7 @@ const ServiceForm = () => {
                 Add
               </button>
             </div>
-            
+
             <div className="space-y-2">
               {formData.features.map((feature, index) => (
                 <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
@@ -393,7 +392,7 @@ const ServiceForm = () => {
         {/* Benefits */}
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Benefits</h2>
-          
+
           <div className="space-y-4">
             <div className="flex space-x-3">
               <input
@@ -412,7 +411,7 @@ const ServiceForm = () => {
                 Add
               </button>
             </div>
-            
+
             <div className="space-y-2">
               {formData.benefits.map((benefit, index) => (
                 <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
@@ -434,7 +433,7 @@ const ServiceForm = () => {
         {formData.category === 'combo' && (
           <div className="bg-white rounded-xl shadow-lg p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Combo Services</h2>
-            
+
             <div className="space-y-4">
               <div className="flex space-x-3">
                 <input
@@ -453,7 +452,7 @@ const ServiceForm = () => {
                   Add
                 </button>
               </div>
-              
+
               <div className="space-y-2">
                 {formData.services.map((service, index) => (
                   <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
@@ -475,7 +474,7 @@ const ServiceForm = () => {
         {/* Settings */}
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Settings</h2>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
