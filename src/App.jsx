@@ -54,6 +54,8 @@ import ServiceDetailPage from './pages/ServiceDetailPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 
+// KeepAlive Component to ping backend
+import KeepAlive from './KeepAlive';
 
 // Home Page Component
 const Home = () => (
@@ -227,6 +229,7 @@ function App() {
                 </Routes>
 
               </main>
+              <KeepAlive />
             </div>
           </Router>
         </CartProvider>
