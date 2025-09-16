@@ -44,6 +44,9 @@ import CustomerOrders from './pages/customer/CustomerOrders';
 import CustomerRewards from './pages/customer/CustomerRewards';
 import CustomerHistory from './pages/customer/CustomerHistory';
 
+import CategoriesAdminPage from './pages/admin/CategoriesAdminPage';
+import CategoryForm from './pages/admin/CategoryForm';
+
 // Import the new About Page
 import AboutPage from './pages/AboutPage';
 // Services
