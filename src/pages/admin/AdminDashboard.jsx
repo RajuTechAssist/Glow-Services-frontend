@@ -1,272 +1,270 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  Users, 
-  Package, 
-  ShoppingBag, 
-  TrendingUp, 
-  Calendar, 
-  DollarSign,
-  Star,
-  Activity
-} from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Users, Package, ShoppingBag, TrendingUp, Calendar, DollarSign, Star, Activity } from 'lucide-react';
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState({
-    totalServices: 12,
-    totalProducts: 45,
-    totalCustomers: 234,
-    monthlyRevenue: 125000,
-    pendingBookings: 8,
-    completedBookings: 156,
-    averageRating: 4.8,
-    lowStockProducts: 3
-  });
+    const navigate = useNavigate(); // ✅ ADD: For navigation
+    const [stats, setStats] = useState({
+        totalServices: 12,
+        totalProducts: 45,
+        totalCustomers: 234,
+        monthlyRevenue: 125000,
+        pendingBookings: 8,
+        completedBookings: 156,
+        averageRating: 4.8,
+        lowStockProducts: 3
+    });
 
-  return (
-    <div className="space-y-8">
-      
-      {/* Welcome Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-600 mt-2">Welcome back! Here's what's happening with your business.</p>
-      </div>
+    // ✅ ADD: Quick Action Click Handlers
+    const handleQuickAction = (action) => {
+        console.log(`📱 Quick action clicked: ${action}`);
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        {/* Total Services */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Services</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.totalServices}</p>
+        try {
+            switch (action) {
+                case 'service':
+                    navigate('/admin/services/create');
+                    break;
+                case 'product':
+                    navigate('/admin/products/create');
+                    break;
+                case 'customer':
+                    navigate('/admin/customers/create');
+                    break;
+                case 'category':
+                    navigate('/admin/categories/create');
+                    break;
+                default:
+                    console.warn('Unknown quick action:', action);
+            }
+        } catch (error) {
+            console.error('Navigation error:', error);
+            alert(`Failed to navigate to ${action} creation page. Please check if the route exists.`);
+        }
+    };
+
+    return (
+        <div className="p-6">
+            {/* Header */}
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+                <p className="text-gray-600">Welcome back! Here's what's happening with your business.</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
-              <Package className="h-6 w-6 text-white" />
+
+            {/* Stats Grid - Your Original Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {/* Total Services */}
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-600">Total Services</p>
+                            <p className="text-3xl font-bold text-gray-900">{stats.totalServices}</p>
+                        </div>
+                        <div className="p-3 bg-blue-100 rounded-full">
+                            <Package className="w-8 h-8 text-blue-600" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Total Products */}
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-600">Total Products</p>
+                            <p className="text-3xl font-bold text-gray-900">{stats.totalProducts}</p>
+                        </div>
+                        <div className="p-3 bg-green-100 rounded-full">
+                            <ShoppingBag className="w-8 h-8 text-green-600" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Total Customers */}
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-600">Total Customers</p>
+                            <p className="text-3xl font-bold text-gray-900">{stats.totalCustomers}</p>
+                        </div>
+                        <div className="p-3 bg-purple-100 rounded-full">
+                            <Users className="w-8 h-8 text-purple-600" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Monthly Revenue */}
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
+                            <p className="text-3xl font-bold text-gray-900">₹{stats.monthlyRevenue.toLocaleString()}</p>
+                        </div>
+                        <div className="p-3 bg-green-100 rounded-full">
+                            <DollarSign className="w-8 h-8 text-green-600" />
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div className="mt-4">
-            <Link to="/admin/services" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-              Manage Services →
-            </Link>
-          </div>
+
+            {/* Quick Actions - Your Original Layout with Working Buttons */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                {/* ✅ FIXED: Add New Service - Now Clickable */}
+                <button
+                    onClick={() => handleQuickAction('service')}
+                    className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all duration-200 text-left"
+                >
+                    <div className="flex items-center mb-4">
+                        <div className="p-3 bg-blue-100 rounded-full mr-4">
+                            <Package className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-900">Add New Service</h3>
+                            <p className="text-gray-600">Create a new service offering</p>
+                        </div>
+                    </div>
+                </button>
+
+                {/* ✅ FIXED: Add New Product - Now Clickable */}
+                <button
+                    onClick={() => handleQuickAction('product')}
+                    className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-green-300 transition-all duration-200 text-left"
+                >
+                    <div className="flex items-center mb-4">
+                        <div className="p-3 bg-green-100 rounded-full mr-4">
+                            <ShoppingBag className="w-6 h-6 text-green-600" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-900">Add New Product</h3>
+                            <p className="text-gray-600">Add product to catalog</p>
+                        </div>
+                    </div>
+                </button>
+
+                {/* ✅ FIXED: Add Customer - Now Clickable */}
+                <button
+                    onClick={() => handleQuickAction('customer')}
+                    className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-purple-300 transition-all duration-200 text-left"
+                >
+                    <div className="flex items-center mb-4">
+                        <div className="p-3 bg-purple-100 rounded-full mr-4">
+                            <Users className="w-6 h-6 text-purple-600" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-900">Add Customer</h3>
+                            <p className="text-gray-600">Register new customer</p>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            {/* Add Category Quick Action - New Addition */}
+            <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+                {/* ✅ NEW: Add Category - Working Button */}
+                <button
+                    onClick={() => handleQuickAction('category')}
+                    className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-indigo-300 transition-all duration-200 text-left"
+                >
+                    <div className="flex items-center mb-4">
+                        <div className="p-3 bg-indigo-100 rounded-full mr-4">
+                            <Star className="w-6 h-6 text-indigo-600" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-900">Add Category</h3>
+                            <p className="text-gray-600">Create new category</p>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            {/* Recent Activity - Your Original Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Recent Activity */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+                    <div className="space-y-4">
+                        <div className="flex items-start space-x-3">
+                            <div className="p-2 bg-blue-100 rounded-full">
+                                <Calendar className="w-4 h-4 text-blue-600" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-900">New booking received</p>
+                                <p className="text-sm text-gray-600">Facial Treatment - Priya Sharma</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start space-x-3">
+                            <div className="p-2 bg-green-100 rounded-full">
+                                <Users className="w-4 h-4 text-green-600" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-900">New customer registered</p>
+                                <p className="text-sm text-gray-600">Anjali Verma joined</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start space-x-3">
+                            <div className="p-2 bg-yellow-100 rounded-full">
+                                <Star className="w-4 h-4 text-yellow-600" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-900">New 5-star review</p>
+                                <p className="text-sm text-gray-600">Excellent service! - Rahul M.</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start space-x-3">
+                            <div className="p-2 bg-red-100 rounded-full">
+                                <Activity className="w-4 h-4 text-red-600" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-900">Low stock alert</p>
+                                <p className="text-sm text-gray-600">{stats.lowStockProducts} products running low</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Performance Metrics */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance</h3>
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                                <div className="p-2 bg-yellow-100 rounded-full">
+                                    <Star className="w-4 h-4 text-yellow-600" />
+                                </div>
+                                <span className="text-sm font-medium text-gray-900">Average Rating</span>
+                            </div>
+                            <span className="text-2xl font-bold text-gray-900">{stats.averageRating}</span>
+                        </div>
+
+                        <div className="text-sm text-gray-600">
+                            Average rating from 247 reviews
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                                <div className="p-2 bg-green-100 rounded-full">
+                                    <Calendar className="w-4 h-4 text-green-600" />
+                                </div>
+                                <span className="text-sm font-medium text-gray-900">Completed Bookings</span>
+                            </div>
+                            <span className="text-2xl font-bold text-gray-900">{stats.completedBookings}</span>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                                <div className="p-2 bg-blue-100 rounded-full">
+                                    <TrendingUp className="w-4 h-4 text-blue-600" />
+                                </div>
+                                <span className="text-sm font-medium text-gray-900">Pending Bookings</span>
+                            </div>
+                            <span className="text-2xl font-bold text-gray-900">{stats.pendingBookings}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        {/* Total Products */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Products</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.totalProducts}</p>
-            </div>
-            <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
-              <ShoppingBag className="h-6 w-6 text-white" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <Link to="/admin/products" className="text-green-600 hover:text-green-700 text-sm font-medium">
-              Manage Products →
-            </Link>
-          </div>
-        </div>
-
-        {/* Total Customers */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Customers</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.totalCustomers}</p>
-            </div>
-            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-              <Users className="h-6 w-6 text-white" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <Link to="/admin/customers" className="text-purple-600 hover:text-purple-700 text-sm font-medium">
-              Manage Customers →
-            </Link>
-          </div>
-        </div>
-
-        {/* Monthly Revenue */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
-              <p className="text-3xl font-bold text-gray-900">₹{stats.monthlyRevenue.toLocaleString()}</p>
-            </div>
-            <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center">
-              <DollarSign className="h-6 w-6 text-white" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <span className="text-green-600 text-sm font-medium">+12% from last month</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Actions & Recent Activity */}
-      <div className="grid lg:grid-cols-3 gap-8">
-        
-        {/* Quick Actions */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-            <h3 className="text-lg font-bold text-gray-900 mb-6">Quick Actions</h3>
-            <div className="space-y-4">
-              <Link
-                to="/admin/services/create"
-                className="w-full flex items-center space-x-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors duration-200"
-              >
-                <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-                  <Package className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">Add New Service</p>
-                  <p className="text-sm text-gray-600">Create a new service offering</p>
-                </div>
-              </Link>
-
-              <Link
-                to="/admin/products/create"
-                className="w-full flex items-center space-x-3 p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-colors duration-200"
-              >
-                <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                  <ShoppingBag className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">Add New Product</p>
-                  <p className="text-sm text-gray-600">Add product to catalog</p>
-                </div>
-              </Link>
-
-              <Link
-                to="/admin/customers/create"
-                className="w-full flex items-center space-x-3 p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors duration-200"
-              >
-                <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
-                  <Users className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">Add Customer</p>
-                  <p className="text-sm text-gray-600">Register new customer</p>
-                </div>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-            <h3 className="text-lg font-bold text-gray-900 mb-6">Recent Activity</h3>
-            <div className="space-y-4">
-              
-              <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
-                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                  <Calendar className="h-5 w-5 text-white" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">New booking received</p>
-                  <p className="text-sm text-gray-600">Facial Treatment - Priya Sharma</p>
-                </div>
-                <span className="text-xs text-gray-500">2 min ago</span>
-              </div>
-
-              <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                  <Users className="h-5 w-5 text-white" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">New customer registered</p>
-                  <p className="text-sm text-gray-600">Anjali Verma joined</p>
-                </div>
-                <span className="text-xs text-gray-500">1 hour ago</span>
-              </div>
-
-              <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
-                <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
-                  <Star className="h-5 w-5 text-white" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">New 5-star review</p>
-                  <p className="text-sm text-gray-600">Excellent service! - Rahul M.</p>
-                </div>
-                <span className="text-xs text-gray-500">3 hours ago</span>
-              </div>
-
-              <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
-                <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
-                  <Activity className="h-5 w-5 text-white" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">Low stock alert</p>
-                  <p className="text-sm text-gray-600">3 products running low</p>
-                </div>
-                <span className="text-xs text-gray-500">5 hours ago</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Performance Metrics */}
-      <div className="grid md:grid-cols-3 gap-6">
-        
-        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-          <h4 className="font-semibold text-gray-900 mb-4">Bookings This Month</h4>
-          <div className="space-y-3">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Pending</span>
-              <span className="font-semibold text-orange-600">{stats.pendingBookings}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Completed</span>
-              <span className="font-semibold text-green-600">{stats.completedBookings}</span>
-            </div>
-            <div className="pt-2 border-t">
-              <div className="flex justify-between">
-                <span className="font-medium">Total</span>
-                <span className="font-bold">{stats.pendingBookings + stats.completedBookings}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-          <h4 className="font-semibold text-gray-900 mb-4">Customer Satisfaction</h4>
-          <div className="text-center">
-            <div className="text-4xl font-bold text-green-600 mb-2">{stats.averageRating}</div>
-            <div className="flex justify-center mb-2">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-              ))}
-            </div>
-            <p className="text-sm text-gray-600">Average rating from 247 reviews</p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-          <h4 className="font-semibold text-gray-900 mb-4">Inventory Status</h4>
-          <div className="space-y-3">
-            <div className="flex justify-between">
-              <span className="text-gray-600">In Stock</span>
-              <span className="font-semibold text-green-600">{stats.totalProducts - stats.lowStockProducts}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Low Stock</span>
-              <span className="font-semibold text-red-600">{stats.lowStockProducts}</span>
-            </div>
-            <div className="pt-2 border-t">
-              <Link to="/admin/products" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-                Manage Inventory →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default AdminDashboard;

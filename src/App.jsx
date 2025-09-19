@@ -33,6 +33,10 @@ import ProductsAdminPage from './pages/admin/ProductsAdminPage';
 import ProductForm from './pages/admin/ProductForm';
 import CustomersAdminPage from './pages/admin/CustomersAdminPage';
 import CustomerForm from './pages/admin/CustomerForm';
+import AdminDashboard from './pages/admin/AdminDashboard';
+
+import CategoriesAdminPage from './pages/admin/CategoriesAdminPage';
+import CategoryForm from './pages/admin/CategoryForm';
 
 // Customer components
 import CustomerLogin from './pages/customer/CustomerLogin';
@@ -44,8 +48,7 @@ import CustomerOrders from './pages/customer/CustomerOrders';
 import CustomerRewards from './pages/customer/CustomerRewards';
 import CustomerHistory from './pages/customer/CustomerHistory';
 
-import CategoriesAdminPage from './pages/admin/CategoriesAdminPage';
-import CategoryForm from './pages/admin/CategoryForm';
+
 
 // Import the new About Page
 import AboutPage from './pages/AboutPage';
@@ -197,24 +200,31 @@ function App() {
                     </ProtectedAdminRoute>
                   }>
                     <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                    <Route path="dashboard" element={<AdminDashboard />} />
                     <Route path="services" element={<ServicesAdminPage />} />
+                    <Route path="/admin/products" element={<ProductsAdminPage />} />
+                    <Route path="customers" element={<CustomersAdminPage />} />
+                    <Route path="/admin/customers" element={<CustomersAdminPage />} />
                     <Route path="services/create" element={<ServiceForm />} />
                     <Route path="services/edit/:slug" element={<ServiceForm />} />
 
-                    <Route path="/admin/products" element={<ProductsAdminPage />} />
-                    <Route path="products" element={<ProductsAdminPage />} />
                     <Route path="/admin/products/create" element={<ProductForm />} />
                     <Route path="/admin/products/edit/:id" element={<ProductForm />} />
 
-                    <Route path="customers" element={<CustomersAdminPage />} />
-                    <Route path="/admin/customers" element={<CustomersAdminPage />} />
                     <Route path="/admin/customers/create" element={<CustomerForm />} />
                     <Route path="/admin/customers/edit/:id" element={<CustomerForm />} />
 
-                 
+
                     <Route path="/admin/categories" element={<CategoriesAdminPage />} />
                     <Route path="/admin/categories/create" element={<CategoryForm />} />
                     <Route path="/admin/categories/edit/:id" element={<CategoryForm />} />
+
+                    // Inside your admin nested routes
+                    <Route path="services/create" element={<ServiceForm />} />
+                    <Route path="products/create" element={<ProductForm />} />
+                    <Route path="customers/create" element={<CustomerForm />} />
+                    <Route path="categories/create" element={<CategoryForm />} />
+
 
                   </Route>
 

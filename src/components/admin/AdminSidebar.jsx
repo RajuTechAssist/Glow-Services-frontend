@@ -1,13 +1,13 @@
 import React from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { 
-  LogOut, 
-  User, 
-  Settings, 
-  Home, 
-  Package, 
-  ShoppingBag, 
-  Users, 
+import {
+  LogOut,
+  User,
+  Settings,
+  Home,
+  Package,
+  ShoppingBag,
+  Users,
   BarChart3,
   Calendar,
   ShoppingCart,
@@ -19,6 +19,12 @@ import {
   X
 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
+
+import { 
+  Plus, Edit, Trash2, Eye, EyeOff, Search, Filter, 
+  Save, ArrowLeft, AlertCircle, Tag 
+} from 'lucide-react';
+
 
 const AdminSidebar = ({ isOpen, onClose }) => {
   const { adminUser, adminLogout } = useAdminAuth();
@@ -34,106 +40,115 @@ const AdminSidebar = ({ isOpen, onClose }) => {
 
   const navigation = [
     // OVERVIEW
-    { 
-      name: 'Dashboard', 
-      href: '/admin/dashboard', 
-      icon: BarChart3, 
+    {
+      name: 'Dashboard',
+      href: '/admin/dashboard',
+      icon: BarChart3,
       current: location.pathname === '/admin/dashboard',
       section: 'overview'
     },
 
+    {
+      name: 'Categories',
+      href: '/admin/categories',
+      icon: Tag, // Import Tag from lucide-react
+      current: location.pathname.startsWith('/admin/categories'),
+      section: 'business'
+    },
+
+
     // BUSINESS MANAGEMENT
-    { 
-      name: 'Bookings', 
-      href: '/admin/bookings', 
-      icon: Calendar, 
+    {
+      name: 'Bookings',
+      href: '/admin/bookings',
+      icon: Calendar,
       current: location.pathname.startsWith('/admin/bookings'),
       badge: '8',
       section: 'business'
     },
-    
-    { 
-      name: 'Services', 
-      href: '/admin/services', 
-      icon: Package, 
+
+    {
+      name: 'Services',
+      href: '/admin/services',
+      icon: Package,
       current: location.pathname.startsWith('/admin/services'),
       section: 'business'
     },
-    
-    { 
-      name: 'Products', 
-      href: '/admin/products', 
-      icon: ShoppingBag, 
+
+    {
+      name: 'Products',
+      href: '/admin/products',
+      icon: ShoppingBag,
       current: location.pathname.startsWith('/admin/products'),
       section: 'business'
     },
 
     // PEOPLE
-    { 
-      name: 'Customers', 
-      href: '/admin/customers', 
-      icon: Users, 
+    {
+      name: 'Customers',
+      href: '/admin/customers',
+      icon: Users,
       current: location.pathname.startsWith('/admin/customers'),
       section: 'people'
     },
-    
-    { 
-      name: 'Staff', 
-      href: '/admin/staff', 
-      icon: UserCheck, 
+
+    {
+      name: 'Staff',
+      href: '/admin/staff',
+      icon: UserCheck,
       current: location.pathname.startsWith('/admin/staff'),
       section: 'people'
     },
 
     // OPERATIONS
-    { 
-      name: 'Orders', 
-      href: '/admin/orders', 
-      icon: ShoppingCart, 
+    {
+      name: 'Orders',
+      href: '/admin/orders',
+      icon: ShoppingCart,
       current: location.pathname.startsWith('/admin/orders'),
       section: 'operations'
     },
-    
-    { 
-      name: 'Inventory', 
-      href: '/admin/inventory', 
-      icon: Package2, 
+
+    {
+      name: 'Inventory',
+      href: '/admin/inventory',
+      icon: Package2,
       current: location.pathname.startsWith('/admin/inventory'),
       badge: '3',
       section: 'operations'
     },
 
     // INSIGHTS
-    { 
-      name: 'Analytics', 
-      href: '/admin/analytics', 
-      icon: TrendingUp, 
+    {
+      name: 'Analytics',
+      href: '/admin/analytics',
+      icon: TrendingUp,
       current: location.pathname.startsWith('/admin/analytics'),
       section: 'insights'
     },
-    
-    { 
-      name: 'Reviews', 
-      href: '/admin/reviews', 
-      icon: Star, 
+
+    {
+      name: 'Reviews',
+      href: '/admin/reviews',
+      icon: Star,
       current: location.pathname.startsWith('/admin/reviews'),
       section: 'insights'
     },
 
     // GROWTH
-    { 
-      name: 'Marketing', 
-      href: '/admin/marketing', 
-      icon: Megaphone, 
+    {
+      name: 'Marketing',
+      href: '/admin/marketing',
+      icon: Megaphone,
       current: location.pathname.startsWith('/admin/marketing'),
       section: 'growth'
     },
 
     // SYSTEM
-    { 
-      name: 'Settings', 
-      href: '/admin/settings', 
-      icon: Settings, 
+    {
+      name: 'Settings',
+      href: '/admin/settings',
+      icon: Settings,
       current: location.pathname.startsWith('/admin/settings'),
       section: 'system'
     }
@@ -155,26 +170,23 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       key={item.name}
       to={item.href}
       onClick={() => onClose && onClose()} // Close sidebar on mobile after click
-      className={`group flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-        item.current
+      className={`group flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${item.current
           ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg'
           : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-      }`}
+        }`}
     >
       <div className="flex items-center">
         <item.icon
-          className={`mr-3 h-4 w-4 ${
-            item.current ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'
-          }`}
+          className={`mr-3 h-4 w-4 ${item.current ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'
+            }`}
         />
         {item.name}
       </div>
       {item.badge && (
-        <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
-          item.current 
-            ? 'bg-white bg-opacity-20 text-white' 
+        <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${item.current
+            ? 'bg-white bg-opacity-20 text-white'
             : 'bg-red-500 text-white'
-        }`}>
+          }`}>
           {item.badge}
         </span>
       )}
@@ -191,10 +203,9 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform ${
-        isOpen ? 'translate-x-0' : '-translate-x-full'
-      } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 flex flex-col`}>
-        
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
+        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 flex flex-col`}>
+
         {/* Sidebar header */}
         <div className="flex items-center justify-between h-16 px-6 bg-gradient-to-r from-pink-600 to-purple-600 flex-shrink-0">
           <div className="flex items-center space-x-3">
@@ -226,7 +237,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
 
         {/* Navigation - Scrollable */}
         <nav className="flex-1 px-4 py-6 space-y-6 overflow-y-auto">
-          
+
           {/* Overview */}
           <div>
             {navigationSections.overview.map(renderNavItem)}
@@ -305,7 +316,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
             <Home className="mr-3 h-4 w-4 text-gray-500" />
             Back to Website
           </button>
-          
+
           <button
             onClick={handleLogout}
             className="w-full flex items-center px-3 py-2.5 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-colors duration-200"
