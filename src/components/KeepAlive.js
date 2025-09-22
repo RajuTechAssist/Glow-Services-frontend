@@ -4,28 +4,30 @@ import axios from 'axios';
 
 const KeepAlive = () => {
   useEffect(() => {
-    const url = 'https://glow-services.onrender.com'; 
-    const interval = 30000; // 30 seconds
+    // Point at the new, existing endpoint
+    const url = 'https://glow-services.onrender.com/api/keep-alive';
+    const interval = 30_000; // 30 seconds
 
-    const reloadWebsite = () => {
-      axios.get(url)
-        .then((response) => {
-          console.log("Backend awakened");
-        })
-        .catch((error) => {
-          console.error("Ping error:", error.message);
-        });
+    // Ping the backend and log success or error
+    const reloadWebsite = async () => {
+      try {
+        await axios.get(url);
+        console.log('Backend awakened');
+      } catch (error) {
+        console.error('Ping error:', error.message);
+      }
     };
 
-    // ping immediately and then at intervals
+    // Immediate ping + interval setup
     reloadWebsite();
     const intervalId = setInterval(reloadWebsite, interval);
 
-    // cleanup interval on unmount
+    // Cleanup on unmount
     return () => clearInterval(intervalId);
   }, []);
 
-  return null; // this component doesn't render anything
+  // This component renders nothing
+  return null;
 };
 
 export default KeepAlive;

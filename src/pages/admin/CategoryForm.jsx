@@ -123,11 +123,11 @@ const CategoryForm = () => {
         // Auto-generate slug when name changes (only for new categories)
         if (field === 'name' && !isEdit) {
             const slug = value.toLowerCase()
-                              .trim()
-                              .replace(/[^a-z0-9\s-]/g, '')
-                              .replace(/\s+/g, '-')
-                              .replace(/-+/g, '-')
-                              .replace(/^-|-$/g, '');
+                .trim()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
             setForm(prev => ({ ...prev, slug }));
         }
     };
@@ -142,7 +142,15 @@ const CategoryForm = () => {
         setSaving(true);
 
         try {
-            const url = isEdit 
+            // ✅ 1. Get the token from localStorage
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                alert('Authentication error. Please log in again.');
+                navigate('/admin/login');
+                return;
+            }
+
+            const url = isEdit
                 ? `${BACKEND_URL}/api/admin/categories/${id}`
                 : `${BACKEND_URL}/api/admin/categories`;
 
@@ -150,13 +158,18 @@ const CategoryForm = () => {
 
             const response = await fetch(url, {
                 method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    // ✅ 2. Add the Authorization header
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({
                     ...form,
                     sortOrder: parseInt(form.sortOrder) || 0
                 })
             });
 
+            
             const data = await response.json();
 
             if (response.ok) {
@@ -225,9 +238,8 @@ const CategoryForm = () => {
                                     required
                                     value={form.name}
                                     onChange={(e) => handleChange('name', e.target.value)}
-                                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                                        errors.name ? 'border-red-300' : 'border-gray-300'
-                                    }`}
+                                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.name ? 'border-red-300' : 'border-gray-300'
+                                        }`}
                                     placeholder="Enter category name"
                                 />
                                 {errors.name && (
@@ -247,9 +259,8 @@ const CategoryForm = () => {
                                     required
                                     value={form.slug}
                                     onChange={(e) => handleChange('slug', e.target.value)}
-                                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                                        errors.slug ? 'border-red-300' : 'border-gray-300'
-                                    }`}
+                                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.slug ? 'border-red-300' : 'border-gray-300'
+                                        }`}
                                     placeholder="category-slug"
                                 />
                                 {errors.slug && (
@@ -272,9 +283,8 @@ const CategoryForm = () => {
                                 rows={3}
                                 value={form.description}
                                 onChange={(e) => handleChange('description', e.target.value)}
-                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                                    errors.description ? 'border-red-300' : 'border-gray-300'
-                                }`}
+                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.description ? 'border-red-300' : 'border-gray-300'
+                                    }`}
                                 placeholder="Category description (optional)"
                             />
                             {errors.description && (
@@ -304,11 +314,10 @@ const CategoryForm = () => {
                                         onChange={(e) => handleChange('type', e.target.value)}
                                         className="sr-only"
                                     />
-                                    <div className={`p-4 border-2 rounded-lg transition-all ${
-                                        form.type === type.value
+                                    <div className={`p-4 border-2 rounded-lg transition-all ${form.type === type.value
                                             ? 'border-blue-500 bg-blue-50'
                                             : 'border-gray-200 hover:border-gray-300'
-                                    }`}>
+                                        }`}>
                                         <div className="font-medium text-gray-900">{type.label}</div>
                                         <div className="text-sm text-gray-500 mt-1">{type.description}</div>
                                     </div>
@@ -362,11 +371,10 @@ const CategoryForm = () => {
                                             key={color.value}
                                             type="button"
                                             onClick={() => handleChange('color', color.value)}
-                                            className={`p-3 rounded-lg border-2 transition-all ${
-                                                form.color === color.value
+                                            className={`p-3 rounded-lg border-2 transition-all ${form.color === color.value
                                                     ? 'border-gray-800'
                                                     : 'border-gray-200 hover:border-gray-300'
-                                            }`}
+                                                }`}
                                         >
                                             <div className={`w-6 h-6 rounded-full mx-auto ${color.class}`}></div>
                                             <div className="text-xs mt-1">{color.label}</div>

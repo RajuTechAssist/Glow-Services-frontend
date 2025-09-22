@@ -113,6 +113,7 @@ function App() {
           <Router>
             <div className="App">
               <main>
+                <KeepAlive />
                 <Routes>
                   <Route path="/" element={
                     <div className="min-h-screen bg-white">
@@ -252,7 +253,7 @@ function App() {
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
 
-                <KeepAlive />
+                
               </main>
             </div>
           </Router>
