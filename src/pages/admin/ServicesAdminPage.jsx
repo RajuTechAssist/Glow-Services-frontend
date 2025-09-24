@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import ApiService from '../../services/api';
 import { Plus, Search, Edit, Trash2, Filter, Star, Eye, EyeOff, MoreVertical } from 'lucide-react';
+
 
 const ServicesAdminPage = () => {
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('ALL');
+  const [filterCategory, setFilterCategory] = useState('all');
   const [error, setError] = useState(null);
 
   const BACKEND_URL = 'https://glow-services.onrender.com';
 
-  // ✅ JWT Authentication Helper Function
   const getAuthHeaders = () => {
     const token = localStorage.getItem('adminToken');
     if (!token) {
@@ -26,30 +28,57 @@ const ServicesAdminPage = () => {
     };
   };
 
+  // ✅ EFFECT TO FETCH BOTH CATEGORIES AND SERVICES
   useEffect(() => {
-    fetchServices();
-  }, []);
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      const headers = getAuthHeaders();
+      if (!headers) return;
 
-  // ✅ Updated fetchServices with JWT auth
+      try {
+        // Fetch Categories
+        const catResponse = await ApiService.getPublicCategories();
+        setCategories([{ id: 'all', name: 'All Categories' }, ...catResponse]);
+
+        // Fetch Services
+        const serviceResponse = await fetch(
+          `${BACKEND_URL}/api/admin/services?category=${filterCategory}`,
+          { headers }
+        );
+        
+        if (!serviceResponse.ok) throw new Error(`HTTP ${serviceResponse.status}`);
+        
+        const serviceData = await serviceResponse.json();
+        setServices(serviceData);
+
+      } catch (error) {
+        console.error('❌ Error fetching data:', error);
+        setError('Failed to load data. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [filterCategory]);
+
+
   const fetchServices = async () => {
     try {
       setLoading(true);
       setError(null);
-
       const headers = getAuthHeaders();
       if (!headers) return;
 
-      const response = await fetch(`${BACKEND_URL}/api/admin/services`, {
-        headers
-      });
+      const response = await fetch(
+        `${BACKEND_URL}/api/admin/services`, 
+        { headers }
+      );
 
       if (response.ok) {
         const data = await response.json();
         setServices(data);
-      } else if (response.status === 401) {
-        localStorage.removeItem('adminToken');
-        alert('Session expired. Please log in again.');
-        navigate('/admin/login');
       } else {
         throw new Error(`HTTP ${response.status}`);
       }
@@ -61,31 +90,27 @@ const ServicesAdminPage = () => {
     }
   };
 
-  // ✅ Updated handleDelete with JWT auth
-  const handleDelete = async (slug, name) => {
-    if (!window.confirm(`Are you sure you want to delete "${name}"?`)) {
-      return;
-    }
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const handleDelete = async (serviceId, name) => {
+    if (!window.confirm(`Are you sure you want to delete "${name}"?`)) return;
 
     try {
       const headers = getAuthHeaders();
       if (!headers) return;
 
-      const response = await fetch(`${BACKEND_URL}/api/admin/services/${slug}`, {
+      const response = await fetch(`${BACKEND_URL}/api/admin/services/${serviceId}`, {
         method: 'DELETE',
         headers
       });
 
       if (response.ok) {
-        setServices(services.filter(service => service.slug !== slug));
+        setServices(services.filter(service => service.id !== serviceId));
         alert('Service deleted successfully!');
-      } else if (response.status === 401) {
-        localStorage.removeItem('adminToken');
-        alert('Session expired. Please log in again.');
-        navigate('/admin/login');
       } else {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP ${response.status}`);
+        throw new Error(`HTTP ${response.status}`);
       }
     } catch (error) {
       console.error('Error deleting service:', error);
@@ -93,57 +118,24 @@ const ServicesAdminPage = () => {
     }
   };
 
-  // ✅ Updated toggleStatus with JWT auth
-  const toggleStatus = async (slug, currentStatus) => {
-    try {
-      const headers = getAuthHeaders();
-      if (!headers) return;
+  const filteredServices = services.filter(service => {
+    if (!searchTerm) return true;
+    return service.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           service.description?.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
-      const response = await fetch(`${BACKEND_URL}/api/admin/services/${slug}/toggle-status`, {
-        method: 'PATCH',
-        headers
-      });
-
-      if (response.ok) {
-        setServices(services.map(service => 
-          service.slug === slug ? { ...service, active: !currentStatus } : service
-        ));
-      } else if (response.status === 401) {
-        localStorage.removeItem('adminToken');
-        alert('Session expired. Please log in again.');
-        navigate('/admin/login');
-      } else {
-        throw new Error(`HTTP ${response.status}`);
-      }
-    } catch (error) {
-      console.error('Error toggling status:', error);
-      alert('Failed to update status. Please try again.');
-    }
+  const handleCategoryChange = (newCategory) => {
+    setFilterCategory(newCategory);
   };
 
-  const categories = [
-    { value: 'ALL', label: 'All Categories' },
-    { value: 'facial', label: 'Facial & Clean Up' },
-    { value: 'waxing', label: 'Waxing & Hair Removal' },
-    { value: 'nails', label: 'Nail Care' },
-    { value: 'body', label: 'Body Care' },
-    { value: 'makeup', label: 'Makeup & Bridal' },
-    { value: 'threading', label: 'Threading & Bleach' },
-    { value: 'combo', label: 'Combo Offers' }
-  ];
 
-  const filteredServices = services.filter(service => {
-    const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         service.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterCategory === 'ALL' || service.category === filterCategory;
-    return matchesSearch && matchesFilter;
-  });
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
+          <span className="ml-4">Loading services...</span>
         </div>
       </div>
     );
@@ -210,8 +202,8 @@ const ServicesAdminPage = () => {
               className="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
             >
               {categories.map(category => (
-                <option key={category.value} value={category.value}>
-                  {category.label}
+                <option key={category.id || category.slug} value={category.slug || 'all'}>
+                  {category.name}
                 </option>
               ))}
             </select>
@@ -223,7 +215,7 @@ const ServicesAdminPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredServices.map((service) => (
           <div
-            key={service.slug}
+            key={service.slug || service.id}
             className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg transition-all"
           >
             <div className="flex items-start justify-between mb-4">
@@ -234,31 +226,20 @@ const ServicesAdminPage = () => {
                 </span>
               </div>
               <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => toggleStatus(service.slug, service.active)}
-                  className={`p-2 rounded-lg transition-colors ${
-                    service.active 
-                      ? 'text-green-600 hover:bg-green-50' 
-                      : 'text-gray-400 hover:bg-gray-50'
-                  }`}
-                  title={service.active ? 'Active' : 'Inactive'}
-                >
-                  {service.active ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                </button>
                 <div className="relative group">
                   <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50">
                     <MoreVertical className="w-4 h-4" />
                   </button>
                   <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
                     <button
-                      onClick={() => navigate(`/admin/services/edit/${service.slug}`)}
+                      onClick={() => navigate(`/admin/services/edit/${service.slug || service.id}`)}
                       className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 w-full text-left"
                     >
                       <Edit className="w-4 h-4" />
                       <span>Edit</span>
                     </button>
                     <button
-                      onClick={() => handleDelete(service.slug, service.name)}
+                      onClick={() => handleDelete(service.slug || service.id, service.name)}
                       className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -278,13 +259,9 @@ const ServicesAdminPage = () => {
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center space-x-4">
                 <span className="font-semibold text-gray-900">₹{service.price}</span>
-                <span className="text-gray-500">{service.duration} mins</span>
+                {service.duration && <span className="text-gray-500">{service.duration}</span>}
               </div>
-              <span className={`px-2 py-1 rounded-full text-xs ${
-                service.active 
-                  ? 'bg-green-100 text-green-800' 
-                  : 'bg-gray-100 text-gray-600'
-              }`}>
+              <span className={`px-2 py-1 rounded-full text-xs ${service.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                 {service.active ? 'Active' : 'Inactive'}
               </span>
             </div>
@@ -297,11 +274,11 @@ const ServicesAdminPage = () => {
           <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No services found</h3>
           <p className="text-gray-500 mb-6">
-            {searchTerm || filterCategory !== 'ALL' 
+            {searchTerm || filterCategory !== 'all' 
               ? 'Try adjusting your search or filter criteria.' 
               : 'Get started by creating your first service.'}
           </p>
-          {(!searchTerm && filterCategory === 'ALL') && (
+          {(!searchTerm && filterCategory === 'all') && (
             <button
               onClick={() => navigate('/admin/services/create')}
               className="bg-gradient-to-r from-pink-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all"

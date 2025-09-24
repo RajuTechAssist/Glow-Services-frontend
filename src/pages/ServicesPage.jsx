@@ -19,6 +19,7 @@ const ServicesPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('popular');
   const [services, setServices] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [likedServices, setLikedServices] = useState(new Set());
@@ -26,21 +27,52 @@ const ServicesPage = () => {
   const [showFilters, setShowFilters] = useState(false);
   const sectionRef = useRef(null);
 
-  const serviceCategories = [
-    { id: 'all', name: 'All Services', icon: '✨', color: 'from-pink-400 to-purple-500' },
-    { id: 'facial', name: 'Facial & Clean Up', icon: '✨', color: 'from-rose-400 to-pink-500' },
-    { id: 'waxing', name: 'Waxing & Hair Removal', icon: '🌟', color: 'from-purple-400 to-indigo-500' },
-    { id: 'nails', name: 'Nail Care', icon: '💅', color: 'from-pink-400 to-rose-500' },
-    { id: 'body', name: 'Body Care', icon: '🌺', color: 'from-violet-400 to-purple-500' },
-    { id: 'massage', name: 'Massage Therapy', icon: '🙌', color: 'from-indigo-400 to-violet-500' },
-    { id: 'makeup', name: 'Makeup Services', icon: '💄', color: 'from-fuchsia-400 to-pink-500' },
-    { id: 'threading', name: 'Threading & Bleach', icon: '🎯', color: 'from-indigo-400 to-purple-500' },
-    { id: 'haircare', name: 'Hair Care', icon: '💇', color: 'from-purple-400 to-fuchsia-500' },
-    { id: 'skincare', name: 'Skin Care', icon: '🧴', color: 'from-pink-300 to-rose-400' },
-    { id: 'bridal', name: 'Bridal Services', icon: '👰', color: 'from-fuchsia-500 to-rose-500' },
-    { id: 'party', name: 'Party & Events', icon: '🎉', color: 'from-violet-400 to-fuchsia-400' },
-    { id: 'combo', name: 'Combo Packages', icon: '🎁', color: 'from-pink-400 via-purple-400 to-indigo-500' }
-  ];
+  // ✅ COMBINED AND CORRECTED useEffect to handle all data fetching and filtering
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        // Fetch categories every time
+        const catData = await ApiService.getPublicCategories();
+        const allOption = { id: 'all', name: 'All Services', slug: 'all', icon: '✨', color: 'from-pink-400 to-purple-500' };
+        setCategories([allOption, ...catData]);
+
+        // Fetch services based on the currently selected category
+        const serviceData = await ApiService.getAllServices(selectedCategory, searchTerm, sortBy);
+        if (Array.isArray(serviceData)) {
+            setServices(serviceData);
+        } else {
+            setServices([]);
+        }
+
+      } catch (err) {
+        console.error("Failed to fetch page data", err);
+        setError("Failed to load services. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [selectedCategory, searchTerm, sortBy]); // This hook now re-runs correctly when a filter changes
+
+  // ✅ ADDED useEffect to fetch categories from the backend
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await ApiService.getPublicCategories();
+        // Manually add the "All Services" option to the front of the list
+        const allOption = { id: 'all', name: 'All Services', icon: '✨', color: 'from-pink-400 to-purple-500' };
+        setCategories([allOption, ...data]);
+      } catch (err) {
+        console.error("Failed to fetch categories", err);
+        // Fallback to a minimal list if API fails
+        setCategories([{ id: 'all', name: 'All Services', icon: '✨', color: 'from-pink-400 to-purple-500' }]);
+      }
+    };
+    fetchCategories();
+  }, []);
 
 
   const sortOptions = [
@@ -276,18 +308,18 @@ const ServicesPage = () => {
                   Categories
                 </h3>
                 <div className="space-y-3">
-                  {serviceCategories.map((category) => (
+                  {categories.map((category) => (
                     <button
                       key={category.id}
-                      onClick={() => setSelectedCategory(category.id)}
-                      className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${selectedCategory === category.id
-                        ? `bg-gradient-to-r ${category.color} text-white shadow-lg border-2 border-transparent`
-                        : 'bg-gradient-to-r from-pink-50 to-purple-50 hover:from-pink-100 hover:to-purple-100 border-2 border-pink-200 hover:border-purple-300 text-gray-700'
+                      onClick={() => setSelectedCategory(category.slug || category.id)}
+                      className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${selectedCategory === (category.slug || category.id)
+                          ? `bg-gradient-to-r ${category.color || 'from-pink-400 to-purple-500'} text-white shadow-lg border-2 border-transparent`
+                          : 'bg-gradient-to-r from-pink-50 to-purple-50 hover:from-pink-100 hover:to-purple-100 border-2 border-pink-200 hover:border-purple-300 text-gray-700'
                         }`}
                     >
                       <span className="text-xl mr-4">{category.icon}</span>
                       <span className="font-semibold flex-1">{category.name}</span>
-                      {selectedCategory === category.id && (
+                      {selectedCategory === (category.slug || category.id) && (
                         <CheckCircle className="w-6 h-6 ml-2" />
                       )}
                     </button>
@@ -404,7 +436,7 @@ const ServicesPage = () => {
                             className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
                             onError={(e) => {
                               e.target.src = '/images/services/facial-service.png'; // 
-                              
+
                             }}
                           />
                           <button

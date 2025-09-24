@@ -14,6 +14,7 @@ class ApiService {
         mode: 'cors',
       });
       
+      
       console.log(`✅ Response status: ${response.status}`);
       
       if (!response.ok) {
@@ -75,6 +76,10 @@ class ApiService {
 
   async getFeaturedServices() {
     return this.get('/services/featured');
+  }
+
+  async getPublicCategories() {
+    return this.get('/public/categories');
   }
 
   async testConnection() {
