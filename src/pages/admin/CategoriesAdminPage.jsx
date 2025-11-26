@@ -1,3 +1,5 @@
+import config from '../../config';
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Search, Edit, Trash2, Filter, MoreVertical, Eye, EyeOff, Star } from 'lucide-react';
@@ -10,7 +12,7 @@ const CategoriesAdminPage = () => {
   const [filterType, setFilterType] = useState('ALL');
   const [error, setError] = useState(null);
 
-  const BACKEND_URL = 'https://glow-services.onrender.com';
+  const BACKEND_URL = config.BASE_URL;
 
   // ✅ JWT Authentication Helper Function
   const getAuthHeaders = () => {

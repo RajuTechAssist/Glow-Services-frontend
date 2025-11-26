@@ -1,4 +1,4 @@
-import config from '../config';
+import config from '../../config';
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
