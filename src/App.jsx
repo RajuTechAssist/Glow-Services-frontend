@@ -65,6 +65,8 @@ import ProductDetailPage from './pages/ProductDetailPage';
 // KeepAlive Component to ping backend
 import KeepAlive from './components/KeepAlive';
 
+import WhatsAppButton from './components/WhatsAppButton';
+
 // Home Page Component
 const Home = () => (
   <div className="min-h-screen">
@@ -114,6 +116,9 @@ function App() {
             <div className="App">
               <main>
                 <KeepAlive />
+
+                <WhatsAppButton />
+
                 <Routes>
                   <Route path="/" element={
                     <div className="min-h-screen bg-white">
