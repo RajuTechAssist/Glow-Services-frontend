@@ -1,3 +1,5 @@
+import config from '../../config';
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Save, ArrowLeft, AlertCircle, Plus, X } from 'lucide-react';
@@ -36,7 +38,7 @@ const ProductForm = () => {
   const [newIngredient, setNewIngredient] = useState('');
   const [newBenefit, setNewBenefit] = useState('');
 
-  const BACKEND_URL = 'https://glow-services.onrender.com';
+  const BACKEND_URL = config.BASE_URL;
 
   // ✅ JWT Authentication Helper Function
   const getAuthHeaders = () => {

@@ -1,3 +1,5 @@
+import config from '../../config';
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Save, ArrowLeft } from 'lucide-react';
@@ -29,7 +31,7 @@ const CustomerForm = () => {
 
   const fetchCustomer = async () => {
     setLoading(true);
-    const res = await fetch(`https://glow-services.onrender.com/api/admin/customers/${id}`);
+    const res = await fetch(`${config.BASE_URL}/api/admin/customers/${id}`);
     const data = await res.json();
     setForm(data);
     setLoading(false);
@@ -41,8 +43,8 @@ const CustomerForm = () => {
     e.preventDefault();
     setSaving(true);
     const url = isEdit 
-      ? `https://glow-services.onrender.com/api/admin/customers/${id}`
-      : 'https://glow-services.onrender.com/api/admin/customers';
+      ? `${config.BASE_URL}/api/admin/customers/${id}`
+      : `${config.BASE_URL}/api/admin/customers`;
     const method = isEdit ? 'PUT' : 'POST';
 
     await fetch(url, {

@@ -1,8 +1,9 @@
+import config from '../../config';
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import ApiService from '../../services/api';
 import { Plus, Search, Edit, Trash2, Filter, Star, Eye, EyeOff, MoreVertical } from 'lucide-react';
-
 
 const ServicesAdminPage = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const ServicesAdminPage = () => {
   const [filterCategory, setFilterCategory] = useState('all');
   const [error, setError] = useState(null);
 
-  const BACKEND_URL = 'https://glow-services.onrender.com';
+  const BACKEND_URL = config.BASE_URL;
 
   const getAuthHeaders = () => {
     const token = localStorage.getItem('adminToken');
@@ -28,72 +29,63 @@ const ServicesAdminPage = () => {
     };
   };
 
-  // ✅ EFFECT TO FETCH BOTH CATEGORIES AND SERVICES
+  // ✅ CORRECTED: Use proper admin endpoints
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
-      const headers = getAuthHeaders();
-      if (!headers) return;
 
       try {
-        // Fetch Categories
-        const catResponse = await ApiService.getPublicCategories();
-        setCategories([{ id: 'all', name: 'All Categories' }, ...catResponse]);
+        // Fetch categories from public endpoint (no auth needed)
+        const categoryData = await ApiService.getPublicCategories();
+        setCategories([
+          { id: 'all', name: 'All Categories', slug: 'all' },
+          ...categoryData
+        ]);
 
-        // Fetch Services
-        const serviceResponse = await fetch(
-          `${BACKEND_URL}/api/admin/services?category=${filterCategory}`,
-          { headers }
-        );
-        
-        if (!serviceResponse.ok) throw new Error(`HTTP ${serviceResponse.status}`);
-        
+        // ✅ CORRECTED: Use /api/admin/services for admin access
+        const headers = getAuthHeaders();
+        if (!headers) return;
+
+        console.log('🔄 Fetching services from: /api/admin/services');
+
+        const serviceResponse = await fetch(`${BACKEND_URL}/api/admin/services`, {
+          headers
+        });
+
+        if (!serviceResponse.ok) {
+          if (serviceResponse.status === 401) {
+            localStorage.removeItem('adminToken');
+            alert('Session expired. Please log in again.');
+            navigate('/admin/login');
+            return;
+          }
+          throw new Error(`HTTP ${serviceResponse.status}`);
+        }
+
         const serviceData = await serviceResponse.json();
-        setServices(serviceData);
+        console.log('📦 Services received:', serviceData);
+
+        // ✅ Filter by category locally since admin endpoint returns all services
+        let filteredServices = serviceData;
+        if (filterCategory && filterCategory !== 'all') {
+          filteredServices = serviceData.filter(service => service.category === filterCategory);
+        }
+
+        setServices(filteredServices);
 
       } catch (error) {
         console.error('❌ Error fetching data:', error);
-        setError('Failed to load data. Please try again.');
+        setError(`Failed to load data: ${error.message}`);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [filterCategory]);
+  }, [filterCategory]); // Re-fetch when category filter changes
 
-
-  const fetchServices = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const headers = getAuthHeaders();
-      if (!headers) return;
-
-      const response = await fetch(
-        `${BACKEND_URL}/api/admin/services`, 
-        { headers }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setServices(data);
-      } else {
-        throw new Error(`HTTP ${response.status}`);
-      }
-    } catch (error) {
-      console.error('Error fetching services:', error);
-      setError('Failed to load services. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchServices();
-  }, []);
-
+  // ✅ CORRECTED: Delete using proper admin endpoint
   const handleDelete = async (serviceId, name) => {
     if (!window.confirm(`Are you sure you want to delete "${name}"?`)) return;
 
@@ -101,6 +93,7 @@ const ServicesAdminPage = () => {
       const headers = getAuthHeaders();
       if (!headers) return;
 
+      // ✅ CORRECTED: Use /api/admin/services/{id} for deletion
       const response = await fetch(`${BACKEND_URL}/api/admin/services/${serviceId}`, {
         method: 'DELETE',
         headers
@@ -109,26 +102,25 @@ const ServicesAdminPage = () => {
       if (response.ok) {
         setServices(services.filter(service => service.id !== serviceId));
         alert('Service deleted successfully!');
+      } else if (response.status === 401) {
+        localStorage.removeItem('adminToken');
+        alert('Session expired. Please log in again.');
+        navigate('/admin/login');
       } else {
         throw new Error(`HTTP ${response.status}`);
       }
     } catch (error) {
       console.error('Error deleting service:', error);
-      alert('Failed to delete service. Please try again.');
+      alert(`Failed to delete service: ${error.message}`);
     }
   };
 
+  // ✅ Filter services locally by search term
   const filteredServices = services.filter(service => {
     if (!searchTerm) return true;
     return service.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
            service.description?.toLowerCase().includes(searchTerm.toLowerCase());
   });
-
-  const handleCategoryChange = (newCategory) => {
-    setFilterCategory(newCategory);
-  };
-
-
 
   if (loading) {
     return (
@@ -147,7 +139,7 @@ const ServicesAdminPage = () => {
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
           <div className="text-red-600 mb-4">{error}</div>
           <button
-            onClick={fetchServices}
+            onClick={() => window.location.reload()}
             className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
           >
             Retry
@@ -168,16 +160,16 @@ const ServicesAdminPage = () => {
               Service Management
             </h1>
           </div>
-          <button
-            onClick={() => navigate('/admin/services/create')}
+          <Link
+            to="/admin/services/create"
             className="bg-gradient-to-r from-pink-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all flex items-center space-x-2"
           >
             <Plus className="w-5 h-5" />
             <span>Add Service</span>
-          </button>
+          </Link>
         </div>
         <p className="text-gray-600 mt-2 ml-11">
-          Manage your beauty services and treatments
+          🔒 Admin-only view - Manage all services (including inactive ones)
         </p>
       </div>
 
@@ -202,7 +194,7 @@ const ServicesAdminPage = () => {
               className="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
             >
               {categories.map(category => (
-                <option key={category.id || category.slug} value={category.slug || 'all'}>
+                <option key={category.id || category.slug} value={category.slug}>
                   {category.name}
                 </option>
               ))}
@@ -215,7 +207,7 @@ const ServicesAdminPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredServices.map((service) => (
           <div
-            key={service.slug || service.id}
+            key={service.id}
             className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg transition-all"
           >
             <div className="flex items-start justify-between mb-4">
@@ -231,15 +223,15 @@ const ServicesAdminPage = () => {
                     <MoreVertical className="w-4 h-4" />
                   </button>
                   <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
-                    <button
-                      onClick={() => navigate(`/admin/services/edit/${service.slug || service.id}`)}
+                    <Link
+                      to={`/admin/services/edit/${service.id}`}
                       className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 w-full text-left"
                     >
                       <Edit className="w-4 h-4" />
                       <span>Edit</span>
-                    </button>
+                    </Link>
                     <button
-                      onClick={() => handleDelete(service.slug || service.id, service.name)}
+                      onClick={() => handleDelete(service.id, service.name)}
                       className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -259,10 +251,14 @@ const ServicesAdminPage = () => {
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center space-x-4">
                 <span className="font-semibold text-gray-900">₹{service.price}</span>
-                {service.duration && <span className="text-gray-500">{service.duration}</span>}
+                {service.duration && <span className="text-gray-500">{service.duration} mins</span>}
               </div>
-              <span className={`px-2 py-1 rounded-full text-xs ${service.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {service.active ? 'Active' : 'Inactive'}
+              <span className={`px-2 py-1 rounded-full text-xs ${
+                service.active !== false
+                  ? 'bg-green-100 text-green-800' 
+                  : 'bg-gray-100 text-gray-600'
+              }`}>
+                {service.active !== false ? 'Active' : 'Inactive'}
               </span>
             </div>
           </div>
@@ -279,12 +275,12 @@ const ServicesAdminPage = () => {
               : 'Get started by creating your first service.'}
           </p>
           {(!searchTerm && filterCategory === 'all') && (
-            <button
-              onClick={() => navigate('/admin/services/create')}
+            <Link
+              to="/admin/services/create"
               className="bg-gradient-to-r from-pink-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all"
             >
               Create First Service
-            </button>
+            </Link>
           )}
         </div>
       )}

@@ -1,3 +1,5 @@
+import config from '../../config';
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
@@ -8,7 +10,7 @@ const CustomersAdminPage = () => {
 
   const fetchCustomers = async () => {
     setLoading(true);
-    const res = await fetch('https://glow-services.onrender.com/api/admin/customers');
+    const res = await fetch(`${config.BASE_URL}/api/admin/customers`);
     const data = await res.json();
     setCustomers(data);
     setLoading(false);
@@ -20,7 +22,7 @@ const CustomersAdminPage = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this customer?')) return;
-    await fetch(`https://glow-services.onrender.com/api/admin/customers/${id}`, { method: 'DELETE' });
+    await fetch(`${config.BASE_URL}/api/admin/customers/${id}`, { method: 'DELETE' });
     fetchCustomers();
   };
 

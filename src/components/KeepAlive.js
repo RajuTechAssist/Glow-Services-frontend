@@ -1,11 +1,14 @@
 // src/KeepAlive.js
+import config from '../config';
+
+
 import { useEffect } from 'react';
 import axios from 'axios';
 
 const KeepAlive = () => {
   useEffect(() => {
     // Point at the new, existing endpoint
-    const url = 'https://glow-services.onrender.com/api/keep-alive';
+    const url = `${config.API_BASE_URL}/keep-alive`;
     const interval = 30_000; // 30 seconds
 
     // Ping the backend and log success or error

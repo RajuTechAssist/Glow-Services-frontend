@@ -1,3 +1,5 @@
+import config from '../../config';
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, User, AlertCircle, Shield, CheckCircle, Loader } from 'lucide-react';
@@ -45,7 +47,7 @@ const AdminLogin = () => {
         try {
             console.log('🔄 Making POST request to login...');
 
-            const response = await fetch('https://glow-services.onrender.com/api/admin/login', {
+            const response = await fetch(`${config.API_BASE_URL}/admin/login`, {
                 method: 'POST', // ✅ Explicitly POST
                 headers: {
                     'Content-Type': 'application/json',

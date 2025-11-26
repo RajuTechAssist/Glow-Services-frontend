@@ -1,21 +1,25 @@
+import config from '../../config';
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Save, ArrowLeft, AlertCircle } from 'lucide-react';
+import ApiService from '../../services/api';
 
 const ServiceForm = () => {
-  const { slug } = useParams();
+  const { id } = useParams(); // ✅ CORRECTED: Your admin controller uses ID, not slug
   const navigate = useNavigate();
-  const isEdit = Boolean(slug);
+  const isEdit = Boolean(id);
 
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
     description: '',
     longDescription: '',
-    category: 'facial',
+    category: '',
     price: '',
     originalPrice: '',
     duration: '',
@@ -33,7 +37,7 @@ const ServiceForm = () => {
   const [newBenefit, setNewBenefit] = useState('');
   const [newService, setNewService] = useState('');
 
-  const BACKEND_URL = 'https://glow-services.onrender.com';
+  const BACKEND_URL = config.BASE_URL;
 
   // ✅ JWT Authentication Helper Function
   const getAuthHeaders = () => {
@@ -49,32 +53,57 @@ const ServiceForm = () => {
     };
   };
 
-  const categories = [
-    { value: 'facial', label: 'Facial & Clean Up' },
-    { value: 'waxing', label: 'Waxing & Hair Removal' },
-    { value: 'nails', label: 'Nail Care' },
-    { value: 'body', label: 'Body Care' },
-    { value: 'makeup', label: 'Makeup & Bridal' },
-    { value: 'threading', label: 'Threading & Bleach' },
-    { value: 'combo', label: 'Combo Offers' }
-  ];
-
   const gradientOptions = [
     'from-pink-500 to-purple-500',
-    'from-blue-500 to-cyan-500',
+    'from-blue-500 to-cyan-500', 
     'from-green-500 to-emerald-500',
     'from-orange-500 to-red-500',
     'from-purple-500 to-pink-500',
     'from-indigo-500 to-purple-500'
   ];
 
+  // ✅ Fetch categories dynamically on component mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoryData = await ApiService.getPublicCategories();
+        setCategories(categoryData);
+
+        // ✅ Set default category to first available category's slug
+        if (categoryData.length > 0 && !isEdit) {
+          setFormData(prev => ({
+            ...prev,
+            category: categoryData[0].slug
+          }));
+        }
+      } catch (error) {
+        console.error('❌ Error fetching categories:', error);
+        // ✅ Fallback categories if API fails
+        setCategories([
+          { slug: 'facial', name: 'Facial & Clean Up' },
+          { slug: 'waxing', name: 'Waxing & Hair Removal' },
+          { slug: 'nails', name: 'Nail Care' },
+          { slug: 'body', name: 'Body Care' },
+          { slug: 'makeup', name: 'Makeup & Bridal' },
+          { slug: 'threading', name: 'Threading & Bleach' },
+          { slug: 'combo', name: 'Combo Offers' }
+        ]);
+        if (!isEdit) {
+          setFormData(prev => ({ ...prev, category: 'facial' }));
+        }
+      }
+    };
+
+    fetchCategories();
+  }, [isEdit]);
+
   useEffect(() => {
     if (isEdit) {
       fetchService();
     }
-  }, [isEdit, slug]);
+  }, [isEdit, id]);
 
-  // ✅ FIXED: Added JWT auth to fetchService
+  // ✅ CORRECTED: For editing, we need to get service by ID first, then get details by slug
   const fetchService = async () => {
     try {
       setLoading(true);
@@ -82,23 +111,32 @@ const ServiceForm = () => {
       const headers = getAuthHeaders();
       if (!headers) return;
 
-      const response = await fetch(`${BACKEND_URL}/api/admin/services/${slug}`, {
+      // ✅ STRATEGY: Since your admin controller uses ID but we might need to fetch by slug,
+      // we'll first try to get the service from admin endpoint, then fallback to public if needed
+      let response = await fetch(`${BACKEND_URL}/api/admin/services`, {
         headers
       });
 
       if (response.ok) {
-        const service = await response.json();
-        setFormData({
-          ...service,
-          features: service.features || [],
-          benefits: service.benefits || [],
-          services: service.services || []
-        });
+        const services = await response.json();
+        const service = services.find(s => s.id.toString() === id);
+
+        if (service) {
+          setFormData({
+            ...service,
+            features: service.features || [],
+            benefits: service.benefits || [],
+            services: service.services || []
+          });
+        } else {
+          throw new Error('Service not found');
+        }
       } else if (response.status === 401) {
         localStorage.removeItem('adminToken');
         alert('Session expired. Please log in again.');
         navigate('/admin/login');
       } else {
+        console.error('Failed to fetch service:', response.status);
         alert('Failed to load service');
         navigate('/admin/services');
       }
@@ -182,6 +220,7 @@ const ServiceForm = () => {
     }));
   };
 
+  // ✅ CORRECTED: Use /api/admin/services for admin operations
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -190,22 +229,33 @@ const ServiceForm = () => {
       const headers = getAuthHeaders();
       if (!headers) return;
 
-      const url = isEdit 
-        ? `${BACKEND_URL}/api/admin/services/${slug}` 
-        : `${BACKEND_URL}/api/admin/services`;
-      const method = isEdit ? 'PUT' : 'POST';
+      // ✅ CORRECTED: Use admin endpoints
+      let url, method;
+
+      if (isEdit) {
+        // ✅ Use your admin controller's PUT endpoint with ID
+        url = `${BACKEND_URL}/api/admin/services/${id}`;
+        method = 'PUT';
+      } else {
+        // ✅ Use your admin controller's POST endpoint
+        url = `${BACKEND_URL}/api/admin/services`;
+        method = 'POST';
+      }
 
       const response = await fetch(url, {
         method,
         headers,
         body: JSON.stringify({
           ...formData,
-          price: parseFloat(formData.price),
-          originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : null
+          price: parseFloat(formData.price) || 0,
+          originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : null,
+          duration: parseInt(formData.duration) || 0
         })
       });
 
       if (response.ok) {
+        const result = await response.json();
+        console.log('✅ Service saved successfully:', result);
         alert(`Service ${isEdit ? 'updated' : 'created'} successfully!`);
         navigate('/admin/services');
       } else if (response.status === 401) {
@@ -213,11 +263,12 @@ const ServiceForm = () => {
         alert('Session expired. Please log in again.');
         navigate('/admin/login');
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || `HTTP ${response.status}`);
+        const errorText = await response.text();
+        console.error('❌ Server response:', response.status, errorText);
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
       }
     } catch (error) {
-      console.error('Error saving service:', error);
+      console.error('❌ Error saving service:', error);
       alert('Failed to save service: ' + error.message);
     } finally {
       setSaving(false);
@@ -243,18 +294,19 @@ const ServiceForm = () => {
           <button
             onClick={() => navigate('/admin/services')}
             className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+            disabled={saving}
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="flex items-center">
-            <span className="text-2xl mr-2">✨</span>
+            <span className="text-2xl mr-2">🔒</span>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
               {isEdit ? 'Edit Service' : 'Create New Service'}
             </h1>
           </div>
         </div>
         <p className="text-gray-600 mt-2 ml-12">
-          {isEdit ? 'Update service information' : 'Add a new beauty service'}
+          {isEdit ? 'Update service information (Admin Only)' : 'Add a new beauty service (Admin Only)'}
         </p>
       </div>
 
@@ -308,11 +360,15 @@ const ServiceForm = () => {
                   required
                   disabled={saving}
                 >
-                  {categories.map(category => (
-                    <option key={category.value} value={category.value}>
-                      {category.label}
-                    </option>
-                  ))}
+                  {categories.length === 0 ? (
+                    <option value="">Loading categories...</option>
+                  ) : (
+                    categories.map(category => (
+                      <option key={category.slug} value={category.slug}>
+                        {category.name}
+                      </option>
+                    ))
+                  )}
                 </select>
               </div>
 
@@ -450,7 +506,7 @@ const ServiceForm = () => {
               </button>
               <button
                 type="submit"
-                disabled={saving}
+                disabled={saving || categories.length === 0}
                 className="px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg hover:shadow-lg font-medium disabled:opacity-50 flex items-center space-x-2"
               >
                 {saving ? (
@@ -458,7 +514,11 @@ const ServiceForm = () => {
                 ) : (
                   <Save className="w-4 h-4" />
                 )}
-                <span>{saving ? 'Saving...' : isEdit ? 'Update Service' : 'Create Service'}</span>
+                <span>
+                  {saving ? 'Saving...' : 
+                   isEdit ? 'Update Service' : 
+                   'Create Service'}
+                </span>
               </button>
             </div>
           </form>

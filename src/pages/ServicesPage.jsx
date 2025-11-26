@@ -33,12 +33,12 @@ const ServicesPage = () => {
       setLoading(true);
       setError(null);
       try {
-        // Fetch categories every time
+        // Fetch categories from the new public endpoint
         const catData = await ApiService.getPublicCategories();
         const allOption = { id: 'all', name: 'All Services', slug: 'all', icon: '✨', color: 'from-pink-400 to-purple-500' };
         setCategories([allOption, ...catData]);
 
-        // Fetch services based on the currently selected category
+        // Fetch services using the currently selected category slug
         const serviceData = await ApiService.getAllServices(selectedCategory, searchTerm, sortBy);
         if (Array.isArray(serviceData)) {
             setServices(serviceData);
@@ -55,24 +55,24 @@ const ServicesPage = () => {
     };
 
     fetchData();
-  }, [selectedCategory, searchTerm, sortBy]); // This hook now re-runs correctly when a filter changes
+  }, [selectedCategory, searchTerm, sortBy]); // ✅ Re-runs correctly when a filter changes
 
-  // ✅ ADDED useEffect to fetch categories from the backend
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await ApiService.getPublicCategories();
-        // Manually add the "All Services" option to the front of the list
-        const allOption = { id: 'all', name: 'All Services', icon: '✨', color: 'from-pink-400 to-purple-500' };
-        setCategories([allOption, ...data]);
-      } catch (err) {
-        console.error("Failed to fetch categories", err);
-        // Fallback to a minimal list if API fails
-        setCategories([{ id: 'all', name: 'All Services', icon: '✨', color: 'from-pink-400 to-purple-500' }]);
-      }
-    };
-    fetchCategories();
-  }, []);
+  // // ✅ ADDED useEffect to fetch categories from the backend
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const data = await ApiService.getPublicCategories();
+  //       // Manually add the "All Services" option to the front of the list
+  //       const allOption = { id: 'all', name: 'All Services', icon: '✨', color: 'from-pink-400 to-purple-500' };
+  //       setCategories([allOption, ...data]);
+  //     } catch (err) {
+  //       console.error("Failed to fetch categories", err);
+  //       // Fallback to a minimal list if API fails
+  //       setCategories([{ id: 'all', name: 'All Services', icon: '✨', color: 'from-pink-400 to-purple-500' }]);
+  //     }
+  //   };
+  //   fetchCategories();
+  // }, []);
 
 
   const sortOptions = [

@@ -1,3 +1,5 @@
+import config from '../../config';
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
@@ -20,7 +22,7 @@ const CustomerLogin = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8081/api/customers/login', {
+      const res = await fetch(`${config.BASE_URL}/api/customers/login`, {
         method: 'POST',
         headers: { 'Content-Type':'application/json' },
         body: JSON.stringify(form),

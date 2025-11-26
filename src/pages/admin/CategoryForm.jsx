@@ -1,3 +1,5 @@
+import config from '../config';
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Save, ArrowLeft, AlertCircle } from 'lucide-react';
@@ -22,7 +24,7 @@ const CategoryForm = () => {
     sortOrder: 0
   });
 
-  const BACKEND_URL = 'https://glow-services.onrender.com';
+  const BACKEND_URL = config.BASE_URL;
 
   // ✅ JWT Authentication Helper Function
   const getAuthHeaders = () => {

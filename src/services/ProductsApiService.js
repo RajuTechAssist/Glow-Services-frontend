@@ -1,5 +1,8 @@
 // services/productsApi.js
-const API_BASE_URL = 'https://glow-services.onrender.com/api';
+import config from '../config';
+
+
+const API_BASE_URL = config.API_BASE_URL;
 
 class ProductsApiService {
 
