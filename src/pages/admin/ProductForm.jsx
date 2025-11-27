@@ -1,4 +1,5 @@
 import config from '../../config';
+import ApiService from '../../services/api';
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -197,6 +198,42 @@ const ProductForm = () => {
       </div>
     );
   }
+
+  // Add this state for loading status
+  const [isUploading, setIsUploading] = useState(false);
+
+  // Add this function to handle file selection
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      // Upload to AWS via Backend
+      const imageUrl = await ApiService.uploadFile(file);
+      
+      // Add URL to form state
+      setForm(prev => ({
+        ...prev,
+        images: [...prev.images, imageUrl]
+      }));
+      
+      alert("Image uploaded successfully!");
+    } catch (error) {
+      console.error('Upload failed:', error);
+      alert("Failed to upload image. Check console for details.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // Add this function to remove an image
+  const removeImage = (index) => {
+    setForm(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
@@ -450,6 +487,68 @@ const ProductForm = () => {
                 ))}
               </div>
             </div>
+
+
+              {/* Images Section */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Product Images
+              </label>
+              
+              {/* Upload Area */}
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center mb-4 hover:border-pink-400 transition-colors">
+                {isUploading ? (
+                  <div className="flex flex-col items-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mb-2"></div>
+                    <span className="text-sm text-gray-500">Uploading to cloud...</span>
+                  </div>
+                ) : (
+                  <>
+                    <input 
+                        type="file" 
+                        onChange={handleImageUpload} 
+                        className="hidden" 
+                        id="product-image-upload"
+                        accept="image/*"
+                    />
+                    <label 
+                        htmlFor="product-image-upload"
+                        className="cursor-pointer flex flex-col items-center"
+                    >
+                        <div className="p-3 bg-pink-50 rounded-full mb-2">
+                            <Plus className="w-6 h-6 text-pink-500" />
+                        </div>
+                        <span className="text-sm text-gray-700 font-medium">Click to Upload Image</span>
+                        <span className="text-xs text-gray-400 mt-1">JPG, PNG supported</span>
+                    </label>
+                  </>
+                )}
+              </div>
+
+              {/* Image Previews */}
+              {form.images.length > 0 && (
+                <div className="grid grid-cols-4 gap-4">
+                  {form.images.map((img, index) => (
+                    <div key={index} className="relative group">
+                      <img 
+                        src={img} 
+                        alt={`Product ${index + 1}`} 
+                        className="w-full h-24 object-cover rounded-lg border border-gray-200"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+
 
             {/* Status Toggles */}
             <div className="flex items-center space-x-6">

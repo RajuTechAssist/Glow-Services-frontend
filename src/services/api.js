@@ -87,6 +87,31 @@ class ApiService {
   async testConnection() {
     return this.get('/services/test');
   }
+
+
+  async uploadFile(file) {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(`${API_BASE_URL}/upload`, {
+        method: 'POST',
+        // Note: Do NOT set Content-Type header for FormData, 
+        // the browser sets it automatically with the boundary
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data.url; // Returns the AWS S3 URL
+    } catch (error) {
+      console.error('🚨 File Upload Error:', error);
+      throw error;
+    }
+  }
 }
 
 export default new ApiService();
