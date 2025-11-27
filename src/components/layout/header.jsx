@@ -1,21 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, } from 'react-router-dom';
-import { ChevronDown, Menu, X, User, ShoppingBag } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ChevronDown, Menu, X, User, ShoppingBag, ChevronRight, Home, Info, Phone, BookOpen } from 'lucide-react';
 import ApiService from '../../services/api';
 import styles from './Header.module.css';
 import { useCart } from '../../context/CartContext';
 import CartDropdown from '../../components/CartDropdown';
-
 import { useCustomerAuth } from '../../context/CustomerAuthContext';
-import { useNavigate } from 'react-router-dom';
 import ProductsApi from '../../services/ProductsApiService';
-
-
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(null); // For desktop hover/click
+  
+  // NEW: State for mobile accordion menus
+  const [mobileExpanded, setMobileExpanded] = useState({
+    services: false,
+    products: false
+  });
+
   const [services, setServices] = useState([]);
   const [showCartDropdown, setShowCartDropdown] = useState(false);
   const { getTotalItems } = useCart();
@@ -24,13 +27,11 @@ const Header = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
 
-
-
-
   // Refs for dropdown management
   const servicesRef = useRef(null);
   const productsRef = useRef(null);
 
+  // ... [Keep your existing useEffects for fetching data and click outside here] ...
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (cartRef.current && !cartRef.current.contains(event.target)) {
@@ -41,24 +42,19 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Fetch real services from API
   useEffect(() => {
     const fetchServices = async () => {
       try {
         const allServices = await ApiService.getAllServices();
-        // Take first 6 services for dropdown
         setServices(allServices.slice(0, 6));
       } catch (error) {
         console.error('Error fetching services for header:', error);
-        // Fallback to empty array if API fails
         setServices([]);
       }
     };
-
     fetchServices();
   }, []);
 
-  // Fetch products for dropdown
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -72,8 +68,6 @@ const Header = () => {
     fetchProducts();
   }, []);
 
-
-  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -82,7 +76,6 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (servicesRef.current && !servicesRef.current.contains(event.target) &&
@@ -98,7 +91,14 @@ const Header = () => {
     setOpenDropdown(openDropdown === dropdown ? null : dropdown);
   };
 
-  // ✅ UPDATED: Product categories with proper routing
+  // NEW: Toggle function for mobile accordions
+  const toggleMobileSection = (section) => {
+    setMobileExpanded(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
   const productCategories = [
     {
       name: 'Skincare',
@@ -135,65 +135,50 @@ const Header = () => {
     }
   ];
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(price);
-  };
-
   return (
     <header className={`${styles.header} ${isScrolled ? styles.headerScrolled : ''}`}>
       <div className={styles.container}>
         <div className={styles.headerContent}>
+          
           {/* Logo */}
           <Link to="/" className={styles.logo}>
             <div className={styles.logoIcon}>G</div>
             <span className={styles.logoText}>Glow Services</span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation (Hidden on Mobile) */}
           <nav className={styles.nav}>
             <Link to="/" className={styles.navLink}>Home</Link>
             <Link to="/about" className={styles.navLink}>About</Link>
 
-            {/* Services Dropdown */}
+            {/* Desktop Services Dropdown */}
             <div className={styles.dropdown} ref={servicesRef}>
-              <button
-                onClick={() => toggleDropdown('services')}
-                className={styles.dropdownButton}
-              >
+              <button onClick={() => toggleDropdown('services')} className={styles.dropdownButton}>
                 Services
                 <ChevronDown className={`${styles.chevron} ${openDropdown === 'services' ? styles.chevronOpen : ''}`} />
               </button>
-
               <div className={`${styles.dropdownMenu} ${openDropdown === 'services' ? styles.dropdownMenuOpen : ''}`}>
                 <div className="px-4 py-2 border-b border-gray-100">
-                  <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">OUR SERVICES</h3>
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Our Services</h3>
                 </div>
-
                 {services.length > 0 ? (
                   <div className="py-2">
                     {services.map((service) => (
                       <Link
                         key={service.id}
                         to={`/services/${service.slug}`}
-                        className="block px-4 py-3 text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors duration-200"
+                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors"
                         onClick={() => setOpenDropdown(null)}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-medium">{service.name}</span>
-                          <span className="text-xs text-gray-400 capitalize">{service.category}</span>
                         </div>
                       </Link>
                     ))}
-
                     <div className="border-t border-gray-100 mt-2 pt-2">
                       <Link
                         to="/services"
-                        className="block px-4 py-3 text-pink-600 hover:bg-pink-50 font-medium transition-colors duration-200"
+                        className="block px-4 py-2 text-sm text-pink-600 font-semibold hover:bg-pink-50"
                         onClick={() => setOpenDropdown(null)}
                       >
                         View All Services →
@@ -201,208 +186,215 @@ const Header = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="px-4 py-6 text-center">
-                    <p className="text-gray-500 text-sm">Loading services...</p>
-                  </div>
+                  <div className="px-4 py-6 text-center"><p className="text-gray-500 text-sm">Loading...</p></div>
                 )}
               </div>
             </div>
 
-            {/* Products Dropdown */}
+            {/* Desktop Products Dropdown */}
             <div className={styles.dropdown} ref={productsRef}>
-              <button
-                onClick={() => toggleDropdown('products')}
-                className={styles.dropdownButton}
-              >
+              <button onClick={() => toggleDropdown('products')} className={styles.dropdownButton}>
                 Products
                 <ChevronDown className={`${styles.chevron} ${openDropdown === 'products' ? styles.chevronOpen : ''}`} />
               </button>
-
               <div className={`${styles.dropdownMenu} ${openDropdown === 'products' ? styles.dropdownMenuOpen : ''}`}>
-                <div className="px-4 py-2 border-b border-gray-100">
-                  <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">PRODUCT CATEGORIES</h3>
-                </div>
-
-                <div className="py-2">
+                {/* ... (Existing Desktop Product Menu Logic) ... */}
+                 <div className="py-2">
                   {productCategories.map((category) => (
-                    <div key={category.slug} className="px-4 py-2">
-                      <Link
-                        to={`/products?category=${category.slug}`}
-                        className="block font-medium text-gray-900 hover:text-pink-600 transition-colors duration-200 mb-2"
-                        onClick={() => setOpenDropdown(null)}
-                      >
-                        {category.icon} {category.name}
-                      </Link>
-                      <div className="grid grid-cols-2 gap-2">
-                        {category.subcategories.map((sub) => (
-                          <Link
-                            key={sub.slug}
-                            to={`/products?category=${category.slug}&search=${sub.name}`}
-                            className="text-sm text-gray-600 hover:text-pink-600 transition-colors duration-200"
-                            onClick={() => setOpenDropdown(null)}
-                          >
-                            {sub.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="border-t border-gray-100 mt-2 pt-2">
-                    <Link
-                      to="/products"
-                      className="block px-4 py-3 text-pink-600 hover:bg-pink-50 font-medium transition-colors duration-200"
+                    <Link 
+                      key={category.slug}
+                      to={`/products?category=${category.slug}`}
+                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600"
                       onClick={() => setOpenDropdown(null)}
                     >
-                      View All Products →
+                       <span className="mr-2">{category.icon}</span> {category.name}
                     </Link>
-                  </div>
-                </div>
+                  ))}
+                   <div className="border-t border-gray-100 mt-2 pt-2">
+                      <Link
+                        to="/products"
+                        className="block px-4 py-2 text-sm text-pink-600 font-semibold hover:bg-pink-50"
+                        onClick={() => setOpenDropdown(null)}
+                      >
+                        Shop All Products →
+                      </Link>
+                    </div>
+                 </div>
               </div>
             </div>
-
 
             <Link to="/blog" className={styles.navLink}>Blog</Link>
             <Link to="/contact" className={styles.navLink}>Contact</Link>
           </nav>
 
-          {/* Right Section */}
+          {/* Right Section (Cart & Mobile Toggle) */}
           <div className={styles.rightSection}>
-            {/* Shopping Cart */}
             <div className="relative" ref={cartRef}>
-              <button
-                onClick={() => setShowCartDropdown(!showCartDropdown)}
-                className={styles.cartButton}
-              >
+              <button onClick={() => setShowCartDropdown(!showCartDropdown)} className={styles.cartButton}>
                 <ShoppingBag className="h-5 w-5" />
                 <span className={styles.cartBadge}>{getTotalItems()}</span>
               </button>
-
-              <CartDropdown
-                isOpen={showCartDropdown}
-                onClose={() => setShowCartDropdown(false)}
-              />
+              <CartDropdown isOpen={showCartDropdown} onClose={() => setShowCartDropdown(false)} />
             </div>
 
-            {/* Authentication Section */}
+            {/* Desktop Auth & Book */}
             <div className={styles.authSection}>
-              {/* Authentication Section */}
-              <div className={styles.authSection}>
-                {isCustomerLoggedIn ? (
-                  <button
-                    onClick={() => navigate('/customer/dashboard')}
-                    className={styles.loginLink}
-                  >
-                    Hi, {customerUser.fullName.split(' ')[0]}
-                  </button>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => navigate('/customer/login')}
-                      className={styles.loginLink}
-                    >
-                      Login
-                    </button>
-                    <button
-                      onClick={() => navigate('/customer/register')}
-                      className={styles.loginLink}
-                    >
-                      Register
-                    </button>
-                  </>
-                )}
-              </div>
-
-              <Link to="/book" className={styles.bookButton}>
-                Book Now
-              </Link>
+              {isCustomerLoggedIn ? (
+                <button onClick={() => navigate('/customer/dashboard')} className={styles.loginLink}>
+                  Hi, {customerUser.fullName.split(' ')[0]}
+                </button>
+              ) : (
+                <>
+                  <button onClick={() => navigate('/customer/login')} className={styles.loginLink}>Login</button>
+                  <button onClick={() => navigate('/customer/register')} className={styles.loginLink}>Register</button>
+                </>
+              )}
+              <Link to="/book" className={styles.bookButton}>Book Now</Link>
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={styles.mobileMenuButton}
-            >
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={styles.mobileMenuButton}>
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* ================= MOBILE MENU ================= */}
         {isMobileMenuOpen && (
-          <div className={styles.mobileMenu}>
-            <Link to="/" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>
-              Home
-            </Link>
-            <Link to="/about" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>
-              About
-            </Link>
+          <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-100 max-h-[90vh] overflow-y-auto">
+            <div className="flex flex-col p-4 space-y-1">
+              
+              {/* Standard Links */}
+              <Link to="/" className="flex items-center px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <Home className="w-5 h-5 mr-3 text-gray-400" />
+                <span className="font-medium">Home</span>
+              </Link>
+              
+              <Link to="/about" className="flex items-center px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <Info className="w-5 h-5 mr-3 text-gray-400" />
+                <span className="font-medium">About</span>
+              </Link>
 
-            {/* Mobile Services Menu */}
-            {services.length > 0 && (
-              <div className="border-b border-gray-200 pb-3 mb-3">
-                <div className="px-4 py-2">
-                  <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Services</h4>
+              {/* Collapsible Services Section */}
+              <div>
+                <button 
+                  onClick={() => toggleMobileSection('services')}
+                  className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors"
+                >
+                  <div className="flex items-center">
+                    <span className="w-5 h-5 mr-3 flex items-center justify-center text-xl">✨</span>
+                    <span className="font-medium">Services</span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${mobileExpanded.services ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {/* Collapsible Content */}
+                <div className={`overflow-hidden transition-all duration-300 ${mobileExpanded.services ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                  <div className="bg-gray-50 rounded-xl mx-2 mt-1 mb-2 py-2">
+                    {services.slice(0, 5).map(service => (
+                      <Link 
+                        key={service.id} 
+                        to={`/services/${service.slug}`}
+                        className="flex items-center px-6 py-2.5 text-sm text-gray-600 hover:text-pink-600"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <ChevronRight className="w-3 h-3 mr-2 text-pink-400" />
+                        {service.name}
+                      </Link>
+                    ))}
+                    <div className="border-t border-gray-200 mt-2 pt-2 px-6">
+                      <Link to="/services" className="text-sm font-semibold text-pink-600" onClick={() => setIsMobileMenuOpen(false)}>
+                        View All Services →
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-                {services.slice(0, 4).map((service) => (
-                  <Link
-                    key={service.id}
-                    to={`/services/${service.slug}`}
-                    className={styles.mobileNavLink}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {service.name}
-                  </Link>
-                ))}
-                <Link
-                  to="/services"
-                  className={`${styles.mobileNavLink} text-pink-600 font-medium`}
+              </div>
+
+              {/* Collapsible Products Section */}
+              <div>
+                <button 
+                  onClick={() => toggleMobileSection('products')}
+                  className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors"
+                >
+                  <div className="flex items-center">
+                    <span className="w-5 h-5 mr-3 flex items-center justify-center text-xl">🛍️</span>
+                    <span className="font-medium">Products</span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${mobileExpanded.products ? 'rotate-180' : ''}`} />
+                </button>
+                
+                <div className={`overflow-hidden transition-all duration-300 ${mobileExpanded.products ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                  <div className="bg-gray-50 rounded-xl mx-2 mt-1 mb-2 py-2">
+                    {productCategories.map(cat => (
+                      <Link 
+                        key={cat.slug} 
+                        to={`/products?category=${cat.slug}`}
+                        className="flex items-center px-6 py-2.5 text-sm text-gray-600 hover:text-pink-600"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <span className="mr-2 text-xs">{cat.icon}</span>
+                        {cat.name}
+                      </Link>
+                    ))}
+                     <div className="border-t border-gray-200 mt-2 pt-2 px-6">
+                      <Link to="/products" className="text-sm font-semibold text-pink-600" onClick={() => setIsMobileMenuOpen(false)}>
+                        Shop All Products →
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Other Links */}
+              <Link to="/blog" className="flex items-center px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <BookOpen className="w-5 h-5 mr-3 text-gray-400" />
+                <span className="font-medium">Blog</span>
+              </Link>
+              
+              <Link to="/contact" className="flex items-center px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <Phone className="w-5 h-5 mr-3 text-gray-400" />
+                <span className="font-medium">Contact</span>
+              </Link>
+
+              {/* Mobile Auth & CTA */}
+              <div className="pt-4 mt-4 border-t border-gray-100 px-4 pb-4 space-y-3">
+                {isCustomerLoggedIn ? (
+                  <div className="flex items-center p-3 bg-pink-50 rounded-xl border border-pink-100">
+                    <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+                      {customerUser?.fullName?.charAt(0) || 'U'}
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-gray-900">{customerUser?.fullName}</p>
+                      <Link to="/customer/dashboard" className="text-xs text-pink-600 font-medium" onClick={() => setIsMobileMenuOpen(false)}>Go to Dashboard</Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    <button 
+                      onClick={() => { navigate('/customer/login'); setIsMobileMenuOpen(false); }}
+                      className="w-full py-2.5 text-gray-700 font-medium border border-gray-200 rounded-lg hover:bg-gray-50"
+                    >
+                      Login
+                    </button>
+                    <button 
+                      onClick={() => { navigate('/customer/register'); setIsMobileMenuOpen(false); }}
+                      className="w-full py-2.5 text-pink-600 font-medium bg-pink-50 rounded-lg hover:bg-pink-100"
+                    >
+                      Register
+                    </button>
+                  </div>
+                )}
+                
+                <Link 
+                  to="/book" 
+                  className="block w-full py-3 text-center text-white font-bold bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-95"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  View All Services →
+                  Book Appointment Now
                 </Link>
               </div>
-            )}
 
-            {/* Mobile Products Menu */}
-            <div className="border-b border-gray-200 pb-3 mb-3">
-              <div className="px-4 py-2">
-                <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Products</h4>
-              </div>
-              {productCategories.map((category) => (
-                <Link
-                  key={category.slug}
-                  to={`/products/${category.slug}`}
-                  className={styles.mobileNavLink}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {category.name}
-                </Link>
-              ))}
-              <Link
-                to="/products"
-                className={`${styles.mobileNavLink} text-pink-600 font-medium`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                View All Products →
-              </Link>
-            </div>
-
-            <Link to="/blog" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>
-              Blog
-            </Link>
-            <Link to="/contact" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>
-              Contact
-            </Link>
-
-            <div className={styles.mobileDivider}>
-              <Link to="/login" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>
-                <User className="h-4 w-4 mr-2 inline" />
-                Login
-              </Link>
-              <Link to="/book" className={styles.mobileBookButton} onClick={() => setIsMobileMenuOpen(false)}>
-                Book Now
-              </Link>
             </div>
           </div>
         )}
