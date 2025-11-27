@@ -2,7 +2,7 @@ import config from '../../config';
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, ArrowLeft, AlertCircle } from 'lucide-react';
+import { Save, ArrowLeft, AlertCircle, Plus, X } from 'lucide-react';
 import ApiService from '../../services/api';
 
 const ServiceForm = () => {
@@ -30,8 +30,12 @@ const ServiceForm = () => {
     services: [],
     popular: false,
     active: true,
+    image: '',  
+    gallery: [],
     gradient: 'from-pink-500 to-purple-500'
   });
+
+  const [isUploading, setIsUploading] = useState(false);
 
   const [newFeature, setNewFeature] = useState('');
   const [newBenefit, setNewBenefit] = useState('');
@@ -286,6 +290,50 @@ const ServiceForm = () => {
     );
   }
 
+  // Handle Main Image Upload
+  const handleMainImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const url = await ApiService.uploadFile(file);
+      setFormData(prev => ({ ...prev, image: url }));
+    } catch (error) {
+      alert("Failed to upload image");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // Handle Gallery Upload
+  const handleGalleryUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const url = await ApiService.uploadFile(file);
+      setFormData(prev => ({ 
+        ...prev, 
+        gallery: [...(prev.gallery || []), url] 
+      }));
+    } catch (error) {
+      alert("Failed to upload image");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // Remove from Gallery
+  const removeGalleryImage = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      gallery: prev.gallery.filter((_, i) => i !== index)
+    }));
+  };
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
       {/* Header */}
@@ -462,6 +510,106 @@ const ServiceForm = () => {
                     </button>
                   </span>
                 ))}
+              </div>
+            </div>
+
+
+            {/* Visual Media Section */}
+            <div className="space-y-6 border-t border-gray-200 pt-6">
+              <h3 className="text-lg font-medium text-gray-900">Visual Media</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Main Image Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Main Service Image
+                  </label>
+                  
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-pink-400 transition-colors">
+                    {formData.image ? (
+                      <div className="relative group">
+                        <img 
+                          src={formData.image} 
+                          alt="Main" 
+                          className="w-full h-48 object-cover rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
+                          className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="py-8">
+                        {isUploading ? (
+                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mx-auto"></div>
+                        ) : (
+                          <>
+                            <input 
+                              type="file" 
+                              onChange={handleMainImageUpload} 
+                              className="hidden" 
+                              id="main-image-upload"
+                              accept="image/*"
+                            />
+                            <label htmlFor="main-image-upload" className="cursor-pointer flex flex-col items-center">
+                              <div className="p-3 bg-pink-50 rounded-full mb-2">
+                                <Plus className="w-6 h-6 text-pink-500" />
+                              </div>
+                              <span className="text-sm text-gray-600">Upload Main Image</span>
+                            </label>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Gallery Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Service Gallery
+                  </label>
+                  
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 min-h-[200px]">
+                    <div className="grid grid-cols-3 gap-2 mb-4">
+                      {formData.gallery?.map((img, idx) => (
+                        <div key={idx} className="relative group aspect-square">
+                          <img 
+                            src={img} 
+                            alt={`Gallery ${idx}`} 
+                            className="w-full h-full object-cover rounded-md"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeGalleryImage(idx)}
+                            className="absolute -top-1 -right-1 bg-red-500 text-white p-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
+                      
+                      {/* Add New Button */}
+                      <div className="aspect-square flex items-center justify-center bg-gray-50 rounded-md border border-gray-200">
+                        <input 
+                          type="file" 
+                          onChange={handleGalleryUpload} 
+                          className="hidden" 
+                          id="gallery-upload"
+                          accept="image/*"
+                          disabled={isUploading}
+                        />
+                        <label htmlFor="gallery-upload" className="cursor-pointer p-2 text-center">
+                          <Plus className="w-5 h-5 text-gray-400 mx-auto" />
+                          <span className="text-xs text-gray-500 block mt-1">Add</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

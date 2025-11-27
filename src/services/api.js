@@ -112,6 +112,16 @@ class ApiService {
       throw error;
     }
   }
+
+
+  async generateBlogContent(topic, tone = 'friendly') {
+    return this.post('/admin/ai/generate', { topic, tone });
+  }
+
+  async getPublishedBlogs() {
+    // Fetch only published blogs for the public view
+    return this.get('/admin/blogs/published');
+  }
 }
 
 export default new ApiService();

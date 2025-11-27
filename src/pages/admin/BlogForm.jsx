@@ -1,11 +1,23 @@
 // import config from '../config';
+import ApiService from "../../services/api";
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { 
-  Save, ArrowLeft, Eye, Upload, Image, Tag, Calendar, 
-  Sparkles, Users, TrendingUp, Star, Heart, X
-} from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  Save,
+  ArrowLeft,
+  Eye,
+  Upload,
+  Image,
+  Tag,
+  Calendar,
+  Sparkles,
+  Users,
+  TrendingUp,
+  Star,
+  Heart,
+  X,
+} from "lucide-react";
 
 const BlogForm = () => {
   const navigate = useNavigate();
@@ -13,43 +25,98 @@ const BlogForm = () => {
   const isEditMode = !!id;
 
   const [formData, setFormData] = useState({
-    title: '',
-    excerpt: '',
-    content: '',
-    category: '',
-    status: 'draft',
-    author: '',
-    featuredImage: '',
+    title: "",
+    excerpt: "",
+    content: "",
+    category: "",
+    status: "draft",
+    author: "",
+    featuredImage: "",
     tags: [],
-    metaTitle: '',
-    metaDescription: '',
-    publishDate: new Date().toISOString().split('T'),
-    featured: false
+    metaTitle: "",
+    metaDescription: "",
+    publishDate: new Date().toISOString().split("T"),
+    featured: false,
   });
 
-  const [currentTag, setCurrentTag] = useState('');
+  const [currentTag, setCurrentTag] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [isUploading, setIsUploading] = useState(false);
+
+  const [isGenerating, setIsGenerating] = useState(false);
+  const handleAiGenerate = async () => {
+    if (!formData.title) {
+      alert("Please enter a Blog Title first so AI knows what to write about!");
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const response = await ApiService.generateBlogContent(formData.title);
+
+      // Append or replace content
+      setFormData((prev) => ({
+        ...prev,
+        content: response.content,
+      }));
+
+      alert("✨ Content generated successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to generate content.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   const beautyCategories = [
-    'Skincare',
-    'Makeup', 
-    'Hair Care',
-    'Nail Care',
-    'Treatments',
-    'Wellness',
-    'Product Reviews',
-    'Tutorials',
-    'Seasonal Tips',
-    'Expert Advice'
+    "Skincare",
+    "Makeup",
+    "Hair Care",
+    "Nail Care",
+    "Treatments",
+    "Wellness",
+    "Product Reviews",
+    "Tutorials",
+    "Seasonal Tips",
+    "Expert Advice",
   ];
 
   const beautyTagSuggestions = [
-    'skincare', 'makeup', 'tutorial', 'tips', 'routine', 'products',
-    'summer', 'winter', 'monsoon', 'bridal', 'natural', 'organic',
-    'anti-aging', 'acne', 'sensitive-skin', 'oily-skin', 'dry-skin',
-    'hair-care', 'styling', 'color', 'treatments', 'spa', 'facial',
-    'moisturizer', 'serum', 'cleanser', 'sunscreen', 'foundation',
-    'lipstick', 'eyeshadow', 'mascara', 'nail-polish', 'pedicure'
+    "skincare",
+    "makeup",
+    "tutorial",
+    "tips",
+    "routine",
+    "products",
+    "summer",
+    "winter",
+    "monsoon",
+    "bridal",
+    "natural",
+    "organic",
+    "anti-aging",
+    "acne",
+    "sensitive-skin",
+    "oily-skin",
+    "dry-skin",
+    "hair-care",
+    "styling",
+    "color",
+    "treatments",
+    "spa",
+    "facial",
+    "moisturizer",
+    "serum",
+    "cleanser",
+    "sunscreen",
+    "foundation",
+    "lipstick",
+    "eyeshadow",
+    "mascara",
+    "nail-polish",
+    "pedicure",
   ];
 
   useEffect(() => {
@@ -58,7 +125,8 @@ const BlogForm = () => {
       // Replace with actual API call
       const sampleBlog = {
         title: "Summer Skincare Routine for Glowing Skin",
-        excerpt: "Discover the perfect summer skincare routine that will keep your skin healthy, hydrated, and glowing during the hot season.",
+        excerpt:
+          "Discover the perfect summer skincare routine that will keep your skin healthy, hydrated, and glowing during the hot season.",
         content: `# Summer Skincare: Your Complete Guide
 
 The summer season brings its own set of challenges for our skin. From increased sun exposure to humidity and sweat, our skin needs special attention during these months.
@@ -100,15 +168,23 @@ Use a slightly richer moisturizer at night to repair and restore your skin.
 - Listen to your skin and adjust your routine as needed
 
 Remember, consistency is key! Stick to your routine for at least 4-6 weeks to see visible results.`,
-        category: 'Skincare',
-        status: 'published',
-        author: 'Dr. Priya Sharma',
-        featuredImage: '/api/placeholder/800/400',
-        tags: ['summer', 'skincare', 'routine', 'tips', 'sunscreen', 'glowing-skin'],
-        metaTitle: 'Summer Skincare Routine for Glowing Skin | Beauty Tips',
-        metaDescription: 'Complete summer skincare guide with morning and evening routines, product recommendations, and expert tips for healthy, glowing skin.',
-        publishDate: '2024-09-15',
-        featured: true
+        category: "Skincare",
+        status: "published",
+        author: "Dr. Priya Sharma",
+        featuredImage: "/api/placeholder/800/400",
+        tags: [
+          "summer",
+          "skincare",
+          "routine",
+          "tips",
+          "sunscreen",
+          "glowing-skin",
+        ],
+        metaTitle: "Summer Skincare Routine for Glowing Skin | Beauty Tips",
+        metaDescription:
+          "Complete summer skincare guide with morning and evening routines, product recommendations, and expert tips for healthy, glowing skin.",
+        publishDate: "2024-09-15",
+        featured: true,
       };
       setFormData(sampleBlog);
     }
@@ -116,26 +192,26 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleAddTag = () => {
     if (currentTag && !formData.tags.includes(currentTag)) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        tags: [...prev.tags, currentTag.toLowerCase()]
+        tags: [...prev.tags, currentTag.toLowerCase()],
       }));
-      setCurrentTag('');
+      setCurrentTag("");
     }
   };
 
   const handleRemoveTag = (tagToRemove) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
+      tags: prev.tags.filter((tag) => tag !== tagToRemove),
     }));
   };
 
@@ -147,23 +223,46 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
       const blogData = {
         ...formData,
         status,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
 
-      console.log('Saving blog:', blogData);
+      console.log("Saving blog:", blogData);
 
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       alert(`Blog post ${status} successfully!`);
-      navigate('/admin/blogs');
+      navigate("/admin/blogs");
     } catch (error) {
-      console.error('Error saving blog:', error);
-      alert('Error saving blog post. Please try again.');
+      console.error("Error saving blog:", error);
+      alert("Error saving blog post. Please try again.");
     } finally {
       setLoading(false);
     }
   };
+
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      // Upload to AWS via Backend
+      const url = await ApiService.uploadFile(file);
+      
+      // Update form with the new image URL
+      setFormData(prev => ({ ...prev, featuredImage: url }));
+      
+      alert("Image uploaded successfully!");
+    } catch (error) {
+      console.error('Upload failed:', error);
+      alert("Failed to upload image. Check console for details.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
@@ -172,7 +271,7 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <button
-              onClick={() => navigate('/admin/blogs')}
+              onClick={() => navigate("/admin/blogs")}
               className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -180,21 +279,21 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
             <div className="flex items-center">
               <Sparkles className="w-6 h-6 text-pink-600 mr-2" />
               <h1 className="text-xl font-bold text-gray-900">
-                {isEditMode ? 'Edit Blog Post' : 'Create New Blog Post'}
+                {isEditMode ? "Edit Blog Post" : "Create New Blog Post"}
               </h1>
             </div>
           </div>
 
           <div className="flex items-center space-x-3">
             <button
-              onClick={() => handleSave('draft')}
+              onClick={() => handleSave("draft")}
               disabled={loading}
               className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 font-medium disabled:opacity-50"
             >
               Save Draft
             </button>
             <button
-              onClick={() => handleSave('published')}
+              onClick={() => handleSave("published")}
               disabled={loading}
               className="px-6 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg hover:shadow-lg font-medium disabled:opacity-50 flex items-center space-x-2"
             >
@@ -251,7 +350,8 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
                       placeholder="Write a compelling excerpt that summarizes your blog post..."
                     />
                     <p className="text-sm text-gray-500 mt-1">
-                      This will appear in blog listings and search results (150-160 characters recommended)
+                      This will appear in blog listings and search results
+                      (150-160 characters recommended)
                     </p>
                   </div>
 
@@ -282,17 +382,55 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
                 <div className="border border-gray-200 rounded-lg overflow-hidden">
                   {/* Toolbar */}
                   <div className="bg-gray-50 border-b border-gray-200 px-4 py-3 flex items-center space-x-2">
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">B</button>
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded italic">I</button>
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded underline">U</button>
+                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">
+                      B
+                    </button>
+                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded italic">
+                      I
+                    </button>
+                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded underline">
+                      U
+                    </button>
                     <div className="w-px h-4 bg-gray-300"></div>
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">H1</button>
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">H2</button>
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">H3</button>
+                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">
+                      H1
+                    </button>
+                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">
+                      H2
+                    </button>
+                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">
+                      H3
+                    </button>
                     <div className="w-px h-4 bg-gray-300"></div>
                     <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded flex items-center space-x-1">
                       <Image className="w-3 h-3" />
                       <span>Image</span>
+                    </button>
+                  </div>
+
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+                      <TrendingUp className="w-5 h-5 text-pink-600 mr-2" />
+                      Blog Content
+                    </h2>
+
+                    <button
+                      type="button"
+                      onClick={handleAiGenerate}
+                      disabled={isGenerating || !formData.title}
+                      className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg text-sm font-medium shadow-md hover:shadow-lg transition-all flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isGenerating ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Writing...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-4 h-4" />
+                          <span>Auto-Write with AI</span>
+                        </>
+                      )}
                     </button>
                   </div>
 
@@ -315,7 +453,9 @@ Share your beauty expertise, tips, and insights!"
                 </div>
 
                 <div className="mt-3 text-sm text-gray-500">
-                  <p>💡 <strong>Beauty Blog Tips:</strong></p>
+                  <p>
+                    💡 <strong>Beauty Blog Tips:</strong>
+                  </p>
                   <ul className="list-disc list-inside mt-1 space-y-1">
                     <li>Use clear headings to organize your content</li>
                     <li>Include step-by-step instructions for tutorials</li>
@@ -338,7 +478,9 @@ Share your beauty expertise, tips, and insights!"
                 <div className="space-y-4">
                   {/* Status */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Status
+                    </label>
                     <select
                       name="status"
                       value={formData.status}
@@ -353,7 +495,9 @@ Share your beauty expertise, tips, and insights!"
 
                   {/* Category */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Category *
+                    </label>
                     <select
                       name="category"
                       value={formData.category}
@@ -361,15 +505,19 @@ Share your beauty expertise, tips, and insights!"
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                     >
                       <option value="">Select Category</option>
-                      {beautyCategories.map(category => (
-                        <option key={category} value={category}>{category}</option>
+                      {beautyCategories.map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
                       ))}
                     </select>
                   </div>
 
                   {/* Publish Date */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Publish Date</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Publish Date
+                    </label>
                     <input
                       type="date"
                       name="publishDate"
@@ -388,7 +536,9 @@ Share your beauty expertise, tips, and insights!"
                       onChange={handleInputChange}
                       className="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
                     />
-                    <label className="ml-3 text-sm font-medium text-gray-700">Featured Post</label>
+                    <label className="ml-3 text-sm font-medium text-gray-700">
+                      Featured Post
+                    </label>
                   </div>
                 </div>
               </div>
@@ -409,19 +559,51 @@ Share your beauty expertise, tips, and insights!"
                         className="w-full h-40 object-cover rounded-lg"
                       />
                       <button
-                        onClick={() => setFormData(prev => ({ ...prev, featuredImage: '' }))}
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            featuredImage: "",
+                          }))
+                        }
                         className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
                       >
                         <X className="w-4 h-4" />
                       </button>
                     </div>
                   ) : (
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-3" />
-                      <p className="text-sm text-gray-600 mb-2">Upload featured image</p>
-                      <button className="text-sm text-pink-600 hover:text-pink-700 font-medium">
-                        Browse files
-                      </button>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-pink-400 transition-colors">
+                      {isUploading ? (
+                        <div className="flex flex-col items-center">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mb-2"></div>
+                          <span className="text-sm text-gray-500">
+                            Uploading...
+                          </span>
+                        </div>
+                      ) : (
+                        <>
+                          {/* This hidden input is the key to opening the file browser */}
+                          <input
+                            type="file"
+                            onChange={handleImageUpload}
+                            className="hidden"
+                            id="featured-image-upload"
+                            accept="image/*"
+                          />
+                          {/* This label acts as the button for the input above */}
+                          <label
+                            htmlFor="featured-image-upload"
+                            className="cursor-pointer flex flex-col items-center w-full h-full justify-center"
+                          >
+                            <Upload className="w-8 h-8 text-gray-400 mb-3" />
+                            <p className="text-sm text-gray-600 mb-2">
+                              Upload featured image
+                            </p>
+                            <span className="text-sm text-pink-600 hover:text-pink-700 font-medium">
+                              Browse files
+                            </span>
+                          </label>
+                        </>
+                      )}
                     </div>
                   )}
 
@@ -445,7 +627,10 @@ Share your beauty expertise, tips, and insights!"
                       type="text"
                       value={currentTag}
                       onChange={(e) => setCurrentTag(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" &&
+                        (e.preventDefault(), handleAddTag())
+                      }
                       className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-sm"
                       placeholder="Add tag..."
                     />
@@ -460,7 +645,7 @@ Share your beauty expertise, tips, and insights!"
                   {/* Current Tags */}
                   {formData.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                      {formData.tags.map(tag => (
+                      {formData.tags.map((tag) => (
                         <span
                           key={tag}
                           className="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm flex items-center space-x-1"
@@ -479,9 +664,11 @@ Share your beauty expertise, tips, and insights!"
 
                   {/* Tag Suggestions */}
                   <div>
-                    <p className="text-sm text-gray-600 mb-2">Suggested beauty tags:</p>
+                    <p className="text-sm text-gray-600 mb-2">
+                      Suggested beauty tags:
+                    </p>
                     <div className="flex flex-wrap gap-1">
-                      {beautyTagSuggestions.slice(0, 12).map(tag => (
+                      {beautyTagSuggestions.slice(0, 12).map((tag) => (
                         <button
                           key={tag}
                           onClick={() => setCurrentTag(tag)}
@@ -516,7 +703,9 @@ Share your beauty expertise, tips, and insights!"
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-sm"
                       placeholder="SEO title for search engines..."
                     />
-                    <p className="text-xs text-gray-500 mt-1">60 characters recommended</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      60 characters recommended
+                    </p>
                   </div>
 
                   {/* Meta Description */}
@@ -532,7 +721,9 @@ Share your beauty expertise, tips, and insights!"
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-sm"
                       placeholder="Brief description for search engines..."
                     />
-                    <p className="text-xs text-gray-500 mt-1">155 characters recommended</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      155 characters recommended
+                    </p>
                   </div>
                 </div>
               </div>
