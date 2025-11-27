@@ -237,15 +237,15 @@ const ProductsSection = () => {
                 className="overflow-hidden rounded-3xl bg-white shadow-2xl border border-pink-100"
               >
                 <div
-                  className="flex w-full transition-transform duration-700 ease-in-out"
+                  className="flex transition-transform duration-700 ease-in-out"
                   style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                 >
                   {products.map((product, index) => (
-                    <div key={product.id} className="w-full min-w-full flex-shrink-0">
+                    <div key={product.id} className="w-full flex-shrink-0">
                       <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
                         {/* Product Image */}
                         <div className="relative">
-                          <div className="h-full w-full md:aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-pink-100 to-purple-100 shadow-xl">
+                          <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-pink-100 to-purple-100 shadow-xl">
                             {product.images && product.images.length > 0 ? (
                               <img
                                 src={product.images[0]}
