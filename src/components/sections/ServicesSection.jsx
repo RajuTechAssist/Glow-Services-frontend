@@ -407,13 +407,6 @@ const ServicesSection = () => {
                                 >
                                   View Details
                                 </Link>
-                                <Link
-                                  to="/book"
-                                  className="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl font-semibold hover:from-pink-600 hover:to-rose-600 transition-all duration-300 transform hover:scale-105 flex items-center"
-                                >
-                                  <Calendar className="w-5 h-5 mr-2" />
-                                  Book Now
-                                </Link>
                               </div>
                             </div>
                           </div>
