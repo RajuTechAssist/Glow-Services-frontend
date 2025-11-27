@@ -257,15 +257,15 @@ const ServicesSection = () => {
                 className="overflow-hidden rounded-3xl bg-white shadow-2xl border border-purple-100"
               >
                 <div
-                  className="flex transition-transform duration-700 ease-in-out"
+                  className="flex w-full transition-transform duration-700 ease-in-out"
                   style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                 >
                   {services.map((service, index) => (
-                    <div key={service.id} className="w-full flex-shrink-0">
+                    <div key={service.id} className="min-w-full w-full flex-shrink-0">
                       <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
                         {/* Service Image */}
                         <div className="relative">
-                          <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-purple-100 to-pink-100 shadow-xl">
+                          <div className="h-full w-full md:aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-purple-100 to-pink-100 shadow-xl">
                             {service.images && service.images.length > 0 ? (
                               <img
                                 src={service.images[0]}
