@@ -13,31 +13,28 @@ const ProductForm = () => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
+  // ✅ FIXED: Removed unused fields (ingredients, howToUse, subCategory, sku) 
   const [form, setForm] = useState({
     name: '',
     slug: '',
     category: 'skincare',
-    subCategory: '',
+    brand: '',
+    productCode: '',
     price: 0,
     originalPrice: '',
     stockQuantity: 0,
     lowStockThreshold: 10,
-    brand: '',
-    description: '',
     shortDescription: '',
-    productCode: '',
-    sku: '',
-    images: [],
-    ingredients: [],
+    description: '',
     benefits: [],
-    howToUse: '',
+    images: [],
     featured: false,
     active: true
   });
 
-  const [newImage, setNewImage] = useState('');
-  const [newIngredient, setNewIngredient] = useState('');
+  // ✅ FIXED: Removed newIngredient - only keep what we use
   const [newBenefit, setNewBenefit] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
   const BACKEND_URL = config.BASE_URL;
 
@@ -85,11 +82,23 @@ const ProductForm = () => {
 
       if (response.ok) {
         const data = await response.json();
+        // ✅ FIXED: Only set fields we're using
         setForm({
-          ...data,
+          name: data.name || '',
+          slug: data.slug || '',
+          category: data.category || 'skincare',
+          brand: data.brand || '',
+          productCode: data.productCode || '',
+          price: data.price || 0,
+          originalPrice: data.originalPrice || '',
+          stockQuantity: data.stockQuantity || 0,
+          lowStockThreshold: data.lowStockThreshold || 10,
+          shortDescription: data.shortDescription || '',
+          description: data.description || '',
+          benefits: data.benefits || [],
           images: data.images || [],
-          ingredients: data.ingredients || [],
-          benefits: data.benefits || []
+          featured: data.featured || false,
+          active: data.active !== undefined ? data.active : true
         });
       } else if (response.status === 401) {
         localStorage.removeItem('adminToken');
@@ -157,16 +166,31 @@ const ProductForm = () => {
         : `${BACKEND_URL}/api/admin/products`;
       const method = isEdit ? 'PUT' : 'POST';
 
+      // ✅ FIXED: Only send fields we're using
+      const payload = {
+        name: form.name,
+        slug: form.slug,
+        category: form.category,
+        brand: form.brand,
+        productCode: form.productCode,
+        price: parseFloat(form.price) || 0,
+        originalPrice: form.originalPrice ? parseFloat(form.originalPrice) : null,
+        stockQuantity: parseInt(form.stockQuantity) || 0,
+        lowStockThreshold: parseInt(form.lowStockThreshold) || 10,
+        shortDescription: form.shortDescription,
+        description: form.description,
+        benefits: form.benefits,
+        images: form.images,
+        featured: form.featured,
+        active: form.active
+      };
+
+      console.log('Sending payload:', payload); // Debug log
+
       const response = await fetch(url, {
         method,
         headers,
-        body: JSON.stringify({
-          ...form,
-          price: parseFloat(form.price) || 0,
-          originalPrice: form.originalPrice ? parseFloat(form.originalPrice) : null,
-          stockQuantity: parseInt(form.stockQuantity) || 0,
-          lowStockThreshold: parseInt(form.lowStockThreshold) || 10
-        })
+        body: JSON.stringify(payload)
       });
 
       if (response.ok) {
@@ -178,6 +202,7 @@ const ProductForm = () => {
         navigate('/admin/login');
       } else {
         const errorData = await response.json().catch(() => ({}));
+        console.error('Error response:', errorData);
         throw new Error(errorData.message || `HTTP ${response.status}`);
       }
     } catch (error) {
@@ -188,21 +213,7 @@ const ProductForm = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
-          <span className="ml-4 text-gray-600">Loading product...</span>
-        </div>
-      </div>
-    );
-  }
-
-  // Add this state for loading status
-  const [isUploading, setIsUploading] = useState(false);
-
-  // Add this function to handle file selection
+  // Handle file upload
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -227,13 +238,24 @@ const ProductForm = () => {
     }
   };
 
-  // Add this function to remove an image
+  // Remove an image
   const removeImage = (index) => {
     setForm(prev => ({
       ...prev,
       images: prev.images.filter((_, i) => i !== index)
     }));
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
+          <span className="ml-4 text-gray-600">Loading product...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
