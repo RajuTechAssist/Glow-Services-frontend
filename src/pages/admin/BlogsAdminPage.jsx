@@ -14,85 +14,7 @@ const BlogsAdminPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
-
-  // Sample blog data - replace with API calls
-  const sampleBlogs = [
-    {
-      id: 1,
-      title: "10 Summer Skincare Tips for Glowing Skin",
-      excerpt: "Discover essential summer skincare routines that will keep your skin healthy and radiant during the hot months.",
-      category: "Skincare",
-      status: "published",
-      author: "Dr. Priya Sharma",
-      publishDate: "2024-09-15",
-      views: 1245,
-      likes: 89,
-      comments: 23,
-      featured: true,
-      image: "/api/placeholder/300/200",
-      tags: ["summer", "skincare", "tips", "glowing-skin"]
-    },
-    {
-      id: 2,
-      title: "Perfect Bridal Makeup Look: Step-by-Step Tutorial",
-      excerpt: "Create the perfect bridal makeup look with this comprehensive tutorial featuring long-lasting products.",
-      category: "Makeup",
-      status: "published",
-      author: "Makeup Artist Anjali",
-      publishDate: "2024-09-12",
-      views: 2156,
-      likes: 156,
-      comments: 45,
-      featured: false,
-      image: "/api/placeholder/300/200",
-      tags: ["bridal", "makeup", "tutorial", "wedding"]
-    },
-    {
-      id: 3,
-      title: "Hair Care Routine for Monsoon Season",
-      excerpt: "Protect your hair from humidity and rain with these effective monsoon hair care tips and products.",
-      category: "Hair Care",
-      status: "draft",
-      author: "Hair Specialist Rahul",
-      publishDate: "2024-09-18",
-      views: 0,
-      likes: 0,
-      comments: 0,
-      featured: false,
-      image: "/api/placeholder/300/200",
-      tags: ["monsoon", "hair-care", "humidity", "protection"]
-    },
-    {
-      id: 4,
-      title: "Anti-Aging Facial Treatments: What Really Works",
-      excerpt: "An in-depth look at the most effective anti-aging treatments available at our spa.",
-      category: "Treatments",
-      status: "published",
-      author: "Dr. Kavitha Reddy",
-      publishDate: "2024-09-10",
-      views: 3421,
-      likes: 234,
-      comments: 67,
-      featured: true,
-      image: "/api/placeholder/300/200",
-      tags: ["anti-aging", "facial", "treatments", "spa"]
-    },
-    {
-      id: 5,
-      title: "Wellness Wednesday: Self-Care Rituals for Busy Women",
-      excerpt: "Simple yet effective self-care routines that fit into your busy schedule.",
-      category: "Wellness",
-      status: "scheduled",
-      author: "Wellness Coach Sneha",
-      publishDate: "2024-09-20",
-      views: 0,
-      likes: 0,
-      comments: 0,
-      featured: false,
-      image: "/api/placeholder/300/200",
-      tags: ["wellness", "self-care", "busy-women", "rituals"]
-    }
-  ];
+  
 
   const categories = [
     "all", "Skincare", "Makeup", "Hair Care", "Treatments", "Wellness", "Product Reviews"
@@ -103,12 +25,22 @@ const BlogsAdminPage = () => {
   ];
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setBlogs(sampleBlogs);
+  const fetchBlogs = async () => {
+    try {
+      setLoading(true);
+      const data = await ApiService.get('/admin/blogs');
+      setBlogs(data);
+    } catch (error) {
+      console.error('Failed to fetch blogs:', error);
+      setBlogs([]);
+    } finally {
       setLoading(false);
-    }, 1000);
-  }, []);
+    }
+  };
+  
+  fetchBlogs();
+}, []);
+
 
   const filteredBlogs = blogs.filter(blog => {
     const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

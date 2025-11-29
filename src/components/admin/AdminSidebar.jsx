@@ -1,5 +1,5 @@
-import React from 'react';
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import React from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
   LogOut,
   User,
@@ -16,15 +16,24 @@ import {
   Package2,
   UserCheck,
   Megaphone,
-  X
-} from 'lucide-react';
-import { useAdminAuth } from '../../context/AdminAuthContext';
+  FileText,
+  X,
+} from "lucide-react";
+import { useAdminAuth } from "../../context/AdminAuthContext";
 
-import { 
-  Plus, Edit, Trash2, Eye, EyeOff, Search, Filter, 
-  Save, ArrowLeft, AlertCircle, Tag 
-} from 'lucide-react';
-
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
+  EyeOff,
+  Search,
+  Filter,
+  Save,
+  ArrowLeft,
+  AlertCircle,
+  Tag,
+} from "lucide-react";
 
 const AdminSidebar = ({ isOpen, onClose }) => {
   const { adminUser, adminLogout } = useAdminAuth();
@@ -32,137 +41,144 @@ const AdminSidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
 
   const handleLogout = () => {
-    if (window.confirm('Are you sure you want to logout?')) {
+    if (window.confirm("Are you sure you want to logout?")) {
       adminLogout();
-      navigate('/admin/login');
+      navigate("/admin/login");
     }
   };
 
   const navigation = [
     // OVERVIEW
     {
-      name: 'Dashboard',
-      href: '/admin/dashboard',
+      name: "Dashboard",
+      href: "/admin/dashboard",
       icon: BarChart3,
-      current: location.pathname === '/admin/dashboard',
-      section: 'overview'
+      current: location.pathname === "/admin/dashboard",
+      section: "overview",
     },
 
     {
-      name: 'Categories',
-      href: '/admin/categories',
+      name: "Categories",
+      href: "/admin/categories",
       icon: Tag, // Import Tag from lucide-react
-      current: location.pathname.startsWith('/admin/categories'),
-      section: 'business'
+      current: location.pathname.startsWith("/admin/categories"),
+      section: "business",
     },
-
 
     // BUSINESS MANAGEMENT
     {
-      name: 'Bookings',
-      href: '/admin/bookings',
+      name: "Bookings",
+      href: "/admin/bookings",
       icon: Calendar,
-      current: location.pathname.startsWith('/admin/bookings'),
-      badge: '8',
-      section: 'business'
+      current: location.pathname.startsWith("/admin/bookings"),
+      badge: "8",
+      section: "business",
     },
 
     {
-      name: 'Services',
-      href: '/admin/services',
+      name: "Services",
+      href: "/admin/services",
       icon: Package,
-      current: location.pathname.startsWith('/admin/services'),
-      section: 'business'
+      current: location.pathname.startsWith("/admin/services"),
+      section: "business",
     },
 
     {
-      name: 'Products',
-      href: '/admin/products',
+      name: "Products",
+      href: "/admin/products",
       icon: ShoppingBag,
-      current: location.pathname.startsWith('/admin/products'),
-      section: 'business'
+      current: location.pathname.startsWith("/admin/products"),
+      section: "business",
+    },
+
+    {
+      name: "Blogs",
+      href: "/admin/blogs",
+      icon: FileText,
+      current: location.pathname.startsWith("/admin/blogs"),
+      section: "growth", // Put in Growth section since it's content marketing
     },
 
     // PEOPLE
     {
-      name: 'Customers',
-      href: '/admin/customers',
+      name: "Customers",
+      href: "/admin/customers",
       icon: Users,
-      current: location.pathname.startsWith('/admin/customers'),
-      section: 'people'
+      current: location.pathname.startsWith("/admin/customers"),
+      section: "people",
     },
 
     {
-      name: 'Staff',
-      href: '/admin/staff',
+      name: "Staff",
+      href: "/admin/staff",
       icon: UserCheck,
-      current: location.pathname.startsWith('/admin/staff'),
-      section: 'people'
+      current: location.pathname.startsWith("/admin/staff"),
+      section: "people",
     },
 
     // OPERATIONS
     {
-      name: 'Orders',
-      href: '/admin/orders',
+      name: "Orders",
+      href: "/admin/orders",
       icon: ShoppingCart,
-      current: location.pathname.startsWith('/admin/orders'),
-      section: 'operations'
+      current: location.pathname.startsWith("/admin/orders"),
+      section: "operations",
     },
 
     {
-      name: 'Inventory',
-      href: '/admin/inventory',
+      name: "Inventory",
+      href: "/admin/inventory",
       icon: Package2,
-      current: location.pathname.startsWith('/admin/inventory'),
-      badge: '3',
-      section: 'operations'
+      current: location.pathname.startsWith("/admin/inventory"),
+      badge: "3",
+      section: "operations",
     },
 
     // INSIGHTS
     {
-      name: 'Analytics',
-      href: '/admin/analytics',
+      name: "Analytics",
+      href: "/admin/analytics",
       icon: TrendingUp,
-      current: location.pathname.startsWith('/admin/analytics'),
-      section: 'insights'
+      current: location.pathname.startsWith("/admin/analytics"),
+      section: "insights",
     },
 
     {
-      name: 'Reviews',
-      href: '/admin/reviews',
+      name: "Reviews",
+      href: "/admin/reviews",
       icon: Star,
-      current: location.pathname.startsWith('/admin/reviews'),
-      section: 'insights'
+      current: location.pathname.startsWith("/admin/reviews"),
+      section: "insights",
     },
 
     // GROWTH
     {
-      name: 'Marketing',
-      href: '/admin/marketing',
+      name: "Marketing",
+      href: "/admin/marketing",
       icon: Megaphone,
-      current: location.pathname.startsWith('/admin/marketing'),
-      section: 'growth'
+      current: location.pathname.startsWith("/admin/marketing"),
+      section: "growth",
     },
 
     // SYSTEM
     {
-      name: 'Settings',
-      href: '/admin/settings',
+      name: "Settings",
+      href: "/admin/settings",
       icon: Settings,
-      current: location.pathname.startsWith('/admin/settings'),
-      section: 'system'
-    }
+      current: location.pathname.startsWith("/admin/settings"),
+      section: "system",
+    },
   ];
 
   // Group navigation by sections
   const navigationSections = {
-    overview: navigation.filter(item => item.section === 'overview'),
-    business: navigation.filter(item => item.section === 'business'),
-    people: navigation.filter(item => item.section === 'people'),
-    operations: navigation.filter(item => item.section === 'operations'),
-    insights: navigation.filter(item => item.section === 'insights'),
-    growth: navigation.filter(item => item.section === 'growth'),
-    system: navigation.filter(item => item.section === 'system')
+    overview: navigation.filter((item) => item.section === "overview"),
+    business: navigation.filter((item) => item.section === "business"),
+    people: navigation.filter((item) => item.section === "people"),
+    operations: navigation.filter((item) => item.section === "operations"),
+    insights: navigation.filter((item) => item.section === "insights"),
+    growth: navigation.filter((item) => item.section === "growth"),
+    system: navigation.filter((item) => item.section === "system"),
   };
 
   const renderNavItem = (item) => (
@@ -170,23 +186,30 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       key={item.name}
       to={item.href}
       onClick={() => onClose && onClose()} // Close sidebar on mobile after click
-      className={`group flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${item.current
-          ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg'
-          : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-        }`}
+      className={`group flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+        item.current
+          ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg"
+          : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+      }`}
     >
       <div className="flex items-center">
         <item.icon
-          className={`mr-3 h-4 w-4 ${item.current ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'
-            }`}
+          className={`mr-3 h-4 w-4 ${
+            item.current
+              ? "text-white"
+              : "text-gray-500 group-hover:text-gray-700"
+          }`}
         />
         {item.name}
       </div>
       {item.badge && (
-        <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${item.current
-            ? 'bg-white bg-opacity-20 text-white'
-            : 'bg-red-500 text-white'
-          }`}>
+        <span
+          className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
+            item.current
+              ? "bg-white bg-opacity-20 text-white"
+              : "bg-red-500 text-white"
+          }`}
+        >
           {item.badge}
         </span>
       )}
@@ -198,14 +221,19 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       {/* Mobile backdrop */}
       {isOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={onClose}></div>
+          <div
+            className="fixed inset-0 bg-gray-600 bg-opacity-75"
+            onClick={onClose}
+          ></div>
         </div>
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 flex flex-col`}>
-
+      <div
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 flex flex-col`}
+      >
         {/* Sidebar header */}
         <div className="flex items-center justify-between h-16 px-6 bg-gradient-to-r from-pink-600 to-purple-600 flex-shrink-0">
           <div className="flex items-center space-x-3">
@@ -229,19 +257,20 @@ const AdminSidebar = ({ isOpen, onClose }) => {
               <User className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-900">{adminUser?.fullName || 'Admin'}</p>
-              <p className="text-xs text-gray-500">{adminUser?.role || 'Administrator'}</p>
+              <p className="text-sm font-semibold text-gray-900">
+                {adminUser?.fullName || "Admin"}
+              </p>
+              <p className="text-xs text-gray-500">
+                {adminUser?.role || "Administrator"}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Navigation - Scrollable */}
         <nav className="flex-1 px-4 py-6 space-y-6 overflow-y-auto">
-
           {/* Overview */}
-          <div>
-            {navigationSections.overview.map(renderNavItem)}
-          </div>
+          <div>{navigationSections.overview.map(renderNavItem)}</div>
 
           {/* Business Management */}
           <div>
@@ -308,7 +337,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
         <div className="px-4 py-4 border-t space-y-2 flex-shrink-0">
           <button
             onClick={() => {
-              navigate('/');
+              navigate("/");
               onClose && onClose();
             }}
             className="w-full flex items-center px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200"
