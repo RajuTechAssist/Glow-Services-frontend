@@ -16,6 +16,7 @@ import {
   Package2,
   UserCheck,
   Megaphone,
+  FileText,
   X
 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
@@ -88,14 +89,6 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       icon: ShoppingBag,
       current: location.pathname.startsWith("/admin/products"),
       section: "business",
-    },
-
-    {
-      name: "Blogs",
-      href: "/admin/blogs",
-      icon: FileText,
-      current: location.pathname.startsWith("/admin/blogs"),
-      section: "growth", // Put in Growth section since it's content marketing
     },
 
     // PEOPLE
