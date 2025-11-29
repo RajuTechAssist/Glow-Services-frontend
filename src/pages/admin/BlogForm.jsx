@@ -1,4 +1,4 @@
-// import config from '../config';
+import config from '../../config';
 import ApiService from "../../services/api";
 
 import React, { useState, useEffect } from "react";
@@ -29,45 +29,36 @@ const BlogForm = () => {
     excerpt: "",
     content: "",
     category: "",
-    status: "draft",
+    status: "DRAFT",
     author: "",
     featuredImage: "",
     tags: [],
     metaTitle: "",
     metaDescription: "",
-    publishDate: new Date().toISOString().split("T"),
+    publishDate: "",
     featured: false,
   });
 
   const [currentTag, setCurrentTag] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [fetchingBlog, setFetchingBlog] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-
   const [isGenerating, setIsGenerating] = useState(false);
-  const handleAiGenerate = async () => {
-    if (!formData.title) {
-      alert("Please enter a Blog Title first so AI knows what to write about!");
-      return;
+
+  const BACKEND_URL = config.BASE_URL;
+
+  // JWT Authentication Helper
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      alert('Authentication error. Please log in again.');
+      navigate('/admin/login');
+      return null;
     }
-
-    setIsGenerating(true);
-    try {
-      const response = await ApiService.generateBlogContent(formData.title);
-
-      // Append or replace content
-      setFormData((prev) => ({
-        ...prev,
-        content: response.content,
-      }));
-
-      alert("✨ Content generated successfully!");
-    } catch (error) {
-      console.error(error);
-      alert("Failed to generate content.");
-    } finally {
-      setIsGenerating(false);
-    }
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
   };
 
   const beautyCategories = [
@@ -121,74 +112,52 @@ const BlogForm = () => {
 
   useEffect(() => {
     if (isEditMode) {
-      // Simulate loading blog data for editing
-      // Replace with actual API call
-      const sampleBlog = {
-        title: "Summer Skincare Routine for Glowing Skin",
-        excerpt:
-          "Discover the perfect summer skincare routine that will keep your skin healthy, hydrated, and glowing during the hot season.",
-        content: `# Summer Skincare: Your Complete Guide
-
-The summer season brings its own set of challenges for our skin. From increased sun exposure to humidity and sweat, our skin needs special attention during these months.
-
-## Morning Routine
-
-### 1. Gentle Cleansing
-Start your day with a gentle, foam-based cleanser that removes overnight buildup without stripping your skin's natural oils.
-
-### 2. Vitamin C Serum
-Apply a vitamin C serum to protect against free radical damage and brighten your complexion.
-
-### 3. Lightweight Moisturizer
-Choose a gel-based or lightweight moisturizer that won't feel heavy in the heat.
-
-### 4. Sunscreen (Most Important!)
-Never skip sunscreen! Use at least SPF 30 and reapply every 2 hours.
-
-## Evening Routine
-
-### 1. Double Cleansing
-Remove sunscreen and makeup with an oil cleanser, followed by your regular cleanser.
-
-### 2. Gentle Exfoliation (2-3 times a week)
-Use a gentle chemical exfoliant to remove dead skin cells and prevent clogged pores.
-
-### 3. Hydrating Serum
-Apply a hyaluronic acid serum to boost hydration levels.
-
-### 4. Night Moisturizer
-Use a slightly richer moisturizer at night to repair and restore your skin.
-
-## Pro Tips for Summer Skincare
-
-- Stay hydrated by drinking plenty of water
-- Wear protective clothing and hats when outdoors
-- Avoid peak sun hours (10 AM - 4 PM)
-- Keep your skincare products in a cool, dry place
-- Listen to your skin and adjust your routine as needed
-
-Remember, consistency is key! Stick to your routine for at least 4-6 weeks to see visible results.`,
-        category: "Skincare",
-        status: "published",
-        author: "Dr. Priya Sharma",
-        featuredImage: "/api/placeholder/800/400",
-        tags: [
-          "summer",
-          "skincare",
-          "routine",
-          "tips",
-          "sunscreen",
-          "glowing-skin",
-        ],
-        metaTitle: "Summer Skincare Routine for Glowing Skin | Beauty Tips",
-        metaDescription:
-          "Complete summer skincare guide with morning and evening routines, product recommendations, and expert tips for healthy, glowing skin.",
-        publishDate: "2024-09-15",
-        featured: true,
-      };
-      setFormData(sampleBlog);
+      fetchBlogData();
     }
-  }, [isEditMode]);
+  }, [isEditMode, id]);
+
+  const fetchBlogData = async () => {
+    try {
+      setFetchingBlog(true);
+      const headers = getAuthHeaders();
+      if (!headers) return;
+
+      const response = await fetch(`${BACKEND_URL}/api/admin/blogs/${id}`, {
+        headers
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFormData({
+          title: data.title || '',
+          excerpt: data.excerpt || '',
+          content: data.content || '',
+          category: data.category || '',
+          status: data.status || 'DRAFT',
+          author: data.author || '',
+          featuredImage: data.featuredImage || '',
+          tags: data.tags || [],
+          metaTitle: data.metaTitle || '',
+          metaDescription: data.metaDescription || '',
+          publishDate: data.publishDate ? data.publishDate.split('T')[0] : '',
+          featured: data.featured || false,
+        });
+      } else if (response.status === 401) {
+        localStorage.removeItem('adminToken');
+        alert('Session expired. Please log in again.');
+        navigate('/admin/login');
+      } else {
+        alert('Failed to load blog post');
+        navigate('/admin/blogs');
+      }
+    } catch (error) {
+      console.error('Error fetching blog:', error);
+      alert('Error loading blog post');
+      navigate('/admin/blogs');
+    } finally {
+      setFetchingBlog(false);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -218,29 +187,52 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
   const handleSave = async (status) => {
     setLoading(true);
 
-    // Simulate API call
     try {
+      const headers = getAuthHeaders();
+      if (!headers) return;
+
+      // Prepare blog data
       const blogData = {
         ...formData,
-        status,
-        updatedAt: new Date().toISOString(),
+        status: status || formData.status,
       };
 
-      console.log("Saving blog:", blogData);
+      // Convert publishDate to ISO format if present
+      if (blogData.publishDate) {
+        blogData.publishDate = new Date(blogData.publishDate).toISOString();
+      }
 
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const url = isEditMode 
+        ? `${BACKEND_URL}/api/admin/blogs/${id}` 
+        : `${BACKEND_URL}/api/admin/blogs`;
+      
+      const method = isEditMode ? 'PUT' : 'POST';
 
-      alert(`Blog post ${status} successfully!`);
-      navigate("/admin/blogs");
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: JSON.stringify(blogData)
+      });
+
+      if (response.ok) {
+        const savedBlog = await response.json();
+        alert(`Blog post ${isEditMode ? 'updated' : 'created'} successfully!`);
+        navigate('/admin/blogs');
+      } else if (response.status === 401) {
+        localStorage.removeItem('adminToken');
+        alert('Session expired. Please log in again.');
+        navigate('/admin/login');
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        alert(errorData.error || 'Failed to save blog post');
+      }
     } catch (error) {
-      console.error("Error saving blog:", error);
-      alert("Error saving blog post. Please try again.");
+      console.error('Error saving blog:', error);
+      alert('Error saving blog post: ' + error.message);
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -248,12 +240,8 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
 
     setIsUploading(true);
     try {
-      // Upload to AWS via Backend
       const url = await ApiService.uploadFile(file);
-      
-      // Update form with the new image URL
       setFormData(prev => ({ ...prev, featuredImage: url }));
-      
       alert("Image uploaded successfully!");
     } catch (error) {
       console.error('Upload failed:', error);
@@ -263,6 +251,38 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
     }
   };
 
+  const handleAiGenerate = async () => {
+    if (!formData.title) {
+      alert("Please enter a Blog Title first so AI knows what to write about!");
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const response = await ApiService.generateBlogContent(formData.title);
+      setFormData((prev) => ({
+        ...prev,
+        content: response.content,
+      }));
+      alert("✨ Content generated successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to generate content: " + error.message);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  if (fetchingBlog) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
+          <span className="ml-4 text-gray-600">Loading blog post...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
@@ -286,14 +306,14 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
 
           <div className="flex items-center space-x-3">
             <button
-              onClick={() => handleSave("draft")}
+              onClick={() => handleSave("DRAFT")}
               disabled={loading}
               className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 font-medium disabled:opacity-50"
             >
               Save Draft
             </button>
             <button
-              onClick={() => handleSave("published")}
+              onClick={() => handleSave("PUBLISHED")}
               disabled={loading}
               className="px-6 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg hover:shadow-lg font-medium disabled:opacity-50 flex items-center space-x-2"
             >
@@ -333,6 +353,7 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       placeholder="Enter an engaging title for your beauty blog post..."
+                      required
                     />
                   </div>
 
@@ -348,6 +369,7 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
                       rows="3"
                       className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       placeholder="Write a compelling excerpt that summarizes your blog post..."
+                      required
                     />
                     <p className="text-sm text-gray-500 mt-1">
                       This will appear in blog listings and search results
@@ -367,6 +389,7 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       placeholder="Author name..."
+                      required
                     />
                   </div>
                 </div>
@@ -374,66 +397,33 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
 
               {/* Content Editor */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                  <TrendingUp className="w-5 h-5 text-pink-600 mr-2" />
-                  Blog Content
-                </h2>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+                    <TrendingUp className="w-5 h-5 text-pink-600 mr-2" />
+                    Blog Content
+                  </h2>
+
+                  <button
+                    type="button"
+                    onClick={handleAiGenerate}
+                    disabled={isGenerating || !formData.title}
+                    className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg text-sm font-medium shadow-md hover:shadow-lg transition-all flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>Writing...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        <span>Auto-Write with AI</span>
+                      </>
+                    )}
+                  </button>
+                </div>
 
                 <div className="border border-gray-200 rounded-lg overflow-hidden">
-                  {/* Toolbar */}
-                  <div className="bg-gray-50 border-b border-gray-200 px-4 py-3 flex items-center space-x-2">
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">
-                      B
-                    </button>
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded italic">
-                      I
-                    </button>
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded underline">
-                      U
-                    </button>
-                    <div className="w-px h-4 bg-gray-300"></div>
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">
-                      H1
-                    </button>
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">
-                      H2
-                    </button>
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded">
-                      H3
-                    </button>
-                    <div className="w-px h-4 bg-gray-300"></div>
-                    <button className="px-3 py-1 text-sm font-medium bg-gray-200 rounded flex items-center space-x-1">
-                      <Image className="w-3 h-3" />
-                      <span>Image</span>
-                    </button>
-                  </div>
-
-                  <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-                      <TrendingUp className="w-5 h-5 text-pink-600 mr-2" />
-                      Blog Content
-                    </h2>
-
-                    <button
-                      type="button"
-                      onClick={handleAiGenerate}
-                      disabled={isGenerating || !formData.title}
-                      className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg text-sm font-medium shadow-md hover:shadow-lg transition-all flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isGenerating ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Writing...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-4 h-4" />
-                          <span>Auto-Write with AI</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-
                   {/* Content Area */}
                   <textarea
                     name="content"
@@ -449,6 +439,7 @@ Remember, consistency is key! Stick to your routine for at least 4-6 weeks to se
 - Step-by-step instructions
 
 Share your beauty expertise, tips, and insights!"
+                    required
                   />
                 </div>
 
@@ -487,9 +478,10 @@ Share your beauty expertise, tips, and insights!"
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                     >
-                      <option value="draft">Draft</option>
-                      <option value="published">Published</option>
-                      <option value="scheduled">Scheduled</option>
+                      <option value="DRAFT">Draft</option>
+                      <option value="PUBLISHED">Published</option>
+                      <option value="SCHEDULED">Scheduled</option>
+                      <option value="ARCHIVED">Archived</option>
                     </select>
                   </div>
 
@@ -503,6 +495,7 @@ Share your beauty expertise, tips, and insights!"
                       value={formData.category}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      required
                     >
                       <option value="">Select Category</option>
                       {beautyCategories.map((category) => (
@@ -581,7 +574,6 @@ Share your beauty expertise, tips, and insights!"
                         </div>
                       ) : (
                         <>
-                          {/* This hidden input is the key to opening the file browser */}
                           <input
                             type="file"
                             onChange={handleImageUpload}
@@ -589,7 +581,6 @@ Share your beauty expertise, tips, and insights!"
                             id="featured-image-upload"
                             accept="image/*"
                           />
-                          {/* This label acts as the button for the input above */}
                           <label
                             htmlFor="featured-image-upload"
                             className="cursor-pointer flex flex-col items-center w-full h-full justify-center"
