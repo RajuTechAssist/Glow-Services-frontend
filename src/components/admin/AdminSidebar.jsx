@@ -16,6 +16,7 @@ import {
   Package2,
   UserCheck,
   Megaphone,
+  FileText,
   X
 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
@@ -48,10 +49,10 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       section: 'overview'
     },
 
-    {
+    {  
       name: 'Categories',
       href: '/admin/categories',
-      icon: Tag, // Import Tag from lucide-react
+      icon: Tag,
       current: location.pathname.startsWith('/admin/categories'),
       section: 'business'
     },
@@ -136,6 +137,14 @@ const AdminSidebar = ({ isOpen, onClose }) => {
     },
 
     // GROWTH
+    {
+      name: 'Blogs',
+      href: '/admin/blogs',
+      icon: FileText,
+      current: location.pathname.startsWith('/admin/blogs'),
+      section: 'growth'
+    },
+
     {
       name: 'Marketing',
       href: '/admin/marketing',
