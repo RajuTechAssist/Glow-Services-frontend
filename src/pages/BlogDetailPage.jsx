@@ -29,11 +29,27 @@ const BlogDetailPage = () => {
 
   const BACKEND_URL = config.BASE_URL;
 
-  useEffect(() => {
-    if (slug) {
-      fetchBlogPost();
+useEffect(() => {
+  const fetchBlog = async () => {
+    try {
+      // PUBLIC endpoint - NO auth required
+      const response = await fetch(
+        `${BACKEND_URL}/api/blogs/slug/${slug}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setBlog(data);
+      }
+    } catch (error) {
+      console.error("Error fetching blog:", error);
+    } finally {
+      setLoading(false);
     }
-  }, [slug]);
+  };
+
+  fetchBlog();
+}, [slug]);
+
 
   const fetchBlogPost = async () => {
     try {
