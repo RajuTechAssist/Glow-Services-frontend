@@ -29,101 +29,58 @@ const BlogDetailPage = () => {
 
   const BACKEND_URL = config.BASE_URL;
 
-useEffect(() => {
-  const fetchBlog = async () => {
-    try {
-      // PUBLIC endpoint - NO auth required
-      const response = await fetch(
-        `${BACKEND_URL}/api/blogs/slug/${slug}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setBlog(data);
-      }
-    } catch (error) {
-      console.error("Error fetching blog:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchBlogData = async () => {
+      if (!slug) return;
 
-  fetchBlog();
-}, [slug]);
-
-
-  const fetchBlogPost = async () => {
-    try {
-      setLoading(true);
-      
-      // Fetch blog post
-      const response = await fetch(`${BACKEND_URL}/api/blogs/slug/${slug}`);
-      
-      if (response.ok) {
-        const data = await response.json();
-        setBlog(data);
+      try {
+        setLoading(true);
         
-        // Increment view count
-        incrementViewCount();
+        // 1. Fetch the Blog Post
+        const response = await fetch(`${BACKEND_URL}/api/blogs/slug/${slug}`);
         
-        // Fetch related blogs
-        if (data.category) {
-          fetchRelatedBlogs(data.category, data.id);
+        if (!response.ok) {
+          throw new Error('Blog not found');
         }
-      } else if (response.status === 404) {
-        alert('Blog post not found');
-        navigate('/blogs');
-      } else {
-        console.error('Failed to fetch blog post');
-      }
-    } catch (error) {
-      console.error('Error fetching blog:', error);
-      alert('Error loading blog post');
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const incrementViewCount = async () => {
-    try {
-      await fetch(`${BACKEND_URL}/api/blogs/slug/${slug}/view`, {
-        method: 'POST'
-      });
-    } catch (error) {
-      console.error('Error incrementing view count:', error);
-    }
-  };
-
-  const fetchRelatedBlogs = async (category, currentBlogId) => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/blogs/category/${category}`);
-      if (response.ok) {
         const data = await response.json();
-        // Filter out current blog and limit to 3
-        const filtered = data.filter(b => b.id !== currentBlogId).slice(0, 3);
-        setRelatedBlogs(filtered);
+        setBlog(data);
+
+        // 2. Increment View Count (Fire and forget)
+        fetch(`${BACKEND_URL}/api/blogs/slug/${slug}/view`, { method: 'POST' }).catch(console.error);
+
+        // 3. Fetch Related Blogs if category exists
+        if (data.category) {
+          const relatedResponse = await fetch(`${BACKEND_URL}/api/blogs/category/${data.category}`);
+          if (relatedResponse.ok) {
+            const relatedData = await relatedResponse.json();
+            // Filter out current blog and limit to 3
+            setRelatedBlogs(relatedData.filter(b => b.id !== data.id).slice(0, 3));
+          }
+        }
+
+      } catch (error) {
+        console.error("Error loading blog:", error);
+        setBlog(null);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error fetching related blogs:', error);
-    }
-  };
+    };
+
+    fetchBlogData();
+  }, [slug, BACKEND_URL]);
 
   const handleLike = async () => {
-    if (liked) return; // Prevent multiple likes
+    if (liked || !blog) return;
     
     try {
-      const response = await fetch(`${BACKEND_URL}/api/blogs/slug/${slug}/like`, {
-        method: 'POST'
-      });
+      setLiked(true); // Optimistic update
+      setBlog(prev => ({ ...prev, likes: (prev.likes || 0) + 1 }));
       
-      if (response.ok) {
-        setLiked(true);
-        setBlog(prev => ({
-          ...prev,
-          likes: (prev.likes || 0) + 1
-        }));
-      }
+      await fetch(`${BACKEND_URL}/api/blogs/slug/${slug}/like`, { method: 'POST' });
     } catch (error) {
       console.error('Error liking blog:', error);
+      setLiked(false); // Revert on error
     }
   };
 
@@ -140,6 +97,7 @@ useEffect(() => {
     if (shareUrls[platform]) {
       window.open(shareUrls[platform], '_blank', 'width=600,height=400');
     }
+    setShowShareMenu(false);
   };
 
   const copyLink = () => {
@@ -155,12 +113,14 @@ useEffect(() => {
     return Math.ceil(words / wordsPerMinute);
   };
 
+  // --- RENDER STATES ---
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 py-12">
-        <div className="flex items-center justify-center h-64">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 pt-24 pb-12">
+        <div className="flex flex-col items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
-          <span className="ml-4 text-gray-600">Loading blog post...</span>
+          <span className="ml-4 text-gray-600 mt-4">Loading article...</span>
         </div>
       </div>
     );
@@ -168,35 +128,36 @@ useEffect(() => {
 
   if (!blog) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 py-12">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Blog post not found</h2>
-          <Link to="/blogs" className="text-pink-600 hover:text-pink-700">
-            ← Back to all blogs
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 pt-24 pb-12">
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="text-6xl mb-4">😕</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Article not found</h2>
+          <p className="text-gray-600 mb-8">The blog post you are looking for might have been removed or is temporarily unavailable.</p>
+          <Link to="/blog" className="inline-flex items-center text-pink-600 hover:text-pink-700 font-semibold">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Blog
           </Link>
         </div>
       </div>
     );
   }
 
-  const readingTime = calculateReadingTime(blog.content);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 pt-24">
       {/* Back Button */}
-      <div className="max-w-4xl mx-auto px-4 pt-8">
-        <button
-          onClick={() => navigate('/blogs')}
-          className="flex items-center text-gray-600 hover:text-pink-600 transition-colors mb-6"
+      <div className="max-w-4xl mx-auto px-4">
+        <Link
+          to="/blog"
+          className="inline-flex items-center text-gray-600 hover:text-pink-600 transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to all blogs
-        </button>
+        </Link>
       </div>
 
       {/* Hero Section with Featured Image */}
       {blog.featuredImage && (
-        <div className="w-full h-96 relative overflow-hidden mb-8">
+        <div className="w-full h-[400px] relative overflow-hidden mb-8">
           <img
             src={blog.featuredImage}
             alt={blog.title}
@@ -212,11 +173,11 @@ useEffect(() => {
         <header className="mb-8">
           {/* Category Badge */}
           <div className="flex items-center space-x-3 mb-4">
-            <span className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-1.5 rounded-full text-sm font-medium">
+            <span className="bg-pink-500 text-white px-4 py-1.5 rounded-full text-sm font-medium">
               {blog.category}
             </span>
             {blog.featured && (
-              <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-1.5 rounded-full text-sm font-medium flex items-center space-x-1">
+              <span className="bg-yellow-400 text-white px-4 py-1.5 rounded-full text-sm font-medium flex items-center space-x-1">
                 <Sparkles className="w-3 h-3" />
                 <span>Featured</span>
               </span>
@@ -224,23 +185,23 @@ useEffect(() => {
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
             {blog.title}
           </h1>
 
           {/* Excerpt */}
           {blog.excerpt && (
-            <p className="text-xl text-gray-600 mb-6 leading-relaxed">
+            <p className="text-xl text-gray-600 mb-6 leading-relaxed italic border-l-4 border-pink-300 pl-4">
               {blog.excerpt}
             </p>
           )}
 
           {/* Meta Information */}
-          <div className="flex flex-wrap items-center gap-6 text-gray-600 text-sm">
+          <div className="flex flex-wrap items-center gap-6 text-gray-600 text-sm border-b border-gray-200 pb-6">
             {/* Author */}
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                {blog.author ? blog.author.charAt(0) : 'A'}
               </div>
               <div>
                 <p className="font-medium text-gray-900">{blog.author}</p>
@@ -248,23 +209,22 @@ useEffect(() => {
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="hidden md:block w-px h-8 bg-gray-300"></div>
-
             {/* Date */}
             <div className="flex items-center space-x-2">
               <Calendar className="w-4 h-4 text-pink-500" />
-              <span>{new Date(blog.publishDate || blog.createdAt).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              })}</span>
+              <span>
+                {new Date(blog.publishDate || blog.createdAt).toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}
+              </span>
             </div>
 
             {/* Reading Time */}
             <div className="flex items-center space-x-2">
               <Clock className="w-4 h-4 text-pink-500" />
-              <span>{readingTime} min read</span>
+              <span>{calculateReadingTime(blog.content || '')} min read</span>
             </div>
 
             {/* Views */}
@@ -273,98 +233,24 @@ useEffect(() => {
               <span>{(blog.views || 0).toLocaleString()} views</span>
             </div>
           </div>
-
-          {/* Social Share & Like */}
-          <div className="flex items-center space-x-4 mt-6 pt-6 border-t border-gray-200">
-            {/* Like Button */}
-            <button
-              onClick={handleLike}
-              disabled={liked}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all ${
-                liked
-                  ? 'bg-pink-500 text-white'
-                  : 'bg-white text-gray-700 hover:bg-pink-50 border border-gray-200'
-              } disabled:opacity-50`}
-            >
-              <Heart className={`w-4 h-4 ${liked ? 'fill-current' : ''}`} />
-              <span className="font-medium">{blog.likes || 0}</span>
-            </button>
-
-            {/* Share Button */}
-            <div className="relative">
-              <button
-                onClick={() => setShowShareMenu(!showShareMenu)}
-                className="flex items-center space-x-2 px-4 py-2 bg-white text-gray-700 hover:bg-purple-50 border border-gray-200 rounded-full transition-all"
-              >
-                <Share2 className="w-4 h-4" />
-                <span className="font-medium">Share</span>
-              </button>
-
-              {/* Share Menu */}
-              {showShareMenu && (
-                <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 p-3 z-10 min-w-[200px]">
-                  <button
-                    onClick={() => shareOnSocial('facebook')}
-                    className="w-full flex items-center space-x-3 px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
-                  >
-                    <Facebook className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm">Facebook</span>
-                  </button>
-                  <button
-                    onClick={() => shareOnSocial('twitter')}
-                    className="w-full flex items-center space-x-3 px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
-                  >
-                    <Twitter className="w-4 h-4 text-sky-500" />
-                    <span className="text-sm">Twitter</span>
-                  </button>
-                  <button
-                    onClick={() => shareOnSocial('linkedin')}
-                    className="w-full flex items-center space-x-3 px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
-                  >
-                    <Linkedin className="w-4 h-4 text-blue-700" />
-                    <span className="text-sm">LinkedIn</span>
-                  </button>
-                  <button
-                    onClick={copyLink}
-                    className="w-full flex items-center space-x-3 px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
-                  >
-                    <Link2 className="w-4 h-4 text-gray-600" />
-                    <span className="text-sm">Copy Link</span>
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
         </header>
 
-        {/* Article Content */}
+        {/* Article Body */}
         <div className="prose prose-lg max-w-none mb-12">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
+            {/* SAFEGUARD: We ensure content is a string, preventing crash on null */}
             <ReactMarkdown
-              className="markdown-content"
               components={{
                 h1: ({node, ...props}) => <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4" {...props} />,
                 h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4" {...props} />,
                 h3: ({node, ...props}) => <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3" {...props} />,
                 p: ({node, ...props}) => <p className="text-gray-700 leading-relaxed mb-4" {...props} />,
                 ul: ({node, ...props}) => <ul className="list-disc list-inside text-gray-700 mb-4 space-y-2" {...props} />,
-                ol: ({node, ...props}) => <ol className="list-decimal list-inside text-gray-700 mb-4 space-y-2" {...props} />,
                 li: ({node, ...props}) => <li className="ml-4" {...props} />,
-                blockquote: ({node, ...props}) => (
-                  <blockquote className="border-l-4 border-pink-500 pl-4 italic text-gray-600 my-6" {...props} />
-                ),
-                code: ({node, inline, ...props}) => 
-                  inline ? (
-                    <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-pink-600" {...props} />
-                  ) : (
-                    <code className="block bg-gray-50 p-4 rounded-lg text-sm font-mono overflow-x-auto" {...props} />
-                  ),
                 strong: ({node, ...props}) => <strong className="font-semibold text-gray-900" {...props} />,
-                em: ({node, ...props}) => <em className="italic text-gray-700" {...props} />,
-                a: ({node, ...props}) => <a className="text-pink-600 hover:text-pink-700 underline" {...props} />
               }}
             >
-              {blog.content}
+              {blog.content || ''}
             </ReactMarkdown>
           </div>
         </div>
@@ -378,66 +264,60 @@ useEffect(() => {
             </h3>
             <div className="flex flex-wrap gap-2">
               {blog.tags.map((tag, index) => (
-                <Link
+                <span
                   key={index}
-                  to={`/blogs?tag=${tag}`}
-                  className="bg-white border border-gray-200 hover:border-pink-300 hover:bg-pink-50 text-gray-700 px-4 py-2 rounded-full text-sm transition-all"
+                  className="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-medium"
                 >
                   #{tag}
-                </Link>
+                </span>
               ))}
             </div>
           </div>
         )}
 
-        {/* Author Bio */}
-        <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-8 mb-12 border border-pink-100">
-          <div className="flex items-start space-x-4">
-            <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-              <User className="w-8 h-8 text-white" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">About {blog.author}</h3>
-              <p className="text-gray-700 leading-relaxed">
-                Beauty expert and skincare enthusiast dedicated to helping you achieve your best skin. 
-                Sharing professional tips, product recommendations, and honest reviews to guide your beauty journey.
-              </p>
-            </div>
+        {/* Social Share & Like - Bottom */}
+        <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200">
+          <button
+            onClick={handleLike}
+            disabled={liked}
+            className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-all shadow-sm ${
+              liked
+                ? 'bg-pink-500 text-white'
+                : 'bg-white text-gray-700 hover:bg-pink-50 border border-gray-200'
+            }`}
+          >
+            <Heart className={`w-5 h-5 ${liked ? 'fill-current' : ''}`} />
+            <span className="font-medium">{liked ? 'Liked' : 'Like this post'}</span>
+            <span className="ml-2 opacity-80">({blog.likes || 0})</span>
+          </button>
+
+          <div className="relative">
+            <button
+              onClick={() => setShowShareMenu(!showShareMenu)}
+              className="flex items-center space-x-2 px-6 py-3 bg-white text-gray-700 hover:bg-purple-50 border border-gray-200 rounded-full transition-all shadow-sm"
+            >
+              <Share2 className="w-5 h-5" />
+              <span className="font-medium">Share</span>
+            </button>
+
+            {showShareMenu && (
+              <div className="absolute bottom-full right-0 mb-2 bg-white rounded-xl shadow-xl border border-gray-200 p-2 z-10 min-w-[200px]">
+                <button onClick={() => shareOnSocial('facebook')} className="w-full flex items-center p-3 hover:bg-gray-50 rounded-lg text-left">
+                  <Facebook className="w-4 h-4 text-blue-600 mr-3" /> Facebook
+                </button>
+                <button onClick={() => shareOnSocial('twitter')} className="w-full flex items-center p-3 hover:bg-gray-50 rounded-lg text-left">
+                  <Twitter className="w-4 h-4 text-sky-500 mr-3" /> Twitter
+                </button>
+                <button onClick={() => shareOnSocial('linkedin')} className="w-full flex items-center p-3 hover:bg-gray-50 rounded-lg text-left">
+                  <Linkedin className="w-4 h-4 text-blue-700 mr-3" /> LinkedIn
+                </button>
+                <button onClick={copyLink} className="w-full flex items-center p-3 hover:bg-gray-50 rounded-lg text-left border-t border-gray-100 mt-1">
+                  <Link2 className="w-4 h-4 text-gray-600 mr-3" /> Copy Link
+                </button>
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Related Posts */}
-        {relatedBlogs.length > 0 && (
-          <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Related Articles</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedBlogs.map((relatedBlog) => (
-                <Link
-                  key={relatedBlog.id}
-                  to={`/blog/${relatedBlog.slug}`}
-                  className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all"
-                >
-                  <img
-                    src={relatedBlog.featuredImage || '/api/placeholder/400/200'}
-                    alt={relatedBlog.title}
-                    className="w-full h-40 object-cover"
-                  />
-                  <div className="p-4">
-                    <span className="text-xs text-pink-600 font-medium">
-                      {relatedBlog.category}
-                    </span>
-                    <h4 className="font-semibold text-gray-900 mt-2 line-clamp-2 hover:text-pink-600 transition-colors">
-                      {relatedBlog.title}
-                    </h4>
-                    <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-                      {relatedBlog.excerpt}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </article>
     </div>
   );

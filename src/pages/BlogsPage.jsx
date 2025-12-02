@@ -34,7 +34,7 @@ const BlogsPage = () => {
     try {
       setLoading(true);
       // PUBLIC endpoint - NO auth required
-      const response = await fetch(`${BACKEND_URL}/api/blogs`);
+      const response = await fetch(`${BACKEND_URL}/api/blogs/published`);
 
       if (response.ok) {
         const data = await response.json();
@@ -179,7 +179,7 @@ const BlogsPage = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 cursor-pointer">
             {filteredBlogs.map((blog) => (
               <Link
                 key={blog.id}
@@ -214,12 +214,12 @@ const BlogsPage = () => {
                     {blog.excerpt}
                   </p>
 
-                  <div className="mb-4">
+                  {/* <div className="mb-4">
                     <span className="inline-flex items-center text-pink-600 font-semibold text-sm group-hover:text-pink-700 transition-colors">
                       Read Full Article
                       <ChevronRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
                     </span>
-                  </div>
+                  </div> */}
 
                   <div className="flex items-center justify-between text-sm text-gray-500 mb-4 pb-4 border-b">
                     <div className="flex items-center gap-4">

@@ -208,13 +208,22 @@ function App() {
                     element={
                       <div className="min-h-screen bg-white">
                         <Header />
-                        <BlogSection />
+                        <BlogsPage /> {/* Points to the full page you edited */}
                         <Footer />
                       </div>
                     }
                   />
-                  <Route path="/blog" element={<BlogsPage />} />
-                  <Route path="/blog/:slug" element={<BlogDetailPage />} />
+
+                  <Route
+                    path="/blog/:slug"
+                    element={
+                      <div className="min-h-screen bg-white">
+                        <Header />
+                        <BlogDetailPage />
+                        <Footer />
+                      </div>
+                    }
+                  />
 
                   <Route
                     path="/contact"
