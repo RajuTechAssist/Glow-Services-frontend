@@ -120,7 +120,7 @@ class ApiService {
 
   async getPublishedBlogs() {
     // Fetch only published blogs for the public view
-    return this.get('/admin/blogs/published');
+    return this.get('/blogs/published');
   }
 }
 
