@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import {
   Search,
   Filter,
@@ -9,15 +9,15 @@ import {
   Tag,
   Heart,
   CheckCircle,
-  Sparkles
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
-import ApiService from '../services/api';
+  Sparkles,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import ApiService from "../services/api";
 
 const ServicesPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('popular');
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("popular");
   const [services, setServices] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,17 +35,26 @@ const ServicesPage = () => {
       try {
         // Fetch categories from the new public endpoint
         const catData = await ApiService.getPublicCategories();
-        const allOption = { id: 'all', name: 'All Services', slug: 'all', icon: '✨', color: 'from-pink-400 to-purple-500' };
+        const allOption = {
+          id: "all",
+          name: "All Services",
+          slug: "all",
+          icon: "✨",
+          color: "from-pink-400 to-purple-500",
+        };
         setCategories([allOption, ...catData]);
 
         // Fetch services using the currently selected category slug
-        const serviceData = await ApiService.getAllServices(selectedCategory, searchTerm, sortBy);
+        const serviceData = await ApiService.getAllServices(
+          selectedCategory,
+          searchTerm,
+          sortBy
+        );
         if (Array.isArray(serviceData)) {
-            setServices(serviceData);
+          setServices(serviceData);
         } else {
-            setServices([]);
+          setServices([]);
         }
-
       } catch (err) {
         console.error("Failed to fetch page data", err);
         setError("Failed to load services. Please try again.");
@@ -74,71 +83,118 @@ const ServicesPage = () => {
   //   fetchCategories();
   // }, []);
 
-
   const sortOptions = [
-    { id: 'popular', name: 'Most Popular', icon: '⭐', color: 'from-yellow-400 to-orange-400' },
-    { id: 'price-low', name: 'Price: Low to High', icon: '💰', color: 'from-green-400 to-emerald-500' },
-    { id: 'price-high', name: 'Price: High to Low', icon: '💎', color: 'from-blue-400 to-indigo-500' },
-    { id: 'rating', name: 'Highest Rated', icon: '🌟', color: 'from-amber-400 to-yellow-500' },
-    { id: 'newest', name: 'Newest First', icon: '🆕', color: 'from-teal-400 to-cyan-500' }
+    {
+      id: "popular",
+      name: "Most Popular",
+      icon: "⭐",
+      color: "from-yellow-400 to-orange-400",
+    },
+    {
+      id: "price-low",
+      name: "Price: Low to High",
+      icon: "💰",
+      color: "from-green-400 to-emerald-500",
+    },
+    {
+      id: "price-high",
+      name: "Price: High to Low",
+      icon: "💎",
+      color: "from-blue-400 to-indigo-500",
+    },
+    {
+      id: "rating",
+      name: "Highest Rated",
+      icon: "🌟",
+      color: "from-amber-400 to-yellow-500",
+    },
+    {
+      id: "newest",
+      name: "Newest First",
+      icon: "🆕",
+      color: "from-teal-400 to-cyan-500",
+    },
   ];
-
 
   const getServiceCategory = (service) => {
     const serviceImageMap = {
       // FACIAL SERVICES
-      'facial-treatment': 'facial', 'deep-cleansing-facial': 'facial',
-      'anti-aging-facial': 'facial', 'hydrating-facial': 'facial',
+      "facial-treatment": "facial",
+      "deep-cleansing-facial": "facial",
+      "anti-aging-facial": "facial",
+      "hydrating-facial": "facial",
 
-      // WAXING SERVICES  
-      'full-body-waxing': 'waxing', 'brazilian-waxing': 'waxing',
-      'bikini-waxing': 'waxing', 'leg-waxing': 'waxing',
+      // WAXING SERVICES
+      "full-body-waxing": "waxing",
+      "brazilian-waxing": "waxing",
+      "bikini-waxing": "waxing",
+      "leg-waxing": "waxing",
 
       // NAIL CARE
-      'manicure': 'nails', 'pedicure': 'nails', 'nail-art': 'nails',
-      'gel-nails': 'nails', 'nail-extension': 'nails',
+      manicure: "nails",
+      pedicure: "nails",
+      "nail-art": "nails",
+      "gel-nails": "nails",
+      "nail-extension": "nails",
 
       // BODY CARE
-      'body-scrub': 'body', 'body-wrap': 'body', 'body-polishing': 'body',
-      'tan-removal': 'body', 'body-brightening': 'body',
+      "body-scrub": "body",
+      "body-wrap": "body",
+      "body-polishing": "body",
+      "tan-removal": "body",
+      "body-brightening": "body",
 
       // MASSAGE
-      'relaxing-massage': 'massage', 'deep-tissue-massage': 'massage',
-      'hot-stone-massage': 'massage', 'aromatherapy-massage': 'massage',
+      "relaxing-massage": "massage",
+      "deep-tissue-massage": "massage",
+      "hot-stone-massage": "massage",
+      "aromatherapy-massage": "massage",
 
       // MAKEUP
-      'party-makeup': 'makeup', 'corporate-makeup': 'makeup',
-      'photoshoot-makeup': 'makeup', 'evening-makeup': 'makeup',
+      "party-makeup": "makeup",
+      "corporate-makeup": "makeup",
+      "photoshoot-makeup": "makeup",
+      "evening-makeup": "makeup",
 
       // THREADING & BLEACH
-      'eyebrow-threading': 'threading', 'upper-lip-threading': 'threading',
-      'chin-threading': 'threading', 'face-bleach': 'threading',
+      "eyebrow-threading": "threading",
+      "upper-lip-threading": "threading",
+      "chin-threading": "threading",
+      "face-bleach": "threading",
 
       // HAIR CARE
-      'hair-spa': 'haircare', 'hair-treatment': 'haircare',
-      'hair-cut-style': 'haircare', 'hair-coloring': 'haircare',
+      "hair-spa": "haircare",
+      "hair-treatment": "haircare",
+      "hair-cut-style": "haircare",
+      "hair-coloring": "haircare",
 
       // SKINCARE
-      'skin-consultation': 'skincare', 'pigmentation-treatment': 'skincare',
-      'acne-scar-treatment': 'skincare', 'skin-rejuvenation': 'skincare',
+      "skin-consultation": "skincare",
+      "pigmentation-treatment": "skincare",
+      "acne-scar-treatment": "skincare",
+      "skin-rejuvenation": "skincare",
 
       // BRIDAL
-      'bridal-makeup': 'bridal', 'bridal-hair': 'bridal',
-      'bridal-mehendi': 'bridal', 'bridal-package': 'bridal',
+      "bridal-makeup": "bridal",
+      "bridal-hair": "bridal",
+      "bridal-mehendi": "bridal",
+      "bridal-package": "bridal",
 
       // PARTY
-      'birthday-makeup': 'party', 'anniversary-makeup': 'party',
-      'date-night-makeup': 'party', 'festival-makeup': 'party',
+      "birthday-makeup": "party",
+      "anniversary-makeup": "party",
+      "date-night-makeup": "party",
+      "festival-makeup": "party",
 
       // COMBO
-      'beauty-combo': 'combo', 'facial-waxing-combo': 'combo',
-      'mani-pedi-combo': 'combo', 'bride-to-be-package': 'combo'
+      "beauty-combo": "combo",
+      "facial-waxing-combo": "combo",
+      "mani-pedi-combo": "combo",
+      "bride-to-be-package": "combo",
     };
 
-    return serviceImageMap[service.slug] || service.category || 'facial';
+    return serviceImageMap[service.slug] || service.category || "facial";
   };
-
-
 
   // Intersection Observer for animations
   useEffect(() => {
@@ -164,22 +220,30 @@ const ServicesPage = () => {
       try {
         setLoading(true);
         setError(null);
-        console.log('🔄 ServicesPage: Fetching services:', { selectedCategory, searchTerm, sortBy });
+        console.log("🔄 ServicesPage: Fetching services:", {
+          selectedCategory,
+          searchTerm,
+          sortBy,
+        });
 
-        const data = await ApiService.getAllServices(selectedCategory, searchTerm, 'popular'); // Always fetch as popular first
-        console.log('📦 ServicesPage: Services received:', data);
+        const data = await ApiService.getAllServices(
+          selectedCategory,
+          searchTerm,
+          "popular"
+        ); // Always fetch as popular first
+        console.log("📦 ServicesPage: Services received:", data);
 
         if (Array.isArray(data)) {
           // Apply local sorting based on sortBy selection
           const sortedData = sortServices(data, sortBy);
           setServices(sortedData);
         } else {
-          console.error('⚠️ ServicesPage: API returned non-array data:', data);
+          console.error("⚠️ ServicesPage: API returned non-array data:", data);
           setServices([]);
         }
       } catch (err) {
-        console.error('❌ ServicesPage: Error fetching services:', err);
-        setError('Failed to load services. Please try again later.');
+        console.error("❌ ServicesPage: Error fetching services:", err);
+        setError("Failed to load services. Please try again later.");
         setServices([]);
       } finally {
         setLoading(false);
@@ -194,16 +258,18 @@ const ServicesPage = () => {
     const sorted = [...servicesArray];
 
     switch (sortType) {
-      case 'popular':
+      case "popular":
         return sorted.sort((a, b) => (b.popular ? 1 : 0) - (a.popular ? 1 : 0));
-      case 'price-low':
+      case "price-low":
         return sorted.sort((a, b) => (a.price || 0) - (b.price || 0));
-      case 'price-high':
+      case "price-high":
         return sorted.sort((a, b) => (b.price || 0) - (a.price || 0));
-      case 'rating':
+      case "rating":
         return sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-      case 'newest':
-        return sorted.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+      case "newest":
+        return sorted.sort(
+          (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+        );
       default:
         return sorted;
     }
@@ -225,10 +291,11 @@ const ServicesPage = () => {
       stars.push(
         <Star
           key={i}
-          className={`w-4 h-4 ${i < Math.floor(rating)
-            ? 'text-yellow-400 fill-current'
-            : 'text-gray-300'
-            }`}
+          className={`w-4 h-4 ${
+            i < Math.floor(rating)
+              ? "text-yellow-400 fill-current"
+              : "text-gray-300"
+          }`}
         />
       );
     }
@@ -238,7 +305,6 @@ const ServicesPage = () => {
   return (
     // ✅ FIXED: Added proper spacing from header (pt-24 instead of pt-8)
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 pt-24">
-
       {/* ✅ ENHANCED: Beautiful Header Section with feminine colors */}
       <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -251,8 +317,10 @@ const ServicesPage = () => {
               <Sparkles className="w-8 h-8 text-white ml-3 animate-pulse" />
             </div>
             <p className="text-lg md:text-xl text-pink-100 max-w-3xl mx-auto leading-relaxed">
-              Discover our complete range of professional beauty services delivered to your doorstep.
-              From rejuvenating facials to stunning bridal makeup, we've got everything you need to look and feel absolutely gorgeous! ✨
+              Discover our complete range of professional beauty services
+              delivered to your doorstep. From rejuvenating facials to stunning
+              bridal makeup, we've got everything you need to look and feel
+              absolutely gorgeous! ✨
             </p>
           </div>
         </div>
@@ -261,7 +329,6 @@ const ServicesPage = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-
           {/* ===== ENHANCED VERTICAL FILTERS SIDEBAR ===== */}
           <div className="lg:w-80 flex-shrink-0">
             {/* Mobile Filter Toggle */}
@@ -272,13 +339,20 @@ const ServicesPage = () => {
               >
                 <Filter className="w-5 h-5 mr-2" />
                 <span className="font-semibold">Filters & Categories</span>
-                <ArrowRight className={`w-4 h-4 ml-auto transition-transform duration-300 ${showFilters ? 'rotate-90' : ''}`} />
+                <ArrowRight
+                  className={`w-4 h-4 ml-auto transition-transform duration-300 ${
+                    showFilters ? "rotate-90" : ""
+                  }`}
+                />
               </button>
             </div>
 
             {/* Filter Panel */}
-            <div className={`${showFilters ? 'block' : 'hidden lg:block'} space-y-6`}>
-
+            <div
+              className={`${
+                showFilters ? "block" : "hidden lg:block"
+              } space-y-6`}
+            >
               {/* Search */}
               <div className="bg-white rounded-2xl shadow-xl border border-pink-100 p-6 backdrop-blur-sm bg-white/95">
                 <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
@@ -311,14 +385,21 @@ const ServicesPage = () => {
                   {categories.map((category) => (
                     <button
                       key={category.id}
-                      onClick={() => setSelectedCategory(category.slug || category.id)}
-                      className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${selectedCategory === (category.slug || category.id)
-                          ? `bg-gradient-to-r ${category.color || 'from-pink-400 to-purple-500'} text-white shadow-lg border-2 border-transparent`
-                          : 'bg-gradient-to-r from-pink-50 to-purple-50 hover:from-pink-100 hover:to-purple-100 border-2 border-pink-200 hover:border-purple-300 text-gray-700'
-                        }`}
+                      onClick={() =>
+                        setSelectedCategory(category.slug || category.id)
+                      }
+                      className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${
+                        selectedCategory === (category.slug || category.id)
+                          ? `bg-gradient-to-r ${
+                              category.color || "from-pink-400 to-purple-500"
+                            } text-white shadow-lg border-2 border-transparent`
+                          : "bg-gradient-to-r from-pink-50 to-purple-50 hover:from-pink-100 hover:to-purple-100 border-2 border-pink-200 hover:border-purple-300 text-gray-700"
+                      }`}
                     >
                       <span className="text-xl mr-4">{category.icon}</span>
-                      <span className="font-semibold flex-1">{category.name}</span>
+                      <span className="font-semibold flex-1">
+                        {category.name}
+                      </span>
                       {selectedCategory === (category.slug || category.id) && (
                         <CheckCircle className="w-6 h-6 ml-2" />
                       )}
@@ -340,16 +421,19 @@ const ServicesPage = () => {
                     <button
                       key={option.id}
                       onClick={() => {
-                        console.log('🔄 Sorting by:', option.id);
+                        console.log("🔄 Sorting by:", option.id);
                         setSortBy(option.id);
                       }}
-                      className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${sortBy === option.id
-                        ? `bg-gradient-to-r ${option.color} text-white shadow-lg border-2 border-transparent`
-                        : 'bg-gradient-to-r from-gray-50 to-indigo-50 hover:from-indigo-50 hover:to-purple-50 border-2 border-gray-200 hover:border-indigo-300 text-gray-700'
-                        }`}
+                      className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${
+                        sortBy === option.id
+                          ? `bg-gradient-to-r ${option.color} text-white shadow-lg border-2 border-transparent`
+                          : "bg-gradient-to-r from-gray-50 to-indigo-50 hover:from-indigo-50 hover:to-purple-50 border-2 border-gray-200 hover:border-indigo-300 text-gray-700"
+                      }`}
                     >
                       <span className="text-xl mr-4">{option.icon}</span>
-                      <span className="font-semibold flex-1">{option.name}</span>
+                      <span className="font-semibold flex-1">
+                        {option.name}
+                      </span>
                       {sortBy === option.id && (
                         <CheckCircle className="w-6 h-6 ml-2" />
                       )}
@@ -368,13 +452,21 @@ const ServicesPage = () => {
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 flex items-center">
                     <Heart className="w-6 h-6 text-pink-500 mr-2" />
-                    {searchTerm ? `Search Results for "${searchTerm}"` :
-                      selectedCategory === 'all' ? 'All Services' :
-                        serviceCategories.find(cat => cat.id === selectedCategory)?.name}
+                    {searchTerm
+                      ? `Search Results for "${searchTerm}"`
+                      : selectedCategory === "all"
+                      ? "All Services"
+                      : serviceCategories.find(
+                          (cat) => cat.id === selectedCategory
+                        )?.name}
                   </h2>
                   <p className="text-pink-600 mt-2 flex items-center">
                     <Sparkles className="w-4 h-4 mr-1" />
-                    {loading ? 'Loading beautiful services...' : `${services.length} amazing service${services.length !== 1 ? 's' : ''} found`}
+                    {loading
+                      ? "Loading beautiful services..."
+                      : `${services.length} amazing service${
+                          services.length !== 1 ? "s" : ""
+                        } found`}
                   </p>
                 </div>
               </div>
@@ -385,7 +477,10 @@ const ServicesPage = () => {
               {loading ? (
                 <div className="space-y-6">
                   {[...Array(5)].map((_, index) => (
-                    <div key={index} className="bg-white rounded-2xl shadow-xl border border-pink-100 p-6 animate-pulse">
+                    <div
+                      key={index}
+                      className="bg-white rounded-2xl shadow-xl border border-pink-100 p-6 animate-pulse"
+                    >
                       <div className="flex flex-col lg:flex-row gap-6">
                         <div className="w-full lg:w-80 h-60 bg-gradient-to-r from-pink-200 to-purple-200 rounded-xl"></div>
                         <div className="flex-1 space-y-4">
@@ -401,20 +496,35 @@ const ServicesPage = () => {
               ) : error ? (
                 <div className="bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 rounded-2xl p-8 text-center">
                   <div className="text-6xl mb-4">😔</div>
-                  <h3 className="text-xl font-bold text-red-800 mb-2">Oops! Something went wrong</h3>
+                  <h3 className="text-xl font-bold text-red-800 mb-2">
+                    Oops! Something went wrong
+                  </h3>
                   <p className="text-red-600">{error}</p>
                 </div>
               ) : services.length === 0 ? (
                 <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 rounded-2xl p-12 text-center">
                   <div className="text-8xl mb-6">🌸</div>
-                  <h3 className="text-2xl font-bold text-purple-900 mb-4">No Services Found</h3>
+                  <h3 className="text-2xl font-bold text-purple-900 mb-4">
+                    No Services Found
+                  </h3>
                   <p className="text-purple-600 text-lg">
                     {searchTerm ? (
-                      <>We couldn't find any services matching "{searchTerm}". Try a different search! 💫</>
-                    ) : selectedCategory !== 'all' ? (
-                      <>No services available in "{serviceCategories.find(cat => cat.id === selectedCategory)?.name}" right now. Check back soon! ✨</>
+                      <>
+                        We couldn't find any services matching "{searchTerm}".
+                        Try a different search! 💫
+                      </>
+                    ) : selectedCategory !== "all" ? (
+                      <>
+                        No services available in "
+                        {
+                          serviceCategories.find(
+                            (cat) => cat.id === selectedCategory
+                          )?.name
+                        }
+                        " right now. Check back soon! ✨
+                      </>
                     ) : (
-                      'No services available at the moment. Our beauticians are preparing something amazing! 🌟'
+                      "No services available at the moment. Our beauticians are preparing something amazing! 🌟"
                     )}
                   </p>
                 </div>
@@ -423,20 +533,28 @@ const ServicesPage = () => {
                   {services.map((service, index) => (
                     <div
                       key={service.id || service.slug}
-                      className={`bg-white rounded-2xl shadow-xl border border-pink-100 hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-[1.02] ${isVisible ? 'animate-fade-in' : 'opacity-0'
-                        }`}
+                      className={`bg-white rounded-2xl shadow-xl border border-pink-100 hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-[1.02] ${
+                        isVisible ? "animate-fade-in" : "opacity-0"
+                      }`}
                       style={{ animationDelay: `${index * 150}ms` }}
                     >
                       <div className="flex flex-col lg:flex-row">
                         {/* Service Image */}
                         <div className="lg:w-80 h-64 lg:h-80 relative overflow-hidden bg-gradient-to-br from-pink-100 to-purple-100">
                           <img
-                            src={`/images/services/${services.serviceCategories}-service.png`}
-                            alt={services.name}
+                            // ✅ FIX: Use service.image (S3 URL) if available, otherwise fallback to local logic
+                            src={
+                              service.image ||
+                              `/images/services/${
+                                service.category || "facial"
+                              }-service.png`
+                            }
+                            alt={service.name}
                             className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
                             onError={(e) => {
-                              e.target.src = '/images/services/facial-service.png'; // 
-
+                              // ✅ FIX: Improved fallback to prevent infinite loop
+                              e.target.onerror = null;
+                              e.target.style.display = "none"; // Hide image to show the gradient background below if both fail
                             }}
                           />
                           <button
@@ -444,10 +562,11 @@ const ServicesPage = () => {
                             className="absolute top-4 right-4 p-3 bg-white/95 backdrop-blur-sm rounded-full hover:bg-white transition-all duration-300 shadow-lg transform hover:scale-110"
                           >
                             <Heart
-                              className={`w-6 h-6 transition-colors duration-300 ${likedServices.has(service.id)
-                                ? 'text-red-500 fill-current'
-                                : 'text-pink-400 hover:text-red-400'
-                                }`}
+                              className={`w-6 h-6 transition-colors duration-300 ${
+                                likedServices.has(service.id)
+                                  ? "text-red-500 fill-current"
+                                  : "text-pink-400 hover:text-red-400"
+                              }`}
                             />
                           </button>
                           {service.popular && (
@@ -467,7 +586,9 @@ const ServicesPage = () => {
                               <div className="flex items-center flex-wrap gap-4 text-sm text-gray-600 mb-4">
                                 <div className="flex items-center bg-purple-50 px-3 py-2 rounded-full">
                                   <Clock className="w-4 h-4 mr-2 text-purple-500" />
-                                  <span className="font-medium">{service.duration}</span>
+                                  <span className="font-medium">
+                                    {service.duration}
+                                  </span>
                                 </div>
                                 <div className="flex items-center bg-yellow-50 px-3 py-2 rounded-full">
                                   {renderStars(service.rating)}
@@ -481,11 +602,12 @@ const ServicesPage = () => {
                               <div className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
                                 ₹{service.price}
                               </div>
-                              {service.originalPrice && service.originalPrice > service.price && (
-                                <div className="text-lg text-gray-500 line-through">
-                                  ₹{service.originalPrice}
-                                </div>
-                              )}
+                              {service.originalPrice &&
+                                service.originalPrice > service.price && (
+                                  <div className="text-lg text-gray-500 line-through">
+                                    ₹{service.originalPrice}
+                                  </div>
+                                )}
                             </div>
                           </div>
 
@@ -501,20 +623,25 @@ const ServicesPage = () => {
                                 What's Included:
                               </h4>
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {service.features.slice(0, 4).map((feature, idx) => (
-                                  <div
-                                    key={idx}
-                                    className="flex items-center px-4 py-2 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 rounded-lg"
-                                  >
-                                    <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
-                                    <span className="font-medium">{feature}</span>
-                                  </div>
-                                ))}
+                                {service.features
+                                  .slice(0, 4)
+                                  .map((feature, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="flex items-center px-4 py-2 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 rounded-lg"
+                                    >
+                                      <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
+                                      <span className="font-medium">
+                                        {feature}
+                                      </span>
+                                    </div>
+                                  ))}
                               </div>
                               {service.features.length > 4 && (
                                 <p className="text-purple-600 font-medium mt-3 flex items-center">
-                                  <Sparkles className="w-4 h-4 mr-1" />
-                                  +{service.features.length - 4} more amazing benefits included!
+                                  <Sparkles className="w-4 h-4 mr-1" />+
+                                  {service.features.length - 4} more amazing
+                                  benefits included!
                                 </p>
                               )}
                             </div>
@@ -534,7 +661,9 @@ const ServicesPage = () => {
                                     className="flex items-center text-gray-700 bg-pink-50 px-3 py-2 rounded-lg border border-pink-200"
                                   >
                                     <CheckCircle className="w-4 h-4 mr-3 text-purple-600" />
-                                    <span className="font-medium">{subService}</span>
+                                    <span className="font-medium">
+                                      {subService}
+                                    </span>
                                   </div>
                                 ))}
                               </div>
