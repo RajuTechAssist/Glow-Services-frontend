@@ -214,6 +214,13 @@ const BlogsPage = () => {
                     {blog.excerpt}
                   </p>
 
+                  <div className="mb-4">
+                    <span className="inline-flex items-center text-pink-600 font-semibold text-sm group-hover:text-pink-700 transition-colors">
+                      Read Full Article
+                      <ChevronRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
+
                   <div className="flex items-center justify-between text-sm text-gray-500 mb-4 pb-4 border-b">
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
