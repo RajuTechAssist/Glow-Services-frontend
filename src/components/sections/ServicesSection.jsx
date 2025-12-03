@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import {
   Star,
   Clock,
@@ -11,9 +11,9 @@ import {
   Award,
   Calendar,
   TrendingUp,
-  Zap
-} from 'lucide-react';
-import ApiService from '../../services/api';
+  Zap,
+} from "lucide-react";
+import ApiService from "../../services/api";
 
 const ServicesSection = () => {
   const [services, setServices] = useState([]);
@@ -50,33 +50,33 @@ const ServicesSection = () => {
       try {
         setLoading(true);
         setError(null);
-        console.log('🔄 ServicesSection: Fetching featured services...');
+        console.log("🔄 ServicesSection: Fetching featured services...");
 
         const allServices = await ApiService.getAllServices();
-        console.log('📦 ServicesSection: Services received:', allServices);
+        console.log("📦 ServicesSection: Services received:", allServices);
 
         if (Array.isArray(allServices) && allServices.length > 0) {
           // Take top 4 services for the section (prioritize featured ones)
           const featuredServices = allServices
-            .filter(service => service.featured)
+            .filter((service) => service.featured)
             .slice(0, 4);
 
           // If not enough featured services, fill with popular ones
           if (featuredServices.length < 4) {
             const remainingServices = allServices
-              .filter(service => !service.featured)
+              .filter((service) => !service.featured)
               .slice(0, 4 - featuredServices.length);
             setServices([...featuredServices, ...remainingServices]);
           } else {
             setServices(featuredServices);
           }
         } else {
-          console.warn('⚠️ ServicesSection: No services found');
+          console.warn("⚠️ ServicesSection: No services found");
           setServices([]);
         }
       } catch (err) {
-        console.error('❌ ServicesSection: Error fetching services:', err);
-        setError('Failed to load services. Please try again later.');
+        console.error("❌ ServicesSection: Error fetching services:", err);
+        setError("Failed to load services. Please try again later.");
         setServices([]);
       } finally {
         setLoading(false);
@@ -118,7 +118,8 @@ const ServicesSection = () => {
   };
 
   const prevSlide = () => {
-    const newIndex = currentIndex === 0 ? services.length - 1 : currentIndex - 1;
+    const newIndex =
+      currentIndex === 0 ? services.length - 1 : currentIndex - 1;
     goToSlide(newIndex);
   };
 
@@ -138,10 +139,11 @@ const ServicesSection = () => {
       stars.push(
         <Star
           key={i}
-          className={`w-4 h-4 ${i < Math.floor(rating)
-            ? 'text-yellow-400 fill-current'
-            : 'text-gray-300'
-            }`}
+          className={`w-4 h-4 ${
+            i < Math.floor(rating)
+              ? "text-yellow-400 fill-current"
+              : "text-gray-300"
+          }`}
         />
       );
     }
@@ -149,11 +151,11 @@ const ServicesSection = () => {
   };
 
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(price);
   };
 
@@ -164,29 +166,36 @@ const ServicesSection = () => {
 
     // Fallback gradient based on service category
     const gradients = {
-      facial: 'from-rose-400 via-pink-400 to-rose-500',
-      massage: 'from-purple-400 via-indigo-400 to-purple-500',
-      haircare: 'from-violet-400 via-purple-400 to-indigo-500',
-      manicure: 'from-pink-400 via-rose-400 to-pink-500',
-      pedicure: 'from-fuchsia-400 via-pink-400 to-rose-500',
-      skincare: 'from-emerald-400 via-teal-400 to-cyan-500',
-      makeup: 'from-amber-400 via-orange-400 to-red-500',
-      eyebrow: 'from-indigo-400 via-blue-400 to-indigo-500',
-      waxing: 'from-green-400 via-emerald-400 to-teal-500',
-      threading: 'from-yellow-400 via-amber-400 to-orange-500'
+      facial: "from-rose-400 via-pink-400 to-rose-500",
+      massage: "from-purple-400 via-indigo-400 to-purple-500",
+      haircare: "from-violet-400 via-purple-400 to-indigo-500",
+      manicure: "from-pink-400 via-rose-400 to-pink-500",
+      pedicure: "from-fuchsia-400 via-pink-400 to-rose-500",
+      skincare: "from-emerald-400 via-teal-400 to-cyan-500",
+      makeup: "from-amber-400 via-orange-400 to-red-500",
+      eyebrow: "from-indigo-400 via-blue-400 to-indigo-500",
+      waxing: "from-green-400 via-emerald-400 to-teal-500",
+      threading: "from-yellow-400 via-amber-400 to-orange-500",
     };
 
-    const category = service.category?.toLowerCase() || 'default';
-    return gradients[category] || 'from-pink-400 via-purple-400 to-indigo-500';
+    const category = service.category?.toLowerCase() || "default";
+    return gradients[category] || "from-pink-400 via-purple-400 to-indigo-500";
   };
 
   const getServiceIcon = (category) => {
     const icons = {
-      facial: '✨', massage: '💆', haircare: '💇', manicure: '💅',
-      pedicure: '🦶', skincare: '🧴', makeup: '💄', eyebrow: '👁️',
-      waxing: '🪒', threading: '🧵'
+      facial: "✨",
+      massage: "💆",
+      haircare: "💇",
+      manicure: "💅",
+      pedicure: "🦶",
+      skincare: "🧴",
+      makeup: "💄",
+      eyebrow: "👁️",
+      waxing: "🪒",
+      threading: "🧵",
     };
-    return icons[category?.toLowerCase()] || '💫';
+    return icons[category?.toLowerCase()] || "💫";
   };
 
   return (
@@ -203,15 +212,26 @@ const ServicesSection = () => {
             </div>
           </div>
 
-          <h2 className={`text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-            }`}>
+          <h2
+            className={`text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 transition-all duration-1000 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-8 opacity-0"
+            }`}
+          >
             Featured Services
           </h2>
 
-          <p className={`text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-            }`}>
-            Experience luxury beauty treatments in the comfort of your home.
-            Our certified professionals bring salon-quality services right to your doorstep.
+          <p
+            className={`text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-8 opacity-0"
+            }`}
+          >
+            Experience luxury beauty treatments in the comfort of your home. Our
+            certified professionals bring salon-quality services right to your
+            doorstep.
           </p>
         </div>
 
@@ -220,13 +240,17 @@ const ServicesSection = () => {
           <div className="text-center py-16">
             <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-500 mr-3"></div>
-              <span className="text-purple-700 font-medium">Loading our amazing services...</span>
+              <span className="text-purple-700 font-medium">
+                Loading our amazing services...
+              </span>
             </div>
           </div>
         ) : error ? (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">😔</div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Oops! Something went wrong</h3>
+            <h3 className="text-xl font-bold text-gray-800 mb-2">
+              Oops! Something went wrong
+            </h3>
             <p className="text-gray-600 mb-6">{error}</p>
             <button
               onClick={() => window.location.reload()}
@@ -238,8 +262,12 @@ const ServicesSection = () => {
         ) : services.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-8xl mb-6">💅</div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">No Featured Services</h3>
-            <p className="text-gray-600 mb-8">We're working on adding more services for you.</p>
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">
+              No Featured Services
+            </h3>
+            <p className="text-gray-600 mb-8">
+              We're working on adding more services for you.
+            </p>
             <Link
               to="/services"
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-pink-700 transition-all duration-300"
@@ -265,22 +293,28 @@ const ServicesSection = () => {
                       <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
                         {/* Service Image */}
                         <div className="relative">
-                          <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-purple-100 to-pink-100 shadow-xl">
-                            {service.images && service.images.length > 0 ? (
-                              <img
-                                src={service.images[0]}
-                                alt={service.name}
-                                className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-                              />
-                            ) : (
-                              <div className={`w-full h-full bg-gradient-to-br ${getServiceImage(service)} flex flex-col items-center justify-center text-white`}>
+                          <div className="aspect-square rounded-2xl overflow-hidden shadow-xl relative group">
+                            
+                            {/* 1. Base Gradient Layer (Always rendered as fallback) */}
+                            <div className={`absolute inset-0 w-full h-full bg-gradient-to-br ${getServiceImage(service)} flex flex-col items-center justify-center text-white`}>
                                 <div className="text-8xl mb-4">{getServiceIcon(service.category)}</div>
                                 <div className="text-2xl font-bold text-center px-4">{service.name}</div>
-                              </div>
+                            </div>
+
+                            {/* 2. Image Layer (Overlays the gradient if image exists) */}
+                            {service.image && (
+                              <img
+                                src={service.image}
+                                alt={service.name}
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-10"
+                                onError={(e) => {
+                                  e.target.style.display = 'none'; // If image breaks, hide it to reveal gradient
+                                }}
+                              />
                             )}
 
-                            {/* Service Badges */}
-                            <div className="absolute top-4 left-4 flex flex-col gap-2">
+                            {/* 3. Service Badges (Z-index 20 to sit on top of image) */}
+                            <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
                               {service.featured && (
                                 <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
                                   <Award className="w-4 h-4 inline mr-1" />
@@ -301,10 +335,10 @@ const ServicesSection = () => {
                               )}
                             </div>
 
-                            {/* Like Button */}
+                            {/* 4. Like Button (Z-index 20) */}
                             <button
                               onClick={() => toggleLike(service.id)}
-                              className="absolute top-4 right-4 p-3 bg-white/95 backdrop-blur-sm rounded-full hover:bg-white transition-all duration-300 shadow-lg transform hover:scale-110"
+                              className="absolute top-4 right-4 p-3 bg-white/95 backdrop-blur-sm rounded-full hover:bg-white transition-all duration-300 shadow-lg transform hover:scale-110 z-20"
                             >
                               <Heart
                                 className={`w-6 h-6 transition-colors duration-300 ${likedServices.has(service.id)
@@ -327,7 +361,7 @@ const ServicesSection = () => {
                             <div className="flex flex-wrap items-center gap-4 mb-6 text-sm text-gray-600">
                               <div className="flex items-center">
                                 <Clock className="w-4 h-4 mr-1 text-purple-500" />
-                                <span>{service.duration || '60'} mins</span>
+                                <span>{service.duration || "60"} mins</span>
                               </div>
                               <div className="flex items-center">
                                 <MapPin className="w-4 h-4 mr-1 text-pink-500" />
@@ -358,23 +392,32 @@ const ServicesSection = () => {
 
                             {/* Description */}
                             <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                              {service?.description || 'Professional service description'}
+                              {service?.description ||
+                                "Professional service description"}
                             </p>
 
                             {/* Service Features */}
-                            {service.features && service.features.length > 0 && (
-                              <div className="mb-6">
-                                <h4 className="font-bold text-gray-900 mb-3">What's Included:</h4>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                  {service.features.slice(0, 4).map((feature, idx) => (
-                                    <div key={idx} className="flex items-center text-sm text-gray-600">
-                                      <div className="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full mr-2"></div>
-                                      {feature}
-                                    </div>
-                                  ))}
+                            {service.features &&
+                              service.features.length > 0 && (
+                                <div className="mb-6">
+                                  <h4 className="font-bold text-gray-900 mb-3">
+                                    What's Included:
+                                  </h4>
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    {service.features
+                                      .slice(0, 4)
+                                      .map((feature, idx) => (
+                                        <div
+                                          key={idx}
+                                          className="flex items-center text-sm text-gray-600"
+                                        >
+                                          <div className="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full mr-2"></div>
+                                          {feature}
+                                        </div>
+                                      ))}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
 
                             {/* Price & Actions */}
                             <div className="flex items-center justify-between">
@@ -383,16 +426,23 @@ const ServicesSection = () => {
                                   <span className="text-3xl font-bold bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent">
                                     {formatPrice(service.price)}
                                   </span>
-                                  {service.originalPrice && service.originalPrice > service.price && (
-                                    <>
-                                      <span className="text-xl text-gray-500 line-through">
-                                        {formatPrice(service.originalPrice)}
-                                      </span>
-                                      <span className="bg-green-100 text-green-800 text-sm font-bold px-3 py-1 rounded-full">
-                                        {Math.round(((service.originalPrice - service.price) / service.originalPrice) * 100)}% OFF
-                                      </span>
-                                    </>
-                                  )}
+                                  {service.originalPrice &&
+                                    service.originalPrice > service.price && (
+                                      <>
+                                        <span className="text-xl text-gray-500 line-through">
+                                          {formatPrice(service.originalPrice)}
+                                        </span>
+                                        <span className="bg-green-100 text-green-800 text-sm font-bold px-3 py-1 rounded-full">
+                                          {Math.round(
+                                            ((service.originalPrice -
+                                              service.price) /
+                                              service.originalPrice) *
+                                              100
+                                          )}
+                                          % OFF
+                                        </span>
+                                      </>
+                                    )}
                                 </div>
 
                                 <p className="text-purple-600 text-sm font-medium">
@@ -442,10 +492,11 @@ const ServicesSection = () => {
                       <button
                         key={index}
                         onClick={() => goToSlide(index)}
-                        className={`w-3 h-3 rounded-full transition-all duration-300 ${currentIndex === index
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-600 scale-125'
-                          : 'bg-white/70 hover:bg-white'
-                          }`}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                          currentIndex === index
+                            ? "bg-gradient-to-r from-purple-500 to-pink-600 scale-125"
+                            : "bg-white/70 hover:bg-white"
+                        }`}
                       />
                     ))}
                   </div>
@@ -454,22 +505,34 @@ const ServicesSection = () => {
             </div>
 
             {/* Call to Action - Services */}
-            <div className={`text-center transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div
+              className={`text-center transition-all duration-1000 delay-800 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
               <div className="bg-white rounded-3xl p-12 shadow-xl border border-gray-100">
                 <div className="flex items-center justify-center space-x-4 mb-6">
                   <div className="flex items-center space-x-2">
                     <Award className="h-6 w-6 text-purple-500" />
-                    <span className="text-purple-600 font-medium">Certified Professionals</span>
+                    <span className="text-purple-600 font-medium">
+                      Certified Professionals
+                    </span>
                   </div>
                   <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-6 w-6 text-pink-500" />
-                    <span className="text-pink-600 font-medium">On-time Appointments</span>
+                    <span className="text-pink-600 font-medium">
+                      On-time Appointments
+                    </span>
                   </div>
                   <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
                   <div className="flex items-center space-x-2">
                     <Star className="h-6 w-6 text-yellow-500" />
-                    <span className="text-yellow-600 font-medium">Top Rated Services</span>
+                    <span className="text-yellow-600 font-medium">
+                      Top Rated Services
+                    </span>
                   </div>
                 </div>
 
@@ -477,8 +540,10 @@ const ServicesSection = () => {
                   Explore Our Complete Beauty Services
                 </h3>
                 <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                  From salon-quality facials and hair treatments to bridal makeup and grooming — book certified professionals
-                  for in-home services or at our partner salons. Trusted, convenient and tailored to you.
+                  From salon-quality facials and hair treatments to bridal
+                  makeup and grooming — book certified professionals for in-home
+                  services or at our partner salons. Trusted, convenient and
+                  tailored to you.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
@@ -507,7 +572,6 @@ const ServicesSection = () => {
                 </div>
               </div>
             </div>
-
           </>
         )}
       </div>

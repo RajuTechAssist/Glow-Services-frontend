@@ -10,9 +10,11 @@ import {
   Heart,
   CheckCircle,
   Sparkles,
+  ShoppingCart,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import ApiService from "../services/api";
+import { useCart } from "../context/CartContext";
 
 const ServicesPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -26,6 +28,13 @@ const ServicesPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const sectionRef = useRef(null);
+
+  const { addToCart } = useCart();
+  const handleAddToCart = (e, service) => {
+    e.preventDefault(); // Prevent navigation if wrapped in Link (though button is separate here)
+    addToCart(service, 1); // Add 1 quantity
+    alert(`${service.name} added to cart! 🛒`);
+  };
 
   // ✅ COMBINED AND CORRECTED useEffect to handle all data fetching and filtering
   useEffect(() => {
@@ -680,9 +689,12 @@ const ServicesPage = () => {
                               View Details
                               <ArrowRight className="w-5 h-5 ml-2" />
                             </Link>
-                            <button className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-4 rounded-xl font-bold hover:from-pink-600 hover:to-rose-600 transition-all duration-300 flex items-center justify-center shadow-lg transform hover:scale-105">
-                              <Calendar className="w-5 h-5 mr-2" />
-                              Book Now
+                            <button
+                              onClick={(e) => handleAddToCart(e, service)}
+                              className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-4 rounded-xl font-bold hover:from-pink-600 hover:to-rose-600 transition-all duration-300 flex items-center justify-center shadow-lg transform hover:scale-105"
+                            >
+                              <ShoppingCart className="w-5 h-5 mr-2" />
+                              Add to Cart
                             </button>
                           </div>
                         </div>
