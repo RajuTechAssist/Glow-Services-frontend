@@ -224,42 +224,41 @@ const ServicesPage = () => {
   }, []);
 
   // Fetch and sort services
+  // Fetch and sort services
   useEffect(() => {
     const fetchServices = async () => {
       try {
         setLoading(true);
         setError(null);
-        console.log("🔄 ServicesPage: Fetching services:", {
-          selectedCategory,
-          searchTerm,
-          sortBy,
-        });
 
+        // Fetch from API (Backend now handles sorting too)
         const data = await ApiService.getAllServices(
           selectedCategory,
           searchTerm,
-          "popular"
-        ); // Always fetch as popular first
-        console.log("📦 ServicesPage: Services received:", data);
+          sortBy
+        );
 
         if (Array.isArray(data)) {
-          // Apply local sorting based on sortBy selection
+          // ✅ EXTRA SAFETY: Apply client-side sort to ensure immediate UI update
           const sortedData = sortServices(data, sortBy);
           setServices(sortedData);
         } else {
-          console.error("⚠️ ServicesPage: API returned non-array data:", data);
           setServices([]);
         }
       } catch (err) {
-        console.error("❌ ServicesPage: Error fetching services:", err);
-        setError("Failed to load services. Please try again later.");
+        setError("Failed to load services.");
         setServices([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchServices();
+    // Debounce the search slightly to avoid too many API calls
+    const timeoutId = setTimeout(() => {
+      fetchServices();
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
   }, [selectedCategory, searchTerm, sortBy]);
 
   // ✅ FIXED: Sort functionality
