@@ -1,458 +1,484 @@
-import React, { useState } from 'react';
-import { X, Calendar, Clock, MapPin, User, Phone, Mail, CreditCard } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  X,
+  Calendar as CalendarIcon,
+  Clock,
+  MapPin,
+  CreditCard,
+  ChevronRight,
+  ChevronLeft,
+} from "lucide-react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css"; // Default styles
+import { format, addDays, isSameDay } from "date-fns";
+
+import { useCustomerAuth } from "../context/CustomerAuthContext";
+
+import config from '../config';
 
 const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
+  const { customerUser, isCustomerLoggedIn } = useCustomerAuth();
+
   const [bookingData, setBookingData] = useState({
-    // Date & Time
-    selectedDate: '',
-    selectedTime: '',
-
-    // Location
-    serviceLocation: 'home', // 'home' or 'salon'
-    address: '',
-    city: '',
-    pincode: '',
-
-    // Customer Details
-    fullName: '',
-    phone: '',
-    email: '',
-
-    // Additional
-    specialInstructions: '',
-    paymentMethod: 'cod' // 'cod', 'online'
+    selectedDate: new Date(),
+    selectedTime: "",
+    serviceLocation: "home",
+    address: "",
+    city: "",
+    pincode: "",
+    fullName: "",
+    phone: "",
+    email: "",
+    createAccount: false,
+    password: "",
+    confirmPassword: "",
   });
 
   const [currentStep, setCurrentStep] = useState(1);
 
-  // Available time slots
+  // ✅ AUTO-FILL DATA IF LOGGED IN
+  useEffect(() => {
+    if (isOpen && isCustomerLoggedIn && customerUser) {
+      setBookingData((prev) => ({
+        ...prev,
+        fullName: customerUser.fullName || "",
+        email: customerUser.email || "",
+        phone: customerUser.phone || "",
+        address: customerUser.address || "",
+        city: customerUser.city || "",
+        pincode: customerUser.pincode || "",
+      }));
+    }
+  }, [isOpen, isCustomerLoggedIn, customerUser]);
+
+  // Generate Time Slots
   const timeSlots = [
-    '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
-    '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM'
+    "09:00 AM",
+    "10:00 AM",
+    "11:00 AM",
+    "12:00 PM",
+    "02:00 PM",
+    "03:00 PM",
+    "04:00 PM",
+    "05:00 PM",
+    "06:00 PM",
   ];
 
-  // Get available dates (next 30 days, excluding Sundays)
-  const getAvailableDates = () => {
-    const dates = [];
-    const today = new Date();
-
-    for (let i = 1; i <= 30; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-
-      // Skip Sundays (day 0)
-      if (date.getDay() !== 0) {
-        dates.push(date.toISOString().split('T')[0]);
-      }
-    }
-
-    return dates;
-  };
-
   const handleInputChange = (field, value) => {
-    setBookingData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    setBookingData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleNextStep = () => {
-    if (currentStep < 4) {
-      setCurrentStep(currentStep + 1);
-    }
+    if (currentStep < 4) setCurrentStep(currentStep + 1);
   };
 
   const handlePrevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
+  };
+
+  const handleBookingSubmit = async () => {
+    try {
+      // Prepare payload matching Backend DTO
+      const payload = {
+        serviceId: service.id,
+        quantity: quantity,
+        selectedDate: bookingData.selectedDate.toISOString().split("T")[0],
+        selectedTime: bookingData.selectedTime,
+        serviceLocation: bookingData.serviceLocation,
+        address: bookingData.address,
+        city: bookingData.city,
+        pincode: bookingData.pincode,
+        fullName: bookingData.fullName,
+        email: bookingData.email,
+        phone: bookingData.phone,
+        specialInstructions: bookingData.specialInstructions,
+      };
+
+      const response = await fetch(`${config.BASE_URL}/api/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(
+          `🎉 Booking Confirmed! \nWe sent the details to ${bookingData.email}`
+        );
+        onClose();
+      } else {
+        alert(`Booking Failed: ${data.error}`);
+      }
+    } catch (error) {
+      console.error("Booking Error:", error);
+      alert("Failed to connect to the server.");
     }
   };
 
-  const handleBookingSubmit = () => {
-    // Here you would typically send the booking data to your backend
-    const bookingDetails = {
-      service: service,
-      quantity: quantity,
-      totalPrice: service.price * quantity,
-      bookingData: bookingData
-    };
-
-    console.log('Booking Details:', bookingDetails);
-
-    // For now, just show alert
-    alert(`Booking confirmed! 
-    
-Service: ${service.name}
-Date: ${bookingData.selectedDate}
-Time: ${bookingData.selectedTime}
-Location: ${bookingData.serviceLocation === 'home' ? 'Home Service' : 'Salon Visit'}
-Total: ₹${service.price * quantity}
-
-We will call you at ${bookingData.phone} to confirm the booking.`);
-
-    onClose();
+  // Disable past dates
+  const tileDisabled = ({ date }) => {
+    return date < new Date().setHours(0, 0, 0, 0);
   };
 
   if (!isOpen) return null;
-
   const totalPrice = service.price * quantity;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-3xl">
-          <div className="flex items-center justify-between">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[2000] p-4">
+      <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row shadow-2xl">
+        {/* Left Sidebar - Summary (Hidden on mobile) */}
+        <div className="hidden md:block w-1/3 bg-gradient-to-br from-pink-500 to-purple-600 p-8 text-white relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm"></div>
+          <div className="relative z-10 flex flex-col h-full justify-between">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900">Book Service</h3>
-              <p className="text-gray-600">{service.name}</p>
+              <h3 className="text-2xl font-bold mb-2">Booking Summary</h3>
+              <p className="text-pink-100 text-sm">
+                Complete these steps to schedule your glow up!
+              </p>
+
+              <div className="mt-8 space-y-6">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-white/20 rounded-lg">
+                    <CalendarIcon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-pink-200 uppercase font-bold">
+                      Date
+                    </p>
+                    <p className="font-medium">
+                      {format(bookingData.selectedDate, "EEE, MMM dd, yyyy")}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-white/20 rounded-lg">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-pink-200 uppercase font-bold">
+                      Time
+                    </p>
+                    <p className="font-medium">
+                      {bookingData.selectedTime || "Not selected"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-white/20 rounded-lg">
+                    <CreditCard className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-pink-200 uppercase font-bold">
+                      Total to Pay
+                    </p>
+                    <p className="text-2xl font-bold">₹{totalPrice}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-auto">
+              <div className="w-full bg-white/20 h-1 rounded-full overflow-hidden">
+                <div
+                  className="bg-white h-full transition-all duration-500"
+                  style={{ width: `${(currentStep / 4) * 100}%` }}
+                />
+              </div>
+              <p className="text-right text-xs mt-2">Step {currentStep} of 4</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Content - Form Steps */}
+        <div className="flex-1 flex flex-col h-full max-h-[90vh] overflow-y-auto bg-gray-50">
+          {/* Header */}
+          <div className="bg-white p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 z-20">
+            <div>
+              <h2 className="text-xl font-bold text-gray-800">
+                Book {service.name}
+              </h2>
+              <p className="text-sm text-gray-500">
+                Step {currentStep}:{" "}
+                {currentStep === 1
+                  ? "Select Date & Time"
+                  : currentStep === 2
+                  ? "Location Details"
+                  : currentStep === 3
+                  ? "Personal Info"
+                  : "Review & Confirm"}
+              </p>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+              className="p-2 hover:bg-gray-100 rounded-full text-gray-500"
             >
-              <X className="h-6 w-6" />
+              <X className="w-6 h-6" />
             </button>
           </div>
 
-          {/* Step Indicator */}
-          <div className="flex items-center mt-4 space-x-2">
-            {[1, 2, 3, 4].map((step) => (
-              <div key={step} className="flex items-center">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${step <= currentStep
-                    ? 'bg-pink-500 text-white'
-                    : 'bg-gray-200 text-gray-600'
-                  }`}>
-                  {step}
+          {/* Steps Content */}
+          <div className="p-6 md:p-8 flex-1">
+            {/* STEP 1: Date & Time (Revamped) */}
+            {currentStep === 1 && (
+              <div className="space-y-8">
+                {/* Custom Calendar Wrapper */}
+                <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                  <h3 className="text-sm font-bold text-gray-700 mb-4 uppercase tracking-wider">
+                    1. Choose a Date
+                  </h3>
+                  <div className="calendar-wrapper flex justify-center">
+                    <Calendar
+                      onChange={(date) =>
+                        handleInputChange("selectedDate", date)
+                      }
+                      value={bookingData.selectedDate}
+                      minDate={new Date()}
+                      tileDisabled={tileDisabled}
+                      className="border-none w-full"
+                      prevLabel={
+                        <ChevronLeft className="w-5 h-5 text-pink-500" />
+                      }
+                      nextLabel={
+                        <ChevronRight className="w-5 h-5 text-pink-500" />
+                      }
+                    />
+                  </div>
                 </div>
-                {step < 4 && <div className={`w-8 h-1 mx-2 ${step < currentStep ? 'bg-pink-500' : 'bg-gray-200'
-                  }`} />}
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-between text-xs text-gray-500 mt-2">
-            <span>Date & Time</span>
-            <span>Location</span>
-            <span>Details</span>
-            <span>Confirm</span>
-          </div>
-        </div>
 
-        {/* Content */}
-        <div className="p-6">
-          {/* Step 1: Date & Time Selection */}
-          {currentStep === 1 && (
-            <div className="space-y-6">
-              <div className="text-center">
-                <Calendar className="h-12 w-12 text-pink-500 mx-auto mb-4" />
-                <h4 className="text-xl font-bold text-gray-900 mb-2">Select Date & Time</h4>
-                <p className="text-gray-600">Choose your preferred appointment slot</p>
-              </div>
-
-              {/* Date Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">Select Date</label>
-                <div className="grid grid-cols-3 gap-3 max-h-40 overflow-y-auto">
-                  {getAvailableDates().slice(0, 15).map((date) => {
-                    const dateObj = new Date(date);
-                    const isSelected = bookingData.selectedDate === date;
-                    return (
-                      <button
-                        key={date}
-                        onClick={() => handleInputChange('selectedDate', date)}
-                        className={`p-3 rounded-lg border text-sm transition-all duration-200 ${isSelected
-                            ? 'border-pink-500 bg-pink-50 text-pink-700'
-                            : 'border-gray-200 hover:border-pink-300 hover:bg-pink-25'
-                          }`}
-                      >
-                        <div className="font-medium">
-                          {dateObj.toLocaleDateString('en-US', { weekday: 'short' })}
-                        </div>
-                        <div className="text-xs">
-                          {dateObj.getDate()}/{dateObj.getMonth() + 1}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Time Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">Select Time</label>
-                <div className="grid grid-cols-3 gap-3">
-                  {timeSlots.map((time) => {
-                    const isSelected = bookingData.selectedTime === time;
-                    return (
+                {/* Time Slots Grid */}
+                <div>
+                  <h3 className="text-sm font-bold text-gray-700 mb-4 uppercase tracking-wider">
+                    2. Pick a Time Slot
+                  </h3>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                    {timeSlots.map((time) => (
                       <button
                         key={time}
-                        onClick={() => handleInputChange('selectedTime', time)}
-                        className={`p-3 rounded-lg border text-sm font-medium transition-all duration-200 ${isSelected
-                            ? 'border-pink-500 bg-pink-50 text-pink-700'
-                            : 'border-gray-200 hover:border-pink-300 hover:bg-pink-25'
-                          }`}
+                        onClick={() => handleInputChange("selectedTime", time)}
+                        className={`py-3 px-2 rounded-xl text-sm font-medium border transition-all duration-200 ${
+                          bookingData.selectedTime === time
+                            ? "bg-pink-500 border-pink-500 text-white shadow-lg shadow-pink-200 transform scale-105"
+                            : "bg-white border-gray-200 text-gray-600 hover:border-pink-300 hover:bg-pink-50"
+                        }`}
                       >
                         {time}
                       </button>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Step 2: Location Selection */}
-          {currentStep === 2 && (
-            <div className="space-y-6">
-              <div className="text-center">
-                <MapPin className="h-12 w-12 text-pink-500 mx-auto mb-4" />
-                <h4 className="text-xl font-bold text-gray-900 mb-2">Service Location</h4>
-                <p className="text-gray-600">Where would you like the service?</p>
-              </div>
-
-              {/* Location Type */}
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  onClick={() => handleInputChange('serviceLocation', 'home')}
-                  className={`p-6 rounded-xl border-2 text-center transition-all duration-200 ${bookingData.serviceLocation === 'home'
-                      ? 'border-pink-500 bg-pink-50'
-                      : 'border-gray-200 hover:border-pink-300'
+            {/* STEP 2: Location */}
+            {currentStep === 2 && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <button
+                    onClick={() => handleInputChange("serviceLocation", "home")}
+                    className={`p-6 rounded-2xl border-2 transition-all ${
+                      bookingData.serviceLocation === "home"
+                        ? "border-pink-500 bg-pink-50 text-pink-700"
+                        : "border-gray-200 bg-white hover:border-pink-200"
                     }`}
-                >
-                  <div className="text-2xl mb-2">🏠</div>
-                  <div className="font-medium">Home Service</div>
-                  <div className="text-sm text-gray-600">We come to you</div>
-                </button>
-
-                <button
-                  onClick={() => handleInputChange('serviceLocation', 'salon')}
-                  className={`p-6 rounded-xl border-2 text-center transition-all duration-200 ${bookingData.serviceLocation === 'salon'
-                      ? 'border-pink-500 bg-pink-50'
-                      : 'border-gray-200 hover:border-pink-300'
+                  >
+                    <span className="text-3xl mb-2 block">🏠</span>
+                    <span className="font-bold">Home Service</span>
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleInputChange("serviceLocation", "salon")
+                    }
+                    className={`p-6 rounded-2xl border-2 transition-all ${
+                      bookingData.serviceLocation === "salon"
+                        ? "border-pink-500 bg-pink-50 text-pink-700"
+                        : "border-gray-200 bg-white hover:border-pink-200"
                     }`}
-                >
-                  <div className="text-2xl mb-2">🏪</div>
-                  <div className="font-medium">Visit Salon</div>
-                  <div className="text-sm text-gray-600">Come to our salon</div>
-                </button>
-              </div>
+                  >
+                    <span className="text-3xl mb-2 block">💇‍♀️</span>
+                    <span className="font-bold">Visit Salon</span>
+                  </button>
+                </div>
 
-              {/* Address Form (only for home service) */}
-              {bookingData.serviceLocation === 'home' && (
+                {bookingData.serviceLocation === "home" && (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Full Address
+                      </label>
+                      <textarea
+                        value={bookingData.address}
+                        onChange={(e) =>
+                          handleInputChange("address", e.target.value)
+                        }
+                        className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none transition-all"
+                        rows="3"
+                        placeholder="Street, House No, Landmark..."
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        placeholder="City"
+                        value={bookingData.city}
+                        onChange={(e) =>
+                          handleInputChange("city", e.target.value)
+                        }
+                        className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Pincode"
+                        value={bookingData.pincode}
+                        onChange={(e) =>
+                          handleInputChange("pincode", e.target.value)
+                        }
+                        className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* STEP 3: Personal Info (With Auto Account Check) */}
+            {currentStep === 3 && (
+              <div className="space-y-6 animate-fade-in">
+                {isCustomerLoggedIn ? (
+                  <div className="bg-green-50 p-4 rounded-xl border border-green-100 text-green-800 flex items-center">
+                    <span className="text-2xl mr-3">👤</span>
+                    <div>
+                      <p className="font-bold">
+                        Logged in as {customerUser.fullName}
+                      </p>
+                      <p className="text-sm">We pre-filled your details.</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 text-blue-800 text-sm">
+                    👋 <strong>New Customer?</strong> We will automatically
+                    create an account for you and email your login details!
+                  </div>
+                )}
+
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Full Address</label>
-                    <textarea
-                      value={bookingData.address}
-                      onChange={(e) => handleInputChange('address', e.target.value)}
-                      placeholder="Enter your complete address..."
-                      rows={3}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
-                      <input
-                        type="text"
-                        value={bookingData.city}
-                        onChange={(e) => handleInputChange('city', e.target.value)}
-                        placeholder="City"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Pincode</label>
-                      <input
-                        type="text"
-                        value={bookingData.pincode}
-                        onChange={(e) => handleInputChange('pincode', e.target.value)}
-                        placeholder="Pincode"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Step 3: Customer Details */}
-          {/* Account Creation Option */}
-          {currentStep === 3 && (
-            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-              <h4 className="font-medium text-blue-900 mb-2">Create Your Account</h4>
-              <p className="text-blue-700 text-sm mb-4">
-                Create an account to track your bookings, earn loyalty points, and get exclusive offers!
-              </p>
-
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={bookingData.createAccount || false}
-                  onChange={(e) => handleInputChange('createAccount', e.target.checked)}
-                  className="w-4 h-4 text-pink-600 rounded focus:ring-pink-500"
-                />
-                <span className="ml-2 text-sm text-blue-900">Yes, create my account</span>
-              </label>
-
-              {bookingData.createAccount && (
-                <div className="mt-4 space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Create Password</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Full Name
+                    </label>
                     <input
-                      type="password"
-                      value={bookingData.password || ''}
-                      onChange={(e) => handleInputChange('password', e.target.value)}
-                      placeholder="Choose a secure password"
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      type="text"
+                      value={bookingData.fullName}
+                      onChange={(e) =>
+                        handleInputChange("fullName", e.target.value)
+                      }
+                      className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Phone Number
+                    </label>
                     <input
-                      type="password"
-                      value={bookingData.confirmPassword || ''}
-                      onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                      placeholder="Confirm your password"
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      type="tel"
+                      value={bookingData.phone}
+                      onChange={(e) =>
+                        handleInputChange("phone", e.target.value)
+                      }
+                      className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={bookingData.email}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
+                      className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none"
                     />
                   </div>
                 </div>
-              )}
-            </div>
-          )}
-
-
-          {/* Step 4: Confirmation */}
-          {currentStep === 4 && (
-            <div className="space-y-6">
-              <div className="text-center">
-                <CreditCard className="h-12 w-12 text-pink-500 mx-auto mb-4" />
-                <h4 className="text-xl font-bold text-gray-900 mb-2">Confirm Booking</h4>
-                <p className="text-gray-600">Please review your booking details</p>
               </div>
+            )}
 
-              {/* Booking Summary */}
-              <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Service:</span>
-                  <span className="font-medium">{service.name}</span>
+            {/* STEP 4: Confirm */}
+            {currentStep === 4 && (
+              <div className="space-y-6 animate-fade-in text-center">
+                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                  <CreditCard className="w-10 h-10 text-green-600" />
                 </div>
+                <h3 className="text-2xl font-bold text-gray-900">
+                  Ready to Book?
+                </h3>
+                <p className="text-gray-500">
+                  Please review your details before confirming.
+                </p>
 
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Date:</span>
-                  <span className="font-medium">
-                    {bookingData.selectedDate && new Date(bookingData.selectedDate).toLocaleDateString('en-US', {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Time:</span>
-                  <span className="font-medium">{bookingData.selectedTime}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Location:</span>
-                  <span className="font-medium">
-                    {bookingData.serviceLocation === 'home' ? 'Home Service' : 'Salon Visit'}
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Duration:</span>
-                  <span className="font-medium">{service.duration}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Quantity:</span>
-                  <span className="font-medium">{quantity}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Customer:</span>
-                  <span className="font-medium">{bookingData.fullName}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Phone:</span>
-                  <span className="font-medium">{bookingData.phone}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Payment:</span>
-                  <span className="font-medium">
-                    {bookingData.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment'}
-                  </span>
-                </div>
-
-                <div className="border-t pt-4">
-                  <div className="flex justify-between text-lg font-bold">
-                    <span>Total Amount:</span>
-                    <span className="text-pink-600">₹{totalPrice}</span>
+                <div className="bg-gray-100 p-6 rounded-2xl text-left space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Service</span>
+                    <span className="font-semibold">{service.name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Date & Time</span>
+                    <span className="font-semibold">
+                      {format(bookingData.selectedDate, "MMM dd")} at{" "}
+                      {bookingData.selectedTime}
+                    </span>
+                  </div>
+                  <div className="flex justify-between border-t border-gray-200 pt-3 mt-3">
+                    <span className="text-gray-800 font-bold">
+                      Total Amount
+                    </span>
+                    <span className="text-pink-600 font-bold text-xl">
+                      ₹{totalPrice}
+                    </span>
                   </div>
                 </div>
               </div>
+            )}
+          </div>
 
-              {/* Terms */}
-              <div className="text-sm text-gray-600 bg-blue-50 p-4 rounded-lg">
-                <p className="mb-2"><strong>Please Note:</strong></p>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>Our team will call you 30 minutes before the appointment</li>
-                  <li>Cancellation allowed up to 2 hours before the appointment</li>
-                  <li>For home services, please ensure someone is available at the address</li>
-                  <li>All tools and products are sanitized and professional grade</li>
-                </ul>
-              </div>
-            </div>
-          )}
-        </div>
+          {/* Footer Buttons */}
+          <div className="p-6 bg-white border-t border-gray-100 flex gap-4">
+            {currentStep > 1 && (
+              <button
+                onClick={handlePrevStep}
+                className="px-6 py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl transition-colors"
+              >
+                Back
+              </button>
+            )}
 
-        {/* Footer */}
-        <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 rounded-b-3xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm text-gray-600">Total Amount</div>
-              <div className="text-2xl font-bold text-pink-600">₹{totalPrice}</div>
-            </div>
-
-            <div className="flex space-x-3">
-              {currentStep > 1 && (
-                <button
-                  onClick={handlePrevStep}
-                  className="px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors duration-200"
-                >
-                  Previous
-                </button>
-              )}
-
-              {currentStep < 4 ? (
-                <button
-                  onClick={handleNextStep}
-                  disabled={
-                    (currentStep === 1 && (!bookingData.selectedDate || !bookingData.selectedTime)) ||
-                    (currentStep === 2 && bookingData.serviceLocation === 'home' && (!bookingData.address || !bookingData.city || !bookingData.pincode)) ||
-                    (currentStep === 3 && (!bookingData.fullName || !bookingData.phone || !bookingData.email))
-                  }
-                  className="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-medium rounded-xl hover:from-pink-600 hover:to-rose-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                >
-                  Next Step
-                </button>
-              ) : (
-                <button
-                  onClick={handleBookingSubmit}
-                  className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200"
-                >
-                  Confirm Booking
-                </button>
-              )}
-            </div>
+            {currentStep < 4 ? (
+              <button
+                onClick={handleNextStep}
+                disabled={
+                  (currentStep === 1 && !bookingData.selectedTime) ||
+                  (currentStep === 2 &&
+                    bookingData.serviceLocation === "home" &&
+                    !bookingData.address) ||
+                  (currentStep === 3 &&
+                    (!bookingData.fullName || !bookingData.phone))
+                }
+                className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                Continue
+              </button>
+            ) : (
+              <button
+                onClick={handleBookingSubmit}
+                className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-green-200 transition-all"
+              >
+                Confirm Booking
+              </button>
+            )}
           </div>
         </div>
       </div>

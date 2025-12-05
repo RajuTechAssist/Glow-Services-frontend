@@ -223,7 +223,7 @@ const ServicesPage = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Fetch and sort services
+
   // Fetch and sort services
   useEffect(() => {
     const fetchServices = async () => {

@@ -1,3 +1,82 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* --- Custom React Calendar Styling for Glow Services --- */
+
+.react-calendar {
+  width: 100% !important;
+  border: none !important;
+  font-family: inherit;
+}
+
+/* Month/Year Header */
+.react-calendar__navigation {
+  margin-bottom: 1rem;
+}
+
+.react-calendar__navigation button {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #374151; /* gray-700 */
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #fdf2f8; /* pink-50 */
+  color: #ec4899; /* pink-500 */
+  border-radius: 8px;
+}
+
+/* Days of Week */
+.react-calendar__month-view__weekdays {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #9ca3af; /* gray-400 */
+  text-align: center;
+  text-decoration: none !important;
+}
+
+.react-calendar__month-view__weekdays abbr {
+  text-decoration: none;
+}
+
+/* Day Tiles */
+.react-calendar__tile {
+  height: 48px;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+  color: #1f2937; /* gray-800 */
+}
+
+/* Hover State */
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #fdf2f8; /* pink-50 */
+  color: #db2777; /* pink-600 */
+}
+
+/* Selected Date (Active) */
+.react-calendar__tile--active,
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: linear-gradient(135deg, #ec4899, #9333ea) !important; /* Pink to Purple */
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+}
+
+/* Current Day (Today) */
+.react-calendar__tile--now {
+  background: #f3f4f6;
+  color: #ec4899;
+  font-weight: bold;
+}
+
+/* Disabled Dates (Past) */
+.react-calendar__tile:disabled {
+  background-color: transparent;
+  color: #e5e7eb; /* gray-200 */
+  cursor: not-allowed;
+}
