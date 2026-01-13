@@ -91,7 +91,7 @@ const AboutSection = () => {
                     className="w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-110 cursor-pointer"
                   />
                 </div>
-                <div className="relative z-10 text-center">
+                {/* <div className="relative z-10 text-center">
                   <div className="w-24 h-24 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6">
                     <Users className="h-12 w-12 text-pink-600" />
                   </div>
@@ -99,7 +99,7 @@ const AboutSection = () => {
                     Raghuvendra Sahu
                   </div>
                   <div className="text-pink-600">Founder & CEO</div>
-                </div>
+                </div> */}
               </div>
 
               {/* Quote Card Overlay */}
