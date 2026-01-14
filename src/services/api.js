@@ -35,6 +35,17 @@ class ApiService {
     }
   }
 
+  async getAllBookings() {
+    console.log('Fetching all bookings...');
+    return this.get('/bookings');
+  }
+
+  async updateBookingStatus(id, status) {
+    console.log(`🔄 Updating booking #${id} to ${status}`);
+    // Note: The backend expects a query param ?status=...
+    return this.post(`/bookings/${id}/status?status=${status}`, {});
+  }
+
   async post(endpoint, data) {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {

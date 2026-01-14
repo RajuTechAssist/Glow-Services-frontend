@@ -41,6 +41,7 @@ import CategoriesAdminPage from "./pages/admin/CategoriesAdminPage";
 import CategoryForm from "./pages/admin/CategoryForm";
 import BlogsAdminPage from "./pages/admin/BlogsAdminPage";
 import BlogForm from "./pages/admin/BlogForm";
+import BookingsAdminPage from './pages/admin/BookingsAdminPage';
 
 // Customer components
 import CustomerLogin from "./pages/customer/CustomerLogin";
@@ -301,7 +302,12 @@ function App() {
                     <Route path="blogs" element={<BlogsAdminPage />} />
                     <Route path="blogs/create" element={<BlogForm />} />
                     <Route path="blogs/edit/:id" element={<BlogForm />} />
+
+                    <Route path="/admin/bookings" element={<BookingsAdminPage />} />
                   </Route>
+                    
+                    
+
 
                   {/* CUSTOMER AUTH ROUTES - Public */}
                   <Route path="/customer/login" element={<CustomerLogin />} />
