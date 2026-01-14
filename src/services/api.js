@@ -43,7 +43,30 @@ class ApiService {
   async updateBookingStatus(id, status) {
     console.log(`🔄 Updating booking #${id} to ${status}`);
     // Note: The backend expects a query param ?status=...
-    return this.post(`/bookings/${id}/status?status=${status}`, {});
+    return this.put(`/bookings/${id}/status?status=${status}`, {});
+  }
+
+  async put(endpoint, data) {
+    try {
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: 'PUT', // ✅ Use PUT here
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        body: JSON.stringify(data),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('🚨 API PUT Error:', error);
+      throw error;
+    }
   }
 
   async post(endpoint, data) {
