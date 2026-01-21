@@ -89,34 +89,34 @@ const WhyChooseSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className="py-24 bg-white relative overflow-hidden"
+      className="py-24 bg-white dark:bg-gray-900 relative overflow-hidden transition-colors duration-300"
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-72 h-72 bg-pink-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-        <div className="absolute top-0 right-0 w-72 h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-rose-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-0 left-0 w-72 h-72 bg-pink-100 dark:bg-pink-900/20 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-xl opacity-70 animate-blob"></div>
+        <div className="absolute top-0 right-0 w-72 h-72 bg-purple-100 dark:bg-purple-900/20 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-rose-100 dark:bg-rose-900/20 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         
         {/* Section Header */}
         <div className="text-center mb-20">
-          <div className={`inline-flex items-center space-x-2 bg-gradient-to-r from-pink-100 to-rose-100 rounded-full px-6 py-3 mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className={`inline-flex items-center space-x-2 bg-gradient-to-r from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 rounded-full px-6 py-3 mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <Sparkles className="h-5 w-5 text-pink-500" />
-            <span className="text-pink-600 font-medium tracking-wide uppercase text-sm">
+            <span className="text-pink-600 dark:text-pink-400 font-medium tracking-wide uppercase text-sm">
               Why Choose Glow Services
             </span>
           </div>
 
-          <h2 className={`text-5xl lg:text-6xl font-bold text-gray-900 mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <h2 className={`text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             Beauty redefined with
             <span className="block bg-gradient-to-r from-pink-500 via-rose-500 to-orange-500 bg-clip-text text-transparent">
               professional excellence
             </span>
           </h2>
 
-          <p className={`text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <p className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             Experience the difference with our premium at-home beauty services. We bring luxury, 
             convenience, and exceptional results right to your doorstep.
           </p>
@@ -129,17 +129,17 @@ const WhyChooseSection = () => {
             return (
               <div
                 key={index}
-                className={`group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl border border-gray-100 hover:border-pink-200 transition-all duration-500 hover:-translate-y-2 ${isVisible ? `opacity-100 translate-y-0 ${feature.delay}` : 'opacity-0 translate-y-8'}`}
+                className={`group bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-700 hover:border-pink-200 dark:hover:border-pink-500 transition-all duration-500 hover:-translate-y-2 ${isVisible ? `opacity-100 translate-y-0 ${feature.delay}` : 'opacity-0 translate-y-8'}`}
               >
                 <div className={`w-16 h-16 bg-gradient-to-r ${feature.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <IconComponent className="h-8 w-8 text-white" />
                 </div>
                 
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-pink-600 transition-colors duration-300">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors duration-300">
                   {feature.title}
                 </h3>
                 
-                <p className="text-gray-600 leading-relaxed text-lg">
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
                   {feature.description}
                 </p>
               </div>
@@ -171,7 +171,7 @@ const WhyChooseSection = () => {
 
         {/* Bottom CTA */}
         <div className={`text-center mt-16 transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h3 className="text-3xl font-bold text-gray-900 mb-6">
+          <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
             Ready to experience the Glow difference?
           </h3>
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
@@ -180,7 +180,7 @@ const WhyChooseSection = () => {
               <CheckCircle className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
             </button>
             
-            <button className="bg-white border-2 border-pink-200 text-pink-600 hover:bg-pink-50 hover:border-pink-300 px-8 py-4 rounded-full font-semibold transition-all duration-300 flex items-center space-x-2">
+            <button className="bg-white dark:bg-gray-800 border-2 border-pink-200 dark:border-pink-700 text-pink-600 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-700 hover:border-pink-300 dark:hover:border-pink-500 px-8 py-4 rounded-full font-semibold transition-all duration-300 flex items-center space-x-2">
               <span>Learn More</span>
               <Sparkles className="h-5 w-5" />
             </button>

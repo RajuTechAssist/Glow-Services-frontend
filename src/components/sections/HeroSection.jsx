@@ -4,12 +4,12 @@ import { Play, ArrowRight, Sparkles, Heart, Users } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-orange-50 overflow-hidden">
+    <section className="relative min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden transition-colors duration-300">
       
       {/* Background Decorative Elements */}
       <div className="absolute inset-0">
         {/* Decorative leaf pattern */}
-        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 opacity-10">
+        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 opacity-10 dark:opacity-5">
           <img 
             src="/images/leaf.png" 
             alt="Decorative leaf" 
@@ -33,9 +33,9 @@ const HeroSection = () => {
           <div className="space-y-8 lg:pr-12">
             
             {/* Tagline */}
-            <div className="inline-flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg">
+            <div className="inline-flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg transition-colors duration-300">
               <Sparkles className="h-5 w-5 text-pink-500" />
-              <span className="text-pink-600 font-medium tracking-wide uppercase text-sm">
+              <span className="text-pink-600 dark:text-pink-400 font-medium tracking-wide uppercase text-sm">
                 Premium Beauty Services
               </span>
             </div>
@@ -43,14 +43,14 @@ const HeroSection = () => {
             {/* Main Heading */}
             <div className="space-y-4">
               <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
-                <span className="text-gray-900">Beauty that</span>
+                <span className="text-gray-900 dark:text-gray-100 transition-colors duration-300">Beauty that</span>
                 <br />
                 <span className="bg-gradient-to-r from-pink-500 via-rose-500 to-orange-500 bg-clip-text text-transparent">
                   comes to you
                 </span>
               </h1>
               
-              <p className="text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-2xl">
+              <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl transition-colors duration-300">
                 Experience professional beauty services in the comfort of your home. 
                 Our certified experts bring luxury, convenience, and exceptional results 
                 right to your doorstep.
@@ -64,8 +64,8 @@ const HeroSection = () => {
                   <Users className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">2847+</div>
-                  <div className="text-sm text-gray-600">Happy Clients</div>
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">2847+</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Happy Clients</div>
                 </div>
               </div>
               
@@ -74,8 +74,8 @@ const HeroSection = () => {
                   <Heart className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">98.5%</div>
-                  <div className="text-sm text-gray-600">Satisfaction</div>
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">98.5%</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Satisfaction</div>
                 </div>
               </div>
             </div>
@@ -100,14 +100,14 @@ const HeroSection = () => {
             </div>
 
             {/* Trust Indicators */}
-            <div className="flex items-center space-x-6 pt-8 border-t border-gray-200">
+            <div className="flex items-center space-x-6 pt-8 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
               <div className="flex items-center space-x-2">
                 <div className="flex -space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-r from-pink-400 to-rose-400 rounded-full border-2 border-white"></div>
-                  <div className="w-8 h-8 bg-gradient-to-r from-rose-400 to-orange-400 rounded-full border-2 border-white"></div>
-                  <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full border-2 border-white"></div>
-                  <div className="w-8 h-8 bg-gray-100 rounded-full border-2 border-white flex items-center justify-center">
-                    <span className="text-xs font-semibold text-gray-600">+</span>
+                  <div className="w-8 h-8 bg-gradient-to-r from-pink-400 to-rose-400 rounded-full border-2 border-white dark:border-gray-800"></div>
+                  <div className="w-8 h-8 bg-gradient-to-r from-rose-400 to-orange-400 rounded-full border-2 border-white dark:border-gray-800"></div>
+                  <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full border-2 border-white dark:border-gray-800"></div>
+                  <div className="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                    <span className="text-xs font-semibold text-gray-600 dark:text-gray-300">+</span>
                   </div>
                 </div>
                 <span className="text-sm text-gray-600">Certified professionals</span>

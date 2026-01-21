@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ChevronDown, Menu, X, User, ShoppingBag, ChevronRight, Home, Info, Phone, BookOpen } from 'lucide-react';
+import { ChevronDown, Menu, X, User, ShoppingBag, ChevronRight, Home, Info, Phone, BookOpen, Sun, Moon } from 'lucide-react';
 import ApiService from '../../services/api';
 import styles from './Header.module.css';
 import { useCart } from '../../context/CartContext';
 import CartDropdown from '../../components/CartDropdown';
 import { useCustomerAuth } from '../../context/CustomerAuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import ProductsApi from '../../services/ProductsApiService';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null); // For desktop hover/click
+  const { isDarkMode, toggleTheme } = useTheme();
   
   // NEW: State for mobile accordion menus
   const [mobileExpanded, setMobileExpanded] = useState({
@@ -30,8 +32,6 @@ const Header = () => {
   // Refs for dropdown management
   const servicesRef = useRef(null);
   const productsRef = useRef(null);
-
-  // ... [Keep your existing useEffects for fetching data and click outside here] ...
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (cartRef.current && !cartRef.current.contains(event.target)) {
@@ -135,6 +135,7 @@ const Header = () => {
     }
   ];
 
+
   return (
     <header className={`${styles.header} ${isScrolled ? styles.headerScrolled : ''}`}>
       <div className={styles.container}>
@@ -158,8 +159,8 @@ const Header = () => {
                 <ChevronDown className={`${styles.chevron} ${openDropdown === 'services' ? styles.chevronOpen : ''}`} />
               </button>
               <div className={`${styles.dropdownMenu} ${openDropdown === 'services' ? styles.dropdownMenuOpen : ''}`}>
-                <div className="px-4 py-2 border-b border-gray-100">
-                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Our Services</h3>
+                <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+                  <h3 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Our Services</h3>
                 </div>
                 {services.length > 0 ? (
                   <div className="py-2">
@@ -167,7 +168,7 @@ const Header = () => {
                       <Link
                         key={service.id}
                         to={`/services/${service.slug}`}
-                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors"
+                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-pink-50 dark:hover:bg-gray-700 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
                         onClick={() => setOpenDropdown(null)}
                       >
                         <div className="flex items-center justify-between">
@@ -175,10 +176,10 @@ const Header = () => {
                         </div>
                       </Link>
                     ))}
-                    <div className="border-t border-gray-100 mt-2 pt-2">
+                    <div className="border-t border-gray-100 dark:border-gray-700 mt-2 pt-2">
                       <Link
                         to="/services"
-                        className="block px-4 py-2 text-sm text-pink-600 font-semibold hover:bg-pink-50"
+                        className="block px-4 py-2 text-sm text-pink-600 dark:text-pink-400 font-semibold hover:bg-pink-50 dark:hover:bg-gray-700"
                         onClick={() => setOpenDropdown(null)}
                       >
                         View All Services →
@@ -204,16 +205,16 @@ const Header = () => {
                     <Link 
                       key={category.slug}
                       to={`/products?category=${category.slug}`}
-                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600"
+                      className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-pink-50 dark:hover:bg-gray-700 hover:text-pink-600 dark:hover:text-pink-400"
                       onClick={() => setOpenDropdown(null)}
                     >
                        <span className="mr-2">{category.icon}</span> {category.name}
                     </Link>
                   ))}
-                   <div className="border-t border-gray-100 mt-2 pt-2">
+                   <div className="border-t border-gray-100 dark:border-gray-700 mt-2 pt-2">
                       <Link
                         to="/products"
-                        className="block px-4 py-2 text-sm text-pink-600 font-semibold hover:bg-pink-50"
+                        className="block px-4 py-2 text-sm text-pink-600 dark:text-pink-400 font-semibold hover:bg-pink-50 dark:hover:bg-gray-700"
                         onClick={() => setOpenDropdown(null)}
                       >
                         Shop All Products →
@@ -250,6 +251,20 @@ const Header = () => {
                 </>
               )}
               <Link to="/book" className={styles.bookButton}>Book Now</Link>
+              
+              {/* Theme Toggle Button */}
+              <button
+                onClick={toggleTheme}
+                className="ml-4 p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+                aria-label="Toggle dark mode"
+                title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {isDarkMode ? (
+                  <Sun className="h-5 w-5 text-gray-700 dark:text-yellow-400" />
+                ) : (
+                  <Moon className="h-5 w-5 text-gray-700" />
+                )}
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -261,17 +276,17 @@ const Header = () => {
 
         {/* ================= MOBILE MENU ================= */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-100 max-h-[90vh] overflow-y-auto">
+          <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-gray-800 shadow-xl border-t border-gray-100 dark:border-gray-700 max-h-[90vh] overflow-y-auto">
             <div className="flex flex-col p-4 space-y-1">
               
               {/* Standard Links */}
-              <Link to="/" className="flex items-center px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
-                <Home className="w-5 h-5 mr-3 text-gray-400" />
+              <Link to="/" className="flex items-center px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-pink-50 dark:hover:bg-gray-700 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <Home className="w-5 h-5 mr-3 text-gray-400 dark:text-gray-400" />
                 <span className="font-medium">Home</span>
               </Link>
               
-              <Link to="/about" className="flex items-center px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
-                <Info className="w-5 h-5 mr-3 text-gray-400" />
+              <Link to="/about" className="flex items-center px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-pink-50 dark:hover:bg-gray-700 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <Info className="w-5 h-5 mr-3 text-gray-400 dark:text-gray-400" />
                 <span className="font-medium">About</span>
               </Link>
 
@@ -279,7 +294,7 @@ const Header = () => {
               <div>
                 <button 
                   onClick={() => toggleMobileSection('services')}
-                  className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-pink-50 dark:hover:bg-gray-700 rounded-xl transition-colors"
                 >
                   <div className="flex items-center">
                     <span className="w-5 h-5 mr-3 flex items-center justify-center text-xl">✨</span>
@@ -290,19 +305,19 @@ const Header = () => {
                 
                 {/* Collapsible Content */}
                 <div className={`overflow-hidden transition-all duration-300 ${mobileExpanded.services ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <div className="bg-gray-50 rounded-xl mx-2 mt-1 mb-2 py-2">
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded-xl mx-2 mt-1 mb-2 py-2">
                     {services.slice(0, 5).map(service => (
                       <Link 
                         key={service.id} 
                         to={`/services/${service.slug}`}
-                        className="flex items-center px-6 py-2.5 text-sm text-gray-600 hover:text-pink-600"
+                        className="flex items-center px-6 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <ChevronRight className="w-3 h-3 mr-2 text-pink-400" />
                         {service.name}
                       </Link>
                     ))}
-                    <div className="border-t border-gray-200 mt-2 pt-2 px-6">
+                    <div className="border-t border-gray-200 dark:border-gray-800 mt-2 pt-2 px-6">
                       <Link to="/services" className="text-sm font-semibold text-pink-600" onClick={() => setIsMobileMenuOpen(false)}>
                         View All Services →
                       </Link>
@@ -315,7 +330,7 @@ const Header = () => {
               <div>
                 <button 
                   onClick={() => toggleMobileSection('products')}
-                  className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-pink-50 dark:hover:bg-gray-700 rounded-xl transition-colors"
                 >
                   <div className="flex items-center">
                     <span className="w-5 h-5 mr-3 flex items-center justify-center text-xl">🛍️</span>
@@ -325,19 +340,19 @@ const Header = () => {
                 </button>
                 
                 <div className={`overflow-hidden transition-all duration-300 ${mobileExpanded.products ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <div className="bg-gray-50 rounded-xl mx-2 mt-1 mb-2 py-2">
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded-xl mx-2 mt-1 mb-2 py-2">
                     {productCategories.map(cat => (
                       <Link 
                         key={cat.slug} 
                         to={`/products?category=${cat.slug}`}
-                        className="flex items-center px-6 py-2.5 text-sm text-gray-600 hover:text-pink-600"
+                        className="flex items-center px-6 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <span className="mr-2 text-xs">{cat.icon}</span>
                         {cat.name}
                       </Link>
                     ))}
-                     <div className="border-t border-gray-200 mt-2 pt-2 px-6">
+                     <div className="border-t border-gray-200 dark:border-gray-800 mt-2 pt-2 px-6">
                       <Link to="/products" className="text-sm font-semibold text-pink-600" onClick={() => setIsMobileMenuOpen(false)}>
                         Shop All Products →
                       </Link>
@@ -347,25 +362,25 @@ const Header = () => {
               </div>
 
               {/* Other Links */}
-              <Link to="/blog" className="flex items-center px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
-                <BookOpen className="w-5 h-5 mr-3 text-gray-400" />
+              <Link to="/blog" className="flex items-center px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-pink-50 dark:hover:bg-gray-700 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <BookOpen className="w-5 h-5 mr-3 text-gray-400 dark:text-gray-400" />
                 <span className="font-medium">Blog</span>
               </Link>
               
-              <Link to="/contact" className="flex items-center px-4 py-3 text-gray-700 hover:bg-pink-50 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
-                <Phone className="w-5 h-5 mr-3 text-gray-400" />
+              <Link to="/contact" className="flex items-center px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-pink-50 dark:hover:bg-gray-700 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <Phone className="w-5 h-5 mr-3 text-gray-400 dark:text-gray-400" />
                 <span className="font-medium">Contact</span>
               </Link>
 
               {/* Mobile Auth & CTA */}
-              <div className="pt-4 mt-4 border-t border-gray-100 px-4 pb-4 space-y-3">
+              <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-700 px-4 pb-4 space-y-3">
                 {isCustomerLoggedIn ? (
-                  <div className="flex items-center p-3 bg-pink-50 rounded-xl border border-pink-100">
+                  <div className="flex items-center p-3 bg-pink-50 dark:bg-gray-800 rounded-xl border border-pink-100 dark:border-gray-600">
                     <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold">
                       {customerUser?.fullName?.charAt(0) || 'U'}
                     </div>
                     <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-900">{customerUser?.fullName}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{customerUser?.fullName}</p>
                       <Link to="/customer/dashboard" className="text-xs text-pink-600 font-medium" onClick={() => setIsMobileMenuOpen(false)}>Go to Dashboard</Link>
                     </div>
                   </div>
@@ -373,13 +388,13 @@ const Header = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <button 
                       onClick={() => { navigate('/customer/login'); setIsMobileMenuOpen(false); }}
-                      className="w-full py-2.5 text-gray-700 font-medium border border-gray-200 rounded-lg hover:bg-gray-50"
+                      className="w-full py-2.5 text-gray-700 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
                     >
                       Login
                     </button>
                     <button 
                       onClick={() => { navigate('/customer/register'); setIsMobileMenuOpen(false); }}
-                      className="w-full py-2.5 text-pink-600 font-medium bg-pink-50 rounded-lg hover:bg-pink-100"
+                      className="w-full py-2.5 text-pink-600 font-medium bg-pink-50 dark:bg-gray-800 rounded-lg hover:bg-pink-100 dark:hover:bg-gray-700"
                     >
                       Register
                     </button>
@@ -393,6 +408,25 @@ const Header = () => {
                 >
                   Book Appointment Now
                 </Link>
+
+                {/* Mobile Theme Toggle */}
+                <button
+                  onClick={toggleTheme}
+                  className="w-full py-3 flex items-center justify-center gap-2 font-medium text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-800 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-colors"
+                  title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                >
+                  {isDarkMode ? (
+                    <>
+                      <Sun className="h-5 w-5" />
+                      <span>Light Mode</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon className="h-5 w-5" />
+                      <span>Dark Mode</span>
+                    </>
+                  )}
+                </button>
               </div>
 
             </div>

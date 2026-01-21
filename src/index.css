@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
+:root.dark {
+  @apply bg-gray-900 text-gray-100;
+}
+
+:root.dark body {
+  @apply bg-gray-900 text-gray-100;
+}
+
 /* --- Custom React Calendar Styling for Glow Services --- */
 
 .react-calendar {
@@ -79,4 +98,43 @@
   background-color: transparent;
   color: #e5e7eb; /* gray-200 */
   cursor: not-allowed;
+}
+
+/* --- Dark Mode Calendar Styling --- */
+:root.dark .react-calendar {
+  background-color: #1f2937;
+  color: #f3f4f6;
+}
+
+:root.dark .react-calendar__navigation button {
+  color: #f3f4f6;
+}
+
+:root.dark .react-calendar__navigation button:enabled:hover,
+:root.dark .react-calendar__navigation button:enabled:focus {
+  background-color: #374151;
+  color: #f472b6;
+}
+
+:root.dark .react-calendar__month-view__weekdays {
+  color: #9ca3af;
+}
+
+:root.dark .react-calendar__tile {
+  color: #f3f4f6;
+}
+
+:root.dark .react-calendar__tile:enabled:hover,
+:root.dark .react-calendar__tile:enabled:focus {
+  background-color: #374151;
+  color: #f472b6;
+}
+
+:root.dark .react-calendar__tile--now {
+  background: #374151;
+  color: #f472b6;
+}
+
+:root.dark .react-calendar__tile:disabled {
+  color: #6b7280;
 }

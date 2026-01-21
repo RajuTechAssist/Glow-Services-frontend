@@ -208,7 +208,7 @@ const ProductsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 pt-24">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900 dark:to-indigo-900 pt-24 transition-colors duration-300">
       {/* Beautiful Header Section */}
       <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -257,8 +257,8 @@ const ProductsPage = () => {
               } space-y-6`}
             >
               {/* Search */}
-              <div className="bg-white rounded-2xl shadow-xl border border-pink-100 p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-pink-100 dark:border-gray-700 p-6 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
                   <div className="p-2 bg-gradient-to-r from-pink-400 to-purple-500 rounded-lg mr-3">
                     <Search className="w-5 h-5 text-white" />
                   </div>
@@ -271,14 +271,14 @@ const ProductsPage = () => {
                     placeholder="Search for beauty products..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 border-2 border-pink-200 rounded-xl focus:ring-4 focus:ring-pink-200 focus:border-pink-400 transition-all duration-300 bg-pink-50/50 placeholder-pink-400"
+                    className="w-full pl-12 pr-4 py-4 border-2 border-pink-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-pink-200 dark:focus:ring-pink-900 focus:border-pink-400 transition-all duration-300 bg-pink-50/50 dark:bg-gray-700 placeholder-pink-400 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100"
                   />
                 </div>
               </div>
 
               {/* Categories */}
-              <div className="bg-white rounded-2xl shadow-xl border border-purple-100 p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-purple-100 dark:border-gray-700 p-6 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
                   <div className="p-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg mr-3">
                     <Tag className="w-5 h-5 text-white" />
                   </div>
@@ -292,14 +292,14 @@ const ProductsPage = () => {
                       className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${
                         selectedCategory === category.id
                           ? `bg-gradient-to-r ${category.color} text-white shadow-lg border-2 border-transparent`
-                          : "bg-gradient-to-r from-pink-50 to-purple-50 hover:from-pink-100 hover:to-purple-100 border-2 border-pink-200 hover:border-purple-300 text-gray-700"
+                          : "bg-gradient-to-r from-pink-50 to-purple-50 dark:from-gray-700 dark:to-gray-750 hover:from-pink-100 hover:to-purple-100 dark:hover:from-gray-600 dark:hover:to-gray-650 border-2 border-pink-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-200"
                       }`}
                     >
                       <span className="text-xl mr-4">{category.icon}</span>
                       <div className="flex-1">
                         <div className="font-semibold">{category.name}</div>
                         {selectedCategory !== category.id && (
-                          <div className="text-xs opacity-75 mt-1">
+                          <div className="text-xs opacity-75 mt-1 dark:text-gray-400">
                             {category.description}
                           </div>
                         )}
@@ -313,8 +313,8 @@ const ProductsPage = () => {
               </div>
 
               {/* Sort Options */}
-              <div className="bg-white rounded-2xl shadow-xl border border-indigo-100 p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-indigo-100 dark:border-gray-700 p-6 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
                   <div className="p-2 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-lg mr-3">
                     <Filter className="w-5 h-5 text-white" />
                   </div>
@@ -331,7 +331,7 @@ const ProductsPage = () => {
                       className={`w-full flex items-center p-4 rounded-xl text-left transition-all duration-300 transform hover:scale-105 ${
                         sortBy === option.id
                           ? `bg-gradient-to-r ${option.color} text-white shadow-lg border-2 border-transparent`
-                          : "bg-gradient-to-r from-gray-50 to-indigo-50 hover:from-indigo-50 hover:to-purple-50 border-2 border-gray-200 hover:border-indigo-300 text-gray-700"
+                          : "bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-700 dark:to-gray-750 hover:from-indigo-50 hover:to-purple-50 dark:hover:from-gray-600 dark:hover:to-gray-650 border-2 border-gray-200 dark:border-gray-600 hover:border-indigo-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-200"
                       }`}
                     >
                       <span className="text-xl mr-4">{option.icon}</span>
@@ -351,10 +351,10 @@ const ProductsPage = () => {
           {/* Products List */}
           <div className="flex-1">
             {/* Results Header */}
-            <div className="bg-white rounded-2xl shadow-xl border border-pink-100 p-6 mb-8">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-pink-100 dark:border-gray-700 p-6 mb-8 transition-colors duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
                     <Sparkles className="w-6 h-6 text-pink-500 mr-2" />
                     {searchTerm
                       ? `Search Results for "${searchTerm}"`
@@ -362,7 +362,7 @@ const ProductsPage = () => {
                       ? "All Products"
                       : getCategoryById(selectedCategory)?.name}
                   </h2>
-                  <p className="text-pink-600 mt-2 flex items-center">
+                  <p className="text-pink-600 dark:text-pink-400 mt-2 flex items-center">
                     <Package className="w-4 h-4 mr-1" />
                     {loading
                       ? "Loading amazing products..."
@@ -381,32 +381,32 @@ const ProductsPage = () => {
                   {[...Array(6)].map((_, index) => (
                     <div
                       key={index}
-                      className="bg-white rounded-2xl shadow-xl border border-pink-100 p-6 animate-pulse"
+                      className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-pink-100 dark:border-gray-700 p-6 animate-pulse"
                     >
-                      <div className="w-full h-64 bg-gradient-to-r from-pink-200 to-purple-200 rounded-xl mb-4"></div>
+                      <div className="w-full h-64 bg-gradient-to-r from-pink-200 to-purple-200 dark:from-gray-700 dark:to-gray-600 rounded-xl mb-4"></div>
                       <div className="space-y-3">
-                        <div className="h-6 bg-gradient-to-r from-pink-200 to-purple-200 rounded-lg w-3/4"></div>
-                        <div className="h-4 bg-pink-100 rounded w-1/2"></div>
-                        <div className="h-8 bg-purple-100 rounded w-2/3"></div>
+                        <div className="h-6 bg-gradient-to-r from-pink-200 to-purple-200 dark:from-gray-700 dark:to-gray-600 rounded-lg w-3/4"></div>
+                        <div className="h-4 bg-pink-100 dark:bg-gray-700 rounded w-1/2"></div>
+                        <div className="h-8 bg-purple-100 dark:bg-gray-700 rounded w-2/3"></div>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : error ? (
-                <div className="bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 rounded-2xl p-8 text-center">
+                <div className="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-8 text-center transition-colors duration-300">
                   <div className="text-6xl mb-4">😔</div>
-                  <h3 className="text-xl font-bold text-red-800 mb-2">
+                  <h3 className="text-xl font-bold text-red-800 dark:text-red-300 mb-2">
                     Oops! Something went wrong
                   </h3>
-                  <p className="text-red-600">{error}</p>
+                  <p className="text-red-600 dark:text-red-400">{error}</p>
                 </div>
               ) : products.length === 0 ? (
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 rounded-2xl p-12 text-center">
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-2 border-purple-200 dark:border-purple-800 rounded-2xl p-12 text-center transition-colors duration-300">
                   <div className="text-8xl mb-6">🛍️</div>
-                  <h3 className="text-2xl font-bold text-purple-900 mb-4">
+                  <h3 className="text-2xl font-bold text-purple-900 dark:text-purple-300 mb-4">
                     No Products Found
                   </h3>
-                  <p className="text-purple-600 text-lg">
+                  <p className="text-purple-600 dark:text-purple-400 text-lg">
                     {searchTerm ? (
                       <>
                         We couldn't find any products matching "{searchTerm}".
@@ -428,13 +428,13 @@ const ProductsPage = () => {
                   {products.map((product, index) => (
                     <div
                       key={product.id || product.slug}
-                      className={`bg-white rounded-2xl shadow-xl border border-pink-100 hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-[1.02] ${
+                      className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-pink-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-[1.02] ${
                         isVisible ? "animate-fade-in" : "opacity-0"
                       }`}
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
                       {/* Product Image */}
-                      <div className="relative h-64 overflow-hidden bg-gradient-to-br from-pink-100 to-purple-100">
+                      <div className="relative h-64 overflow-hidden bg-gradient-to-br from-pink-100 to-purple-100 dark:from-gray-700 dark:to-purple-900">
                         {product.images && product.images.length > 0 ? (
                           <img
                             src={product.images[0]}
@@ -480,7 +480,7 @@ const ProductsPage = () => {
                         {/* Heart Button */}
                         <button
                           onClick={() => toggleLike(product.id)}
-                          className="absolute top-3 right-3 p-2.5 bg-white/95 backdrop-blur-sm rounded-full hover:bg-white transition-all duration-300 shadow-lg transform hover:scale-110"
+                          className="absolute top-3 right-3 p-2.5 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 shadow-lg transform hover:scale-110"
                         >
                           <Heart
                             className={`w-5 h-5 transition-colors duration-300 ${
@@ -495,18 +495,18 @@ const ProductsPage = () => {
                       {/* Product Info */}
                       <div className="p-6">
                         <div className="mb-4">
-                          <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
                             {product.name}
                           </h3>
                           {product.brand && (
-                            <p className="text-purple-600 font-medium text-sm mb-2">
+                            <p className="text-purple-600 dark:text-purple-400 font-medium text-sm mb-2">
                               {product.brand}
                             </p>
                           )}
                           <div className="flex items-center gap-2 mb-3">
                             <div className="flex items-center">
                               {renderStars(product.rating)}
-                              <span className="ml-2 text-sm font-medium text-gray-700">
+                              <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                                 {product.rating} ({product.reviewCount})
                               </span>
                             </div>
@@ -522,10 +522,10 @@ const ProductsPage = () => {
                             {product.originalPrice &&
                               product.originalPrice > product.price && (
                                 <>
-                                  <span className="text-lg text-gray-500 line-through">
+                                  <span className="text-lg text-gray-500 dark:text-gray-400 line-through">
                                     {formatPrice(product.originalPrice)}
                                   </span>
-                                  <span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-full">
+                                  <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 text-xs font-bold px-2 py-1 rounded-full">
                                     {Math.round(
                                       ((product.originalPrice - product.price) /
                                         product.originalPrice) *

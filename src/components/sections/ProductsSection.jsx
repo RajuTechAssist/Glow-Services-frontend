@@ -120,7 +120,7 @@ const ProductsSection = () => {
           key={i}
           className={`w-4 h-4 ${i < Math.floor(rating)
             ? 'text-yellow-400 fill-current'
-            : 'text-gray-300'
+            : 'text-gray-300 dark:text-gray-600'
             }`}
         />
       );
@@ -172,7 +172,7 @@ const ProductsSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50"
+      className="py-20 bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -188,7 +188,7 @@ const ProductsSection = () => {
             Featured Products
           </h2>
 
-          <p className={`text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+          <p className={`text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
             }`}>
             Discover our handpicked collection of premium beauty products from top international brands.
             Professional quality, delivered to your doorstep.
@@ -234,7 +234,7 @@ const ProductsSection = () => {
             <div className="relative mb-16">
               <div
                 ref={carouselRef}
-                className="overflow-hidden rounded-3xl bg-white shadow-2xl border border-pink-100"
+                className="overflow-hidden rounded-3xl bg-white dark:bg-gray-800 shadow-2xl border border-pink-100 dark:border-gray-700"
               >
                 <div
                   className="flex transition-transform duration-700 ease-in-out"
@@ -245,7 +245,7 @@ const ProductsSection = () => {
                       <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
                         {/* Product Image */}
                         <div className="relative">
-                          <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-pink-100 to-purple-100 shadow-xl">
+                          <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-pink-100 to-purple-100 dark:from-gray-700 dark:to-gray-600 shadow-xl">
                             {product.images && product.images.length > 0 ? (
                               <img
                                 src={product.images[0]}
@@ -283,12 +283,12 @@ const ProductsSection = () => {
                             {/* Like Button */}
                             <button
                               onClick={() => toggleLike(product.id)}
-                              className="absolute top-4 right-4 p-3 bg-white/95 backdrop-blur-sm rounded-full hover:bg-white transition-all duration-300 shadow-lg transform hover:scale-110"
+                              className="absolute top-4 right-4 p-3 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 shadow-lg transform hover:scale-110"
                             >
                               <Heart
                                 className={`w-6 h-6 transition-colors duration-300 ${likedProducts.has(product.id)
                                   ? 'text-red-500 fill-current'
-                                  : 'text-pink-400 hover:text-red-400'
+                                  : 'text-pink-400 dark:text-pink-300 hover:text-red-400 dark:hover:text-red-300'
                                   }`}
                               />
                             </button>
@@ -299,11 +299,11 @@ const ProductsSection = () => {
                         <div className="flex flex-col justify-center">
                           <div className="mb-4">
                             {product.brand && (
-                              <p className="text-purple-600 font-semibold mb-2 text-lg">
+                              <p className="text-purple-600 dark:text-purple-400 font-semibold mb-2 text-lg">
                                 {product.brand}
                               </p>
                             )}
-                            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+                            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
                               {product.name}
                             </h3>
 
@@ -311,27 +311,27 @@ const ProductsSection = () => {
                             <div className="flex items-center gap-4 mb-6">
                               <div className="flex items-center">
                                 {renderStars(product.rating)}
-                                <span className="ml-2 text-lg font-semibold text-gray-700">
+                                <span className="ml-2 text-lg font-semibold text-gray-700 dark:text-gray-200">
                                   {product.rating}
                                 </span>
                               </div>
-                              <span className="text-gray-600">
+                              <span className="text-gray-600 dark:text-gray-400">
                                 ({product.reviewCount} reviews)
                               </span>
                             </div>
 
                             {/* Description */}
-                            <p className="text-gray-600 text-lg leading-relaxed mb-6">
+                            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-6">
                               {product.description}
                             </p>
 
                             {/* Features */}
                             {product.features && product.features.length > 0 && (
                               <div className="mb-6">
-                                <h4 className="font-bold text-gray-900 mb-3">Key Benefits:</h4>
+                                <h4 className="font-bold text-gray-900 dark:text-white mb-3">Key Benefits:</h4>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                   {product.features.slice(0, 4).map((feature, idx) => (
-                                    <div key={idx} className="flex items-center text-sm text-gray-600">
+                                    <div key={idx} className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                                       <div className="w-2 h-2 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full mr-2"></div>
                                       {feature}
                                     </div>
@@ -349,10 +349,10 @@ const ProductsSection = () => {
                                   </span>
                                   {product.originalPrice && product.originalPrice > product.price && (
                                     <>
-                                      <span className="text-xl text-gray-500 line-through">
+                                      <span className="text-xl text-gray-500 dark:text-gray-400 line-through">
                                         {formatPrice(product.originalPrice)}
                                       </span>
-                                      <span className="bg-green-100 text-green-800 text-sm font-bold px-3 py-1 rounded-full">
+                                      <span className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 text-sm font-bold px-3 py-1 rounded-full">
                                         {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
                                       </span>
                                     </>
@@ -360,11 +360,11 @@ const ProductsSection = () => {
                                 </div>
 
                                 {product.stockQuantity > 0 ? (
-                                  <p className="text-green-600 text-sm font-medium">
+                                  <p className="text-green-600 dark:text-green-400 text-sm font-medium">
                                     ✓ In Stock ({product.stockQuantity} available)
                                   </p>
                                 ) : (
-                                  <p className="text-red-600 text-sm font-medium">
+                                  <p className="text-red-600 dark:text-red-400 text-sm font-medium">
                                     Out of Stock
                                   </p>
                                 )}
@@ -393,17 +393,17 @@ const ProductsSection = () => {
                   {/* Previous Button */}
                   <button
                     onClick={prevSlide}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/95 backdrop-blur-sm rounded-full shadow-xl hover:bg-white transition-all duration-300 z-10 hover:scale-110"
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-xl hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 z-10 hover:scale-110"
                   >
-                    <ArrowRight className="w-6 h-6 text-gray-700 rotate-180" />
+                    <ArrowRight className="w-6 h-6 text-gray-700 dark:text-white rotate-180" />
                   </button>
 
                   {/* Next Button */}
                   <button
                     onClick={nextSlide}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/95 backdrop-blur-sm rounded-full shadow-xl hover:bg-white transition-all duration-300 z-10 hover:scale-110"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-xl hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 z-10 hover:scale-110"
                   >
-                    <ArrowRight className="w-6 h-6 text-gray-700" />
+                    <ArrowRight className="w-6 h-6 text-gray-700 dark:text-white" />
                   </button>
 
                   {/* Dots Indicator */}
@@ -414,7 +414,7 @@ const ProductsSection = () => {
                         onClick={() => goToSlide(index)}
                         className={`w-3 h-3 rounded-full transition-all duration-300 ${currentIndex === index
                           ? 'bg-gradient-to-r from-pink-500 to-purple-600 scale-125'
-                          : 'bg-white/70 hover:bg-white'
+                          : 'bg-white/70 dark:bg-gray-600/70 hover:bg-white dark:hover:bg-gray-500'
                           }`}
                       />
                     ))}
@@ -425,28 +425,28 @@ const ProductsSection = () => {
 
             {/* Call to Action */}
             <div className={`text-center transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <div className="bg-white rounded-3xl p-12 shadow-xl border border-gray-100">
+              <div className="bg-white dark:bg-gray-800 rounded-3xl p-12 shadow-xl border border-gray-100 dark:border-gray-700">
                 <div className="flex items-center justify-center space-x-4 mb-6">
                   <div className="flex items-center space-x-2">
                     <Award className="h-6 w-6 text-purple-500" />
-                    <span className="text-purple-600 font-medium">Premium Brands</span>
+                    <span className="text-purple-600 dark:text-purple-400 font-medium">Premium Brands</span>
                   </div>
-                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                  <div className="w-2 h-2 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                   <div className="flex items-center space-x-2">
                     <Zap className="h-6 w-6 text-pink-500" />
-                    <span className="text-pink-600 font-medium">Fast Delivery</span>
+                    <span className="text-pink-600 dark:text-pink-400 font-medium">Fast Delivery</span>
                   </div>
-                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                  <div className="w-2 h-2 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                   <div className="flex items-center space-x-2">
                     <Star className="h-6 w-6 text-yellow-500" />
-                    <span className="text-yellow-600 font-medium">Top Rated</span>
+                    <span className="text-yellow-600 dark:text-yellow-400 font-medium">Top Rated</span>
                   </div>
                 </div>
 
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                   Explore Our Complete Beauty Collection
                 </h3>
-                <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
                   Browse through our extensive catalog of 200+ premium beauty products.
                   From skincare essentials to makeup must-haves - find everything you need.
                 </p>
@@ -460,7 +460,7 @@ const ProductsSection = () => {
                     <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                   </Link>
 
-                  <div className="flex items-center space-x-4 text-gray-600">
+                  <div className="flex items-center space-x-4 text-gray-600 dark:text-gray-300">
                     <span className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                       <span className="text-sm">200+ Products</span>

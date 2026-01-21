@@ -201,7 +201,7 @@ const ServicesSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50"
+      className="py-20 bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-indigo-950 dark:via-purple-950 dark:to-gray-900 transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -213,7 +213,7 @@ const ServicesSection = () => {
           </div>
 
           <h2
-            className={`text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 transition-all duration-1000 ${
+            className={`text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent mb-6 transition-all duration-1000 ${
               isVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-8 opacity-0"
@@ -223,7 +223,7 @@ const ServicesSection = () => {
           </h2>
 
           <p
-            className={`text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${
+            className={`text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${
               isVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-8 opacity-0"
@@ -238,9 +238,9 @@ const ServicesSection = () => {
         {/* Services Content */}
         {loading ? (
           <div className="text-center py-16">
-            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full">
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 rounded-full">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-500 mr-3"></div>
-              <span className="text-purple-700 font-medium">
+              <span className="text-purple-700 dark:text-purple-300 font-medium">
                 Loading our amazing services...
               </span>
             </div>
@@ -248,10 +248,10 @@ const ServicesSection = () => {
         ) : error ? (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">😔</div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">
+            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">
               Oops! Something went wrong
             </h3>
-            <p className="text-gray-600 mb-6">{error}</p>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
             <button
               onClick={() => window.location.reload()}
               className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-pink-700 transition-all duration-300"
@@ -262,10 +262,10 @@ const ServicesSection = () => {
         ) : services.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-8xl mb-6">💅</div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
+            <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">
               No Featured Services
             </h3>
-            <p className="text-gray-600 mb-8">
+            <p className="text-gray-600 dark:text-gray-400 mb-8">
               We're working on adding more services for you.
             </p>
             <Link
@@ -282,7 +282,7 @@ const ServicesSection = () => {
             <div className="relative mb-16">
               <div
                 ref={carouselRef}
-                className="overflow-hidden rounded-3xl bg-white shadow-2xl border border-purple-100"
+                className="overflow-hidden rounded-3xl bg-white dark:bg-gray-800 shadow-2xl border border-purple-100 dark:border-gray-700 transition-colors duration-300"
               >
                 <div
                   className="flex transition-transform duration-700 ease-in-out"
@@ -338,12 +338,12 @@ const ServicesSection = () => {
                             {/* 4. Like Button (Z-index 20) */}
                             <button
                               onClick={() => toggleLike(service.id)}
-                              className="absolute top-4 right-4 p-3 bg-white/95 backdrop-blur-sm rounded-full hover:bg-white transition-all duration-300 shadow-lg transform hover:scale-110 z-20"
+                              className="absolute top-4 right-4 p-3 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 shadow-lg transform hover:scale-110 z-20"
                             >
                               <Heart
                                 className={`w-6 h-6 transition-colors duration-300 ${likedServices.has(service.id)
                                   ? 'text-red-500 fill-current'
-                                  : 'text-pink-400 hover:text-red-400'
+                                  : 'text-pink-400 hover:text-red-400 dark:text-pink-300 dark:hover:text-red-300'
                                   }`}
                               />
                             </button>
@@ -353,12 +353,12 @@ const ServicesSection = () => {
                         {/* Service Info */}
                         <div className="flex flex-col justify-center">
                           <div className="mb-4">
-                            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+                            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
                               {service.name}
                             </h3>
 
                             {/* Service Details */}
-                            <div className="flex flex-wrap items-center gap-4 mb-6 text-sm text-gray-600">
+                            <div className="flex flex-wrap items-center gap-4 mb-6 text-sm text-gray-600 dark:text-gray-300">
                               <div className="flex items-center">
                                 <Clock className="w-4 h-4 mr-1 text-purple-500" />
                                 <span>{service.duration || "60"} mins</span>
@@ -378,12 +378,12 @@ const ServicesSection = () => {
                               <div className="flex items-center gap-4 mb-6">
                                 <div className="flex items-center">
                                   {renderStars(service.rating)}
-                                  <span className="ml-2 text-lg font-semibold text-gray-700">
+                                  <span className="ml-2 text-lg font-semibold text-gray-700 dark:text-gray-200">
                                     {service.rating}
                                   </span>
                                 </div>
                                 {service.reviewCount && (
-                                  <span className="text-gray-600">
+                                  <span className="text-gray-600 dark:text-gray-400">
                                     ({service.reviewCount} reviews)
                                   </span>
                                 )}
@@ -391,7 +391,7 @@ const ServicesSection = () => {
                             )}
 
                             {/* Description */}
-                            <p className="text-gray-600 text-lg leading-relaxed mb-6">
+                            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-6">
                               {service?.description ||
                                 "Professional service description"}
                             </p>
@@ -400,7 +400,7 @@ const ServicesSection = () => {
                             {service.features &&
                               service.features.length > 0 && (
                                 <div className="mb-6">
-                                  <h4 className="font-bold text-gray-900 mb-3">
+                                  <h4 className="font-bold text-gray-900 dark:text-white mb-3">
                                     What's Included:
                                   </h4>
                                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -409,7 +409,7 @@ const ServicesSection = () => {
                                       .map((feature, idx) => (
                                         <div
                                           key={idx}
-                                          className="flex items-center text-sm text-gray-600"
+                                          className="flex items-center text-sm text-gray-600 dark:text-gray-300"
                                         >
                                           <div className="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full mr-2"></div>
                                           {feature}
@@ -429,10 +429,10 @@ const ServicesSection = () => {
                                   {service.originalPrice &&
                                     service.originalPrice > service.price && (
                                       <>
-                                        <span className="text-xl text-gray-500 line-through">
+                                        <span className="text-xl text-gray-500 dark:text-gray-400 line-through">
                                           {formatPrice(service.originalPrice)}
                                         </span>
-                                        <span className="bg-green-100 text-green-800 text-sm font-bold px-3 py-1 rounded-full">
+                                        <span className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 text-sm font-bold px-3 py-1 rounded-full">
                                           {Math.round(
                                             ((service.originalPrice -
                                               service.price) /
@@ -445,7 +445,7 @@ const ServicesSection = () => {
                                     )}
                                 </div>
 
-                                <p className="text-purple-600 text-sm font-medium">
+                                <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">
                                   📍 Available at your location
                                 </p>
                               </div>
@@ -473,17 +473,17 @@ const ServicesSection = () => {
                   {/* Previous Button */}
                   <button
                     onClick={prevSlide}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/95 backdrop-blur-sm rounded-full shadow-xl hover:bg-white transition-all duration-300 z-10 hover:scale-110"
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-xl hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 z-10 hover:scale-110"
                   >
-                    <ArrowRight className="w-6 h-6 text-gray-700 rotate-180" />
+                    <ArrowRight className="w-6 h-6 text-gray-700 dark:text-white rotate-180" />
                   </button>
 
                   {/* Next Button */}
                   <button
                     onClick={nextSlide}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/95 backdrop-blur-sm rounded-full shadow-xl hover:bg-white transition-all duration-300 z-10 hover:scale-110"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-xl hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 z-10 hover:scale-110"
                   >
-                    <ArrowRight className="w-6 h-6 text-gray-700" />
+                    <ArrowRight className="w-6 h-6 text-gray-700 dark:text-white" />
                   </button>
 
                   {/* Dots Indicator */}
@@ -495,7 +495,7 @@ const ServicesSection = () => {
                         className={`w-3 h-3 rounded-full transition-all duration-300 ${
                           currentIndex === index
                             ? "bg-gradient-to-r from-purple-500 to-pink-600 scale-125"
-                            : "bg-white/70 hover:bg-white"
+                            : "bg-white/70 dark:bg-gray-600/70 hover:bg-white dark:hover:bg-gray-400"
                         }`}
                       />
                     ))}
@@ -512,34 +512,34 @@ const ServicesSection = () => {
                   : "opacity-0 translate-y-8"
               }`}
             >
-              <div className="bg-white rounded-3xl p-12 shadow-xl border border-gray-100">
+              <div className="bg-white dark:bg-gray-800 rounded-3xl p-12 shadow-xl border border-gray-100 dark:border-gray-700">
                 <div className="flex items-center justify-center space-x-4 mb-6">
                   <div className="flex items-center space-x-2">
                     <Award className="h-6 w-6 text-purple-500" />
-                    <span className="text-purple-600 font-medium">
+                    <span className="text-purple-600 dark:text-purple-400 font-medium">
                       Certified Professionals
                     </span>
                   </div>
-                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                  <div className="w-2 h-2 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-6 w-6 text-pink-500" />
-                    <span className="text-pink-600 font-medium">
+                    <span className="text-pink-600 dark:text-pink-400 font-medium">
                       On-time Appointments
                     </span>
                   </div>
-                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                  <div className="w-2 h-2 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                   <div className="flex items-center space-x-2">
                     <Star className="h-6 w-6 text-yellow-500" />
-                    <span className="text-yellow-600 font-medium">
+                    <span className="text-yellow-600 dark:text-yellow-400 font-medium">
                       Top Rated Services
                     </span>
                   </div>
                 </div>
 
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                   Explore Our Complete Beauty Services
                 </h3>
-                <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
                   From salon-quality facials and hair treatments to bridal
                   makeup and grooming — book certified professionals for in-home
                   services or at our partner salons. Trusted, convenient and
@@ -555,7 +555,7 @@ const ServicesSection = () => {
                     <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                   </Link>
 
-                  <div className="flex items-center space-x-4 text-gray-600">
+                  <div className="flex items-center space-x-4 text-gray-600 dark:text-gray-300">
                     <span className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                       <span className="text-sm">100+ Services</span>

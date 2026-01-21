@@ -170,7 +170,7 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
     <>
       {/* --- MAIN BOOKING MODAL --- */}
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[2000] p-4">
-        <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row shadow-2xl">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row shadow-2xl transition-colors duration-300">
           
           {/* Left Sidebar Summary */}
           <div className="hidden md:block w-1/3 bg-gradient-to-br from-pink-500 to-purple-600 p-8 text-white relative">
@@ -206,13 +206,13 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
           </div>
 
           {/* Right Content */}
-          <div className="flex-1 flex flex-col h-full max-h-[90vh] overflow-y-auto bg-gray-50">
-            <div className="bg-white p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 z-20">
+          <div className="flex-1 flex flex-col h-full max-h-[90vh] overflow-y-auto bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center sticky top-0 z-20 transition-colors duration-300">
                <div>
-                 <h2 className="text-xl font-bold text-gray-800">Book {service.name}</h2>
-                 <p className="text-sm text-gray-500">Step {currentStep}/4</p>
+                 <h2 className="text-xl font-bold text-gray-800 dark:text-white">Book {service.name}</h2>
+                 <p className="text-sm text-gray-500 dark:text-gray-400">Step {currentStep}/4</p>
                </div>
-               <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full text-gray-500"><X className="w-6 h-6" /></button>
+               <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full text-gray-500 dark:text-gray-300"><X className="w-6 h-6" /></button>
             </div>
 
             <div className="p-6 md:p-8 flex-1">
@@ -220,8 +220,40 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
               {/* Step 1: Date & Time */}
               {currentStep === 1 && (
                 <div className="space-y-8">
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <div className="calendar-wrapper flex justify-center">
+                  <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+                    <div className="calendar-wrapper flex justify-center booking-calendar-dark">
+                      <style jsx>{`
+                        .booking-calendar-dark .react-calendar {
+                          background-color: transparent !important;
+                          border: none !important;
+                          font-family: inherit;
+                        }
+                        :global(.dark) .booking-calendar-dark .react-calendar__tile {
+                          color: #e5e7eb;
+                        }
+                        :global(.dark) .booking-calendar-dark .react-calendar__tile:disabled {
+                          background-color: transparent;
+                          color: #4b5563;
+                        }
+                        :global(.dark) .booking-calendar-dark .react-calendar__tile:enabled:hover,
+                        :global(.dark) .booking-calendar-dark .react-calendar__tile:enabled:focus {
+                          background-color: #374151;
+                          border-radius: 0.5rem;
+                        }
+                        :global(.dark) .booking-calendar-dark .react-calendar__navigation button {
+                          color: #e5e7eb;
+                        }
+                        :global(.dark) .booking-calendar-dark .react-calendar__navigation button:disabled {
+                          background-color: transparent;
+                        }
+                        :global(.dark) .booking-calendar-dark .react-calendar__navigation button:enabled:hover,
+                        :global(.dark) .booking-calendar-dark .react-calendar__navigation button:enabled:focus {
+                          background-color: #374151;
+                        }
+                        :global(.dark) .booking-calendar-dark .react-calendar__month-view__weekdays__weekday {
+                          color: #9ca3af;
+                        }
+                      `}</style>
                       <Calendar 
                         onChange={(date) => handleInputChange('selectedDate', date)} 
                         value={bookingData.selectedDate}
@@ -234,7 +266,7 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
                     </div>
                   </div>
                   <div>
-                     <h3 className="text-sm font-bold text-gray-700 mb-4">TIME SLOT</h3>
+                     <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4">TIME SLOT</h3>
                      <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                         {timeSlots.map((time) => (
                           <button
@@ -243,7 +275,7 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
                             className={`py-3 px-2 rounded-xl text-sm font-medium border transition-all duration-200 ${
                               bookingData.selectedTime === time
                                 ? 'bg-pink-500 border-pink-500 text-white shadow-lg transform scale-105'
-                                : 'bg-white border-gray-200 text-gray-600 hover:border-pink-300'
+                                : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-200 hover:border-pink-300 dark:hover:border-pink-500'
                             }`}
                           >
                             {time}
@@ -258,10 +290,10 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
               {currentStep === 2 && (
                 <div className="space-y-6 animate-fade-in">
                    <div className="grid grid-cols-2 gap-4 mb-6">
-                      <button onClick={() => handleInputChange('serviceLocation', 'home')} className={`p-4 rounded-2xl border-2 flex flex-col items-center justify-center transition-all ${bookingData.serviceLocation === 'home' ? 'border-pink-500 bg-pink-50 text-pink-700' : 'border-gray-200 bg-white'}`}>
+                      <button onClick={() => handleInputChange('serviceLocation', 'home')} className={`p-4 rounded-2xl border-2 flex flex-col items-center justify-center transition-all ${bookingData.serviceLocation === 'home' ? 'border-pink-500 bg-pink-50 text-pink-700 bg-pink-50 dark:bg-pink-900/20' : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300'}`}>
                         <span className="text-2xl mb-1">🏠</span><span className="font-bold text-sm">Home Service</span>
                       </button>
-                      <button onClick={() => handleInputChange('serviceLocation', 'salon')} className={`p-4 rounded-2xl border-2 flex flex-col items-center justify-center transition-all ${bookingData.serviceLocation === 'salon' ? 'border-pink-500 bg-pink-50 text-pink-700' : 'border-gray-200 bg-white'}`}>
+                      <button onClick={() => handleInputChange('serviceLocation', 'salon')} className={`p-4 rounded-2xl border-2 flex flex-col items-center justify-center transition-all ${bookingData.serviceLocation === 'salon' ? 'border-pink-500 bg-pink-50 text-pink-700 bg-pink-50 dark:bg-pink-900/20' : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300'}`}>
                         <span className="text-2xl mb-1">💇‍♀️</span><span className="font-bold text-sm">Visit Salon</span>
                       </button>
                    </div>
@@ -272,15 +304,15 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
                        {/* Country & State */}
                        <div className="grid grid-cols-2 gap-4">
                          <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Country</label>
-                            <select className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50" disabled>
+                            <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Country</label>
+                            <select className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 dark:text-gray-300" disabled>
                                <option>India</option>
                             </select>
                          </div>
                          <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">State</label>
+                            <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">State</label>
                             <select 
-                               className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none"
+                               className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none bg-white dark:bg-gray-700 dark:text-white"
                                value={bookingData.stateCode}
                                onChange={(e) => handleInputChange('stateCode', e.target.value)}
                             >
@@ -294,9 +326,9 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
 
                        {/* City Dropdown */}
                        <div>
-                          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">City</label>
+                          <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">City</label>
                           <select 
-                             className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none disabled:bg-gray-50"
+                             className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none disabled:bg-gray-50 dark:disabled:bg-gray-800 bg-white dark:bg-gray-700 dark:text-white"
                              value={bookingData.city}
                              onChange={(e) => handleInputChange('city', e.target.value)}
                              disabled={!bookingData.stateCode}
@@ -309,22 +341,22 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
                        </div>
 
                        <div>
-                         <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Full Address</label>
+                         <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Full Address</label>
                          <textarea 
                             value={bookingData.address}
                             onChange={(e) => handleInputChange('address', e.target.value)}
-                            className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none"
+                            className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none bg-white dark:bg-gray-700 dark:text-white"
                             rows="2"
                             placeholder="House No, Street, Landmark"
                          />
                        </div>
                        <div>
-                         <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Pincode</label>
+                         <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Pincode</label>
                          <input 
                             type="text" 
                             value={bookingData.pincode}
                             onChange={(e) => handleInputChange('pincode', e.target.value)}
-                            className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none"
+                            className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none bg-white dark:bg-gray-700 dark:text-white"
                             placeholder="110001"
                          />
                        </div>
@@ -337,7 +369,7 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
               {currentStep === 3 && (
                 <div className="space-y-6 animate-fade-in">
                   {!isCustomerLoggedIn && (
-                     <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 text-blue-800 text-sm">
+                     <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-xl border border-blue-100 dark:border-blue-800 text-blue-800 dark:text-blue-200 text-sm">
                         ℹ️ <strong>Guest Checkout:</strong> We will create an account for you automatically!
                      </div>
                   )}
@@ -347,21 +379,21 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
                       placeholder="Full Name"
                       value={bookingData.fullName}
                       onChange={(e) => handleInputChange('fullName', e.target.value)}
-                      className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none"
+                      className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none bg-white dark:bg-gray-700 dark:text-white"
                     />
                     <input 
                       type="tel" 
                       placeholder="Phone Number"
                       value={bookingData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
-                      className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none"
+                      className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none bg-white dark:bg-gray-700 dark:text-white"
                     />
                     <input 
                       type="email" 
                       placeholder="Email Address"
                       value={bookingData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none"
+                      className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none bg-white dark:bg-gray-700 dark:text-white"
                     />
                   </div>
                 </div>
@@ -370,23 +402,23 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
               {/* Step 4: Confirm */}
               {currentStep === 4 && (
                 <div className="space-y-6 animate-fade-in text-center">
-                   <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                      <CreditCard className="w-10 h-10 text-green-600" />
+                   <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto">
+                      <CreditCard className="w-10 h-10 text-green-600 dark:text-green-400" />
                    </div>
-                   <h3 className="text-2xl font-bold text-gray-900">Ready to Book?</h3>
-                   <div className="bg-gray-100 p-6 rounded-2xl text-left space-y-3">
-                      <div className="flex justify-between"><span className="text-gray-600">Service</span><span className="font-semibold">{service.name}</span></div>
-                      <div className="flex justify-between"><span className="text-gray-600">Date</span><span className="font-semibold">{format(bookingData.selectedDate, 'MMM dd')}</span></div>
-                      <div className="flex justify-between border-t border-gray-200 pt-3 mt-3"><span className="text-gray-800 font-bold">Total</span><span className="text-pink-600 font-bold text-xl">₹{totalPrice}</span></div>
+                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Ready to Book?</h3>
+                   <div className="bg-gray-100 dark:bg-gray-700 p-6 rounded-2xl text-left space-y-3">
+                      <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">Service</span><span className="font-semibold dark:text-white">{service.name}</span></div>
+                      <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">Date</span><span className="font-semibold dark:text-white">{format(bookingData.selectedDate, 'MMM dd')}</span></div>
+                      <div className="flex justify-between border-t border-gray-200 dark:border-gray-600 pt-3 mt-3"><span className="text-gray-800 dark:text-white font-bold">Total</span><span className="text-pink-600 dark:text-pink-400 font-bold text-xl">₹{totalPrice}</span></div>
                    </div>
                 </div>
               )}
             </div>
 
             {/* Footer Buttons */}
-            <div className="p-6 bg-white border-t border-gray-100 flex gap-4">
+            <div className="p-6 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 flex gap-4 transition-colors duration-300">
                {currentStep > 1 && (
-                 <button onClick={handlePrevStep} className="px-6 py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl">Back</button>
+                 <button onClick={handlePrevStep} className="px-6 py-3 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl">Back</button>
                )}
                {currentStep < 4 ? (
                  <button 
@@ -409,17 +441,17 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
       {/* --- REGRET POPUP --- */}
       {showRegretModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[3000] p-4">
-           <div className="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl animate-bounce-in">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+           <div className="bg-white dark:bg-gray-800 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl animate-bounce-in">
+              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                  <Map className="w-8 h-8 text-red-500" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">We're not there yet! 😔</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">We're not there yet! 😔</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
                 Currently, Glow Services is only available in <strong>Delhi NCR</strong>. We are expanding soon to other cities!
               </p>
               <button 
                 onClick={() => { setShowRegretModal(false); setBookingData(prev => ({...prev, city: ''})); }}
-                className="w-full py-3 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition-all"
+                className="w-full py-3 bg-gray-900 dark:bg-gray-700 text-white rounded-xl font-bold hover:bg-gray-800 dark:hover:bg-gray-600 transition-all"
               >
                 Okay, I understand
               </button>

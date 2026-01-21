@@ -174,13 +174,13 @@ const CategoriesAdminPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900/20 p-6 transition-colors duration-200">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Star className="w-8 h-8 text-pink-600 mr-3" />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 dark:from-pink-400 dark:to-purple-400 bg-clip-text text-transparent">
               Category Management
             </h1>
           </div>
@@ -192,13 +192,13 @@ const CategoriesAdminPage = () => {
             <span>Add Category</span>
           </button>
         </div>
-        <p className="text-gray-600 mt-2 ml-11">
+        <p className="text-gray-600 dark:text-gray-400 mt-2 ml-11">
           Organize your beauty services and products into categories
         </p>
       </div>
 
       {/* Search and Filter */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6 transition-colors duration-200">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -207,7 +207,7 @@ const CategoriesAdminPage = () => {
               placeholder="Search categories..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
           <div className="flex items-center space-x-2">
@@ -215,7 +215,7 @@ const CategoriesAdminPage = () => {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+              className="px-4 py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
             >
               <option value="ALL">All Types</option>
               <option value="SERVICE">Services</option>
@@ -231,7 +231,7 @@ const CategoriesAdminPage = () => {
         {filteredCategories.map((category) => (
           <div
             key={category.id}
-            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg transition-all"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 hover:shadow-lg transition-all"
           >
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center space-x-3">
@@ -239,7 +239,7 @@ const CategoriesAdminPage = () => {
                   {getCategoryIcon(category.icon)}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">{category.name}</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">{category.name}</h3>
                   <span className={`inline-block px-2 py-1 text-xs rounded-full ${getCategoryBadgeClass(category.type)}`}>
                     {category.type}
                   </span>
@@ -250,8 +250,8 @@ const CategoriesAdminPage = () => {
                   onClick={() => toggleStatus(category.id, category.active)}
                   className={`p-2 rounded-lg transition-colors ${
                     category.active 
-                      ? 'text-green-600 hover:bg-green-50' 
-                      : 'text-gray-400 hover:bg-gray-50'
+                      ? 'text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20' 
+                      : 'text-gray-400 dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
                   title={category.active ? 'Active' : 'Inactive'}
                 >
@@ -282,12 +282,12 @@ const CategoriesAdminPage = () => {
             </div>
 
             {category.description && (
-              <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
                 {category.description}
               </p>
             )}
 
-            <div className="flex items-center justify-between text-sm text-gray-500">
+            <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
               <span>Sort Order: {category.sortOrder || 0}</span>
               <span className={`px-2 py-1 rounded-full text-xs ${
                 category.active 

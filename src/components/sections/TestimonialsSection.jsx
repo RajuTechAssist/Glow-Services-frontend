@@ -126,7 +126,7 @@ const TestimonialsSection = () => {
     return [...Array(5)].map((_, index) => (
       <Star 
         key={index} 
-        className={`w-5 h-5 ${index < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
+        className={`w-5 h-5 ${index < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300 dark:text-gray-600'}`} 
       />
     ));
   };
@@ -134,10 +134,10 @@ const TestimonialsSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className="py-24 bg-gradient-to-br from-yellow-50 via-orange-50 to-pink-50 relative overflow-hidden"
+      className="py-24 bg-gradient-to-br from-yellow-50 via-orange-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden transition-colors duration-300"
     >
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-30">
+      <div className="absolute inset-0 opacity-30 dark:opacity-5">
         <div className="absolute inset-0" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f59e0b' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         }}></div>
@@ -147,18 +147,18 @@ const TestimonialsSection = () => {
         
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className={`inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-100 to-orange-100 rounded-full px-6 py-3 shadow-lg mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <Star className="h-5 w-5 text-yellow-500" />
-            <span className="text-orange-600 font-medium tracking-wide uppercase text-sm">
+          <div className={`inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-gray-700 dark:to-gray-600 rounded-full px-6 py-3 shadow-lg mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <Star className="h-5 w-5 text-yellow-500 dark:text-yellow-400" />
+            <span className="text-orange-600 dark:text-orange-300 font-medium tracking-wide uppercase text-sm">
               Client Love
             </span>
           </div>
 
-          <h2 className={`text-5xl lg:text-6xl font-bold text-gray-900 mb-6 transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <h2 className={`text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             What Our Clients Say
           </h2>
 
-          <p className={`text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <p className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             Don't just take our word for it. Here's what thousands of satisfied clients have to say 
             about their Glow Services experience.
           </p>
@@ -167,7 +167,7 @@ const TestimonialsSection = () => {
           <button
             onClick={fetchGoogleReviews}
             disabled={loading}
-            className={`inline-flex items-center space-x-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-6 py-3 rounded-full shadow-lg border border-gray-200 transition-all duration-300 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
+            className={`inline-flex items-center space-x-2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium px-6 py-3 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             <span>{loading ? 'Loading Reviews...' : 'Latest Google Reviews'}</span>
@@ -180,7 +180,7 @@ const TestimonialsSection = () => {
           {reviews.slice(0, 5).map((review, index) => (
             <div
               key={review.id}
-              className={`bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative ${isVisible ? `opacity-100 translate-y-0` : 'opacity-0 translate-y-8'}`}
+              className={`bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative ${isVisible ? `opacity-100 translate-y-0` : 'opacity-0 translate-y-8'}`}
               style={{ animationDelay: `${400 + index * 100}ms` }}
             >
               {/* Google Maps Badge */}
@@ -196,21 +196,21 @@ const TestimonialsSection = () => {
                 <div className="flex space-x-1">
                   {renderStars(review.rating)}
                 </div>
-                <div className="flex items-center space-x-2 text-gray-500 text-sm">
+                <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400 text-sm">
                   <Calendar className="h-4 w-4" />
                   <span>{review.relative_time_description}</span>
                 </div>
               </div>
 
               {/* Review Text */}
-              <blockquote className="text-gray-700 leading-relaxed mb-6 italic text-lg">
+              <blockquote className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6 italic text-lg">
                 "{review.text}"
               </blockquote>
 
               {/* Service Type Badge */}
               {review.service_type && (
                 <div className="mb-4">
-                  <span className="bg-gradient-to-r from-pink-100 to-rose-100 text-pink-700 px-3 py-1 rounded-full text-sm font-medium">
+                  <span className="bg-gradient-to-r from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 text-pink-700 dark:text-pink-300 px-3 py-1 rounded-full text-sm font-medium">
                     {review.service_type}
                   </span>
                 </div>
@@ -222,8 +222,8 @@ const TestimonialsSection = () => {
                   {review.author_name.charAt(0)}
                 </div>
                 <div>
-                  <div className="font-semibold text-gray-900">{review.author_name}</div>
-                  <div className="text-gray-600 text-sm flex items-center space-x-1">
+                  <div className="font-semibold text-gray-900 dark:text-white">{review.author_name}</div>
+                  <div className="text-gray-600 dark:text-gray-400 text-sm flex items-center space-x-1">
                     <MapPin className="h-3 w-3" />
                     <span>{review.location}</span>
                   </div>
@@ -242,17 +242,17 @@ const TestimonialsSection = () => {
         </div>
 
         {/* Statistics & CTA Section */}
-        <div className={`bg-gradient-to-r from-pink-100 via-rose-100 to-orange-100 rounded-3xl p-12 shadow-xl transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`bg-gradient-to-r from-pink-100 via-rose-100 to-orange-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 rounded-3xl p-12 shadow-xl transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           
           {/* Stats Grid */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             {stats.map((stat, index) => (
               <div key={index} className="text-center group">
                 <div className="text-6xl mb-2">{stat.icon}</div>
-                <div className="text-4xl lg:text-5xl font-bold text-gray-900 mb-2 group-hover:scale-110 transition-transform duration-300">
+                <div className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-2 group-hover:scale-110 transition-transform duration-300">
                   {stat.number}
                 </div>
-                <div className="text-gray-600 font-medium">
+                <div className="text-gray-600 dark:text-gray-300 font-medium">
                   {stat.label}
                 </div>
                 {stat.label === "Average Rating" && (
@@ -266,10 +266,10 @@ const TestimonialsSection = () => {
 
           {/* CTA Section */}
           <div className="text-center">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
+            <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
               Join Our Community of Satisfied Clients
             </h3>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
               Experience the difference that professional, convenient beauty services can make in your life.
             </p>
             
@@ -285,7 +285,7 @@ const TestimonialsSection = () => {
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
               </a>
               
-              <div className="flex items-center space-x-4 text-gray-600">
+              <div className="flex items-center space-x-4 text-gray-600 dark:text-gray-300">
                 <span className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                   <span className="text-sm">Live Reviews</span>

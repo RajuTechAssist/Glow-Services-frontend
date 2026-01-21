@@ -9,6 +9,7 @@ import { AdminAuthProvider } from "./context/AdminAuthContext";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import { CustomerAuthProvider } from "./context/CustomerAuthContext";
 import ProtectedCustomerRoute from "./components/ProtectedCustomerRoute";
+import { ThemeProvider } from "./context/ThemeContext";
 
 // User components
 import Header from "./components/layout/header";
@@ -119,11 +120,12 @@ const Contact = () => (
 
 function App() {
   return (
-    <AdminAuthProvider>
-      <CustomerAuthProvider>
-        <CartProvider>
-          <Router>
-            <div className="App">
+    <ThemeProvider>
+      <AdminAuthProvider>
+        <CustomerAuthProvider>
+          <CartProvider>
+            <Router>
+              <div className="App">
               <main>
                 <KeepAlive />
 
@@ -133,7 +135,7 @@ function App() {
                   <Route
                     path="/"
                     element={
-                      <div className="min-h-screen bg-white">
+                      <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
                         <Header />
                         <HeroSection />
                         <WhyChooseSection />
@@ -344,6 +346,7 @@ function App() {
         </CartProvider>
       </CustomerAuthProvider>
     </AdminAuthProvider>
+    </ThemeProvider>
   );
 }
 

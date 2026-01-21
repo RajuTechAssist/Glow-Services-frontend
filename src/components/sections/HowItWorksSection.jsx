@@ -112,10 +112,10 @@ const HowItWorksSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className="py-24 bg-gradient-to-br from-gray-50 to-pink-50 relative overflow-hidden"
+      className="py-24 bg-gradient-to-br from-gray-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden transition-colors duration-300"
     >
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-40">
+      <div className="absolute inset-0 opacity-40 dark:opacity-10">
         <div className="absolute inset-0" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ec4899' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         }}></div>
@@ -125,21 +125,21 @@ const HowItWorksSection = () => {
         
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className={`inline-flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className={`inline-flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <Play className="h-5 w-5 text-pink-500" />
-            <span className="text-pink-600 font-medium tracking-wide uppercase text-sm">
+            <span className="text-pink-600 dark:text-pink-400 font-medium tracking-wide uppercase text-sm">
               How It Works
             </span>
           </div>
 
-          <h2 className={`text-5xl lg:text-6xl font-bold text-gray-900 mb-6 transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <h2 className={`text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             Simple steps to
             <span className="block bg-gradient-to-r from-pink-500 via-rose-500 to-orange-500 bg-clip-text text-transparent">
               beauty perfection
             </span>
           </h2>
 
-          <p className={`text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <p className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             Whether you're booking a service or ordering products, we've made it incredibly simple 
             and convenient for you to access premium beauty solutions.
           </p>
@@ -147,13 +147,13 @@ const HowItWorksSection = () => {
 
         {/* Tab Navigation */}
         <div className={`flex justify-center mb-16 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="bg-white rounded-2xl p-2 shadow-xl border border-gray-100">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-2 shadow-xl border border-gray-100 dark:border-gray-700">
             <button
               onClick={() => setActiveTab('services')}
               className={`px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 ${
                 activeTab === 'services'
                   ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-pink-500 hover:bg-pink-50'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-700'
               }`}
             >
               Book Services
@@ -163,7 +163,7 @@ const HowItWorksSection = () => {
               className={`px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 ${
                 activeTab === 'products'
                   ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-pink-500 hover:bg-pink-50'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-700'
               }`}
             >
               Order Products
@@ -178,7 +178,7 @@ const HowItWorksSection = () => {
             return (
               <div
                 key={`${activeTab}-${index}`}
-                className={`relative bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-700 hover:-translate-y-2 group ${isVisible ? `opacity-100 translate-y-0` : 'opacity-0 translate-y-8'}`}
+                className={`relative bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-700 hover:-translate-y-2 group ${isVisible ? `opacity-100 translate-y-0` : 'opacity-0 translate-y-8'}`}
                 style={{ animationDelay: `${400 + index * 150}ms` }}
               >
                 {/* Step Number */}
@@ -192,18 +192,18 @@ const HowItWorksSection = () => {
                 </div>
 
                 {/* Content */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-pink-600 transition-colors duration-300">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors duration-300">
                   {step.title}
                 </h3>
 
-                <p className="text-gray-600 leading-relaxed mb-6 text-lg">
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 text-lg">
                   {step.description}
                 </p>
 
                 {/* Duration Badge */}
-                <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-pink-100 to-rose-100 rounded-full px-4 py-2">
+                <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 rounded-full px-4 py-2">
                   <Clock className="h-4 w-4 text-pink-500" />
-                  <span className="text-pink-600 font-medium text-sm">{step.duration}</span>
+                  <span className="text-pink-600 dark:text-pink-400 font-medium text-sm">{step.duration}</span>
                 </div>
 
                 {/* Connector Arrow - Hide on last item */}
@@ -219,28 +219,28 @@ const HowItWorksSection = () => {
 
         {/* Bottom Features */}
         <div className={`grid md:grid-cols-3 gap-8 mb-16 transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 group">
             <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
               <CheckCircle className="h-8 w-8 text-white" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">100% Satisfaction</h3>
-            <p className="text-gray-600">Love it or we'll make it right - guaranteed.</p>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">100% Satisfaction</h3>
+            <p className="text-gray-600 dark:text-gray-300">Love it or we'll make it right - guaranteed.</p>
           </div>
 
-          <div className="bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 group">
             <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
               <Clock className="h-8 w-8 text-white" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Always On Time</h3>
-            <p className="text-gray-600">Punctual service delivery, every single time.</p>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Always On Time</h3>
+            <p className="text-gray-600 dark:text-gray-300">Punctual service delivery, every single time.</p>
           </div>
 
-          <div className="bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 group">
             <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
               <Sparkles className="h-8 w-8 text-white" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Premium Quality</h3>
-            <p className="text-gray-600">Only the finest products and expert techniques.</p>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Premium Quality</h3>
+            <p className="text-gray-600 dark:text-gray-300">Only the finest products and expert techniques.</p>
           </div>
         </div>
 
@@ -254,7 +254,7 @@ const HowItWorksSection = () => {
             and luxury of our premium beauty services.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <button className="group bg-white text-pink-600 hover:bg-gray-50 font-semibold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-2">
+            <button className="group bg-white dark:bg-gray-800 text-pink-600 dark:text-pink-400 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-2">
               <span>
                 {activeTab === 'services' ? 'Book a Service' : 'Shop Products'}
               </span>

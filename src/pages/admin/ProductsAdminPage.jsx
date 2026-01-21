@@ -185,13 +185,13 @@ const ProductsAdminPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900/20 p-6 transition-colors duration-200">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Package className="w-8 h-8 text-pink-600 mr-3" />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+            <Package className="w-8 h-8 text-pink-600 dark:text-pink-400 mr-3" />
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 dark:from-pink-400 dark:to-purple-400 bg-clip-text text-transparent">
               Product Management
             </h1>
           </div>
@@ -203,13 +203,13 @@ const ProductsAdminPage = () => {
             <span>Add Product</span>
           </button>
         </div>
-        <p className="text-gray-600 mt-2 ml-11">
+        <p className="text-gray-600 dark:text-gray-400 mt-2 ml-11">
           Manage your beauty products and inventory
         </p>
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6 transition-colors duration-200">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -218,7 +218,7 @@ const ProductsAdminPage = () => {
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
           <div className="flex items-center space-x-4">
@@ -227,7 +227,7 @@ const ProductsAdminPage = () => {
               <select
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e.target.value)}
-                className="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                className="px-4 py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
               >
                 {categories.map(category => (
                   <option key={category.value} value={category.value}>
@@ -239,7 +239,7 @@ const ProductsAdminPage = () => {
             <select
               value={filterStock}
               onChange={(e) => setFilterStock(e.target.value)}
-              className="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+              className="px-4 py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
             >
               {stockFilters.map(filter => (
                 <option key={filter.value} value={filter.value}>
@@ -258,17 +258,17 @@ const ProductsAdminPage = () => {
           return (
             <div
               key={product.id}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg transition-all"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 hover:shadow-lg transition-all"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 mb-1 line-clamp-2">{product.name}</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2">{product.name}</h3>
                   <div className="flex flex-wrap gap-1 mb-2">
-                    <span className="inline-block px-2 py-1 text-xs rounded-full bg-pink-100 text-pink-800">
+                    <span className="inline-block px-2 py-1 text-xs rounded-full bg-pink-100 dark:bg-pink-900/40 text-pink-800 dark:text-pink-300">
                       {product.category}
                     </span>
                     {product.brand && (
-                      <span className="inline-block px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
+                      <span className="inline-block px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
                         {product.brand}
                       </span>
                     )}
@@ -279,28 +279,28 @@ const ProductsAdminPage = () => {
                     onClick={() => toggleStatus(product.id, product.active)}
                     className={`p-1.5 rounded-lg transition-colors ${
                       product.active 
-                        ? 'text-green-600 hover:bg-green-50' 
-                        : 'text-gray-400 hover:bg-gray-50'
+                        ? 'text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20' 
+                        : 'text-gray-400 dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                     title={product.active ? 'Active' : 'Inactive'}
                   >
                     {product.active ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                   </button>
                   <div className="relative group">
-                    <button className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50">
+                    <button className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
                       <MoreVertical className="w-4 h-4" />
                     </button>
-                    <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
                       <button
                         onClick={() => navigate(`/admin/products/edit/${product.id}`)}
-                        className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 w-full text-left"
+                        className="flex items-center space-x-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 w-full text-left"
                       >
                         <Edit className="w-4 h-4" />
                         <span>Edit</span>
                       </button>
                       <button
                         onClick={() => handleDelete(product.id, product.name)}
-                        className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left"
+                        className="flex items-center space-x-2 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 w-full text-left"
                       >
                         <Trash2 className="w-4 h-4" />
                         <span>Delete</span>
@@ -311,16 +311,16 @@ const ProductsAdminPage = () => {
               </div>
 
               {product.shortDescription && (
-                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
                   {product.shortDescription}
                 </p>
               )}
 
               <div className="flex items-center justify-between text-sm mb-3">
                 <div className="flex items-center space-x-2">
-                  <span className="font-semibold text-gray-900">₹{product.price}</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">₹{product.price}</span>
                   {product.originalPrice && product.originalPrice > product.price && (
-                    <span className="text-gray-500 line-through">₹{product.originalPrice}</span>
+                    <span className="text-gray-500 dark:text-gray-400 line-through">₹{product.originalPrice}</span>
                   )}
                 </div>
                 <div className="flex items-center space-x-2">
@@ -336,7 +336,7 @@ const ProductsAdminPage = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-sm text-gray-500">
+              <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
                 <span>Stock: {product.stockQuantity}</span>
                 <span className={`px-2 py-1 rounded-full text-xs ${
                   product.active 
@@ -352,10 +352,10 @@ const ProductsAdminPage = () => {
       </div>
 
       {filteredProducts.length === 0 && !loading && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-          <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
-          <p className="text-gray-500 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-12 text-center">
+          <Package className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No products found</h3>
+          <p className="text-gray-500 dark:text-gray-400 mb-6">
             {searchTerm || filterCategory !== 'ALL' || filterStock !== 'ALL'
               ? 'Try adjusting your search or filter criteria.' 
               : 'Get started by creating your first product.'}

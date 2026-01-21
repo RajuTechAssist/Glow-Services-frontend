@@ -88,13 +88,13 @@ const AdminDashboard = () => {
 }, []);
 
   const BeautyStatCard = ({ title, value, icon: Icon, color, description, trend, suffix = '' }) => (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 hover:shadow-md transition-all duration-200">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}{suffix}</p>
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{title}</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}{suffix}</p>
           {description && (
-            <p className="text-xs text-gray-500 mt-1">{description}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{description}</p>
           )}
         </div>
         <div className={`p-3 rounded-full ${color}`}>
@@ -103,26 +103,26 @@ const AdminDashboard = () => {
       </div>
       {trend && (
         <div className="mt-4 flex items-center">
-          <span className={`text-sm font-medium ${trend > 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+          <span className={`text-sm font-medium ${trend > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500 dark:text-red-400'}`}>
             {trend > 0 ? '+' : ''}{trend}%
           </span>
-          <span className="text-sm text-gray-500 ml-2">from last month</span>
+          <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">from last month</span>
         </div>
       )}
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900/20 p-6 transition-colors duration-200">
       {/* Header - Beauty Business Style */}
       <div className="mb-8">
         <div className="flex items-center mb-2">
-          <Sparkles className="w-8 h-8 text-pink-600 mr-3" />
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+          <Sparkles className="w-8 h-8 text-pink-600 dark:text-pink-400 mr-3" />
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 dark:from-pink-400 dark:to-purple-400 bg-clip-text text-transparent">
             Glow Services Dashboard
           </h1>
         </div>
-        <p className="text-gray-600 text-lg">
+        <p className="text-gray-600 dark:text-gray-300 text-lg">
           Welcome back, {adminUser?.fullName || 'Admin'}! ✨ 
           Here's your beauty business overview.
         </p>
@@ -230,9 +230,9 @@ const AdminDashboard = () => {
       </div>
 
       {/* ✅ FIXED: Beauty Business Quick Actions */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-          <Sparkles className="w-6 h-6 text-pink-600 mr-2" />
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-8 transition-colors duration-200">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+          <Sparkles className="w-6 h-6 text-pink-600 dark:text-pink-400 mr-2" />
           Quick Actions
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -240,84 +240,84 @@ const AdminDashboard = () => {
           {/* Add Service */}
           <button
             onClick={() => handleQuickAction('service')}
-            className="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gradient-to-br hover:from-pink-50 hover:to-pink-100 hover:border-pink-300 transition-all duration-300 text-left group"
+            className="flex items-center p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gradient-to-br hover:from-pink-50 hover:to-pink-100 dark:hover:from-pink-900/30 dark:hover:to-pink-800/30 hover:border-pink-300 dark:hover:border-pink-700 transition-all duration-300 text-left group"
           >
-            <div className="p-3 bg-gradient-to-br from-pink-100 to-pink-200 rounded-xl mr-4 group-hover:from-pink-200 group-hover:to-pink-300">
-              <Scissors className="w-6 h-6 text-pink-600" />
+            <div className="p-3 bg-gradient-to-br from-pink-100 to-pink-200 dark:from-pink-900/50 dark:to-pink-800/50 rounded-xl mr-4 group-hover:from-pink-200 group-hover:to-pink-300 dark:group-hover:from-pink-800/50 dark:group-hover:to-pink-700/50">
+              <Scissors className="w-6 h-6 text-pink-600 dark:text-pink-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 group-hover:text-pink-600">Add Beauty Service</h3>
-              <p className="text-sm text-gray-600">Create new treatment</p>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-pink-600 dark:group-hover:text-pink-400">Add Beauty Service</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Create new treatment</p>
             </div>
           </button>
 
           {/* Add Product */}
           <button
             onClick={() => handleQuickAction('product')}
-            className="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100 hover:border-purple-300 transition-all duration-300 text-left group"
+            className="flex items-center p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/30 dark:hover:to-purple-800/30 hover:border-purple-300 dark:hover:border-purple-700 transition-all duration-300 text-left group"
           >
-            <div className="p-3 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl mr-4 group-hover:from-purple-200 group-hover:to-purple-300">
-              <Heart className="w-6 h-6 text-purple-600" />
+            <div className="p-3 bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900/50 dark:to-purple-800/50 rounded-xl mr-4 group-hover:from-purple-200 group-hover:to-purple-300 dark:group-hover:from-purple-800/50 dark:group-hover:to-purple-700/50">
+              <Heart className="w-6 h-6 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 group-hover:text-purple-600">Add Beauty Product</h3>
-              <p className="text-sm text-gray-600">Add to catalog</p>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400">Add Beauty Product</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Add to catalog</p>
             </div>
           </button>
 
           {/* Add Customer */}
           <button
             onClick={() => handleQuickAction('customer')}
-            className="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gradient-to-br hover:from-rose-50 hover:to-rose-100 hover:border-rose-300 transition-all duration-300 text-left group"
+            className="flex items-center p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gradient-to-br hover:from-rose-50 hover:to-rose-100 dark:hover:from-rose-900/30 dark:hover:to-rose-800/30 hover:border-rose-300 dark:hover:border-rose-700 transition-all duration-300 text-left group"
           >
-            <div className="p-3 bg-gradient-to-br from-rose-100 to-rose-200 rounded-xl mr-4 group-hover:from-rose-200 group-hover:to-rose-300">
-              <Users className="w-6 h-6 text-rose-600" />
+            <div className="p-3 bg-gradient-to-br from-rose-100 to-rose-200 dark:from-rose-900/50 dark:to-rose-800/50 rounded-xl mr-4 group-hover:from-rose-200 group-hover:to-rose-300 dark:group-hover:from-rose-800/50 dark:group-hover:to-rose-700/50">
+              <Users className="w-6 h-6 text-rose-600 dark:text-rose-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 group-hover:text-rose-600">Add New Client</h3>
-              <p className="text-sm text-gray-600">Register customer</p>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-rose-600 dark:group-hover:text-rose-400">Add New Client</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Register customer</p>
             </div>
           </button>
 
           {/* Add Category */}
           <button
             onClick={() => handleQuickAction('category')}
-            className="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gradient-to-br hover:from-indigo-50 hover:to-indigo-100 hover:border-indigo-300 transition-all duration-300 text-left group"
+            className="flex items-center p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gradient-to-br hover:from-indigo-50 hover:to-indigo-100 dark:hover:from-indigo-900/30 dark:hover:to-indigo-800/30 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all duration-300 text-left group"
           >
-            <div className="p-3 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-xl mr-4 group-hover:from-indigo-200 group-hover:to-indigo-300">
-              <BarChart3 className="w-6 h-6 text-indigo-600" />
+            <div className="p-3 bg-gradient-to-br from-indigo-100 to-indigo-200 dark:from-indigo-900/50 dark:to-indigo-800/50 rounded-xl mr-4 group-hover:from-indigo-200 group-hover:to-indigo-300 dark:group-hover:from-indigo-800/50 dark:group-hover:to-indigo-700/50">
+              <BarChart3 className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 group-hover:text-indigo-600">Add Category</h3>
-              <p className="text-sm text-gray-600">Organize services</p>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Add Category</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Organize services</p>
             </div>
           </button>
 
           {/* Add Blog Post */}
           <button
             onClick={() => handleQuickAction('blog')}
-            className="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gradient-to-br hover:from-blue-50 hover:to-blue-100 hover:border-blue-300 transition-all duration-300 text-left group"
+            className="flex items-center p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gradient-to-br hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/30 dark:hover:to-blue-800/30 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-300 text-left group"
           >
-            <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl mr-4 group-hover:from-blue-200 group-hover:to-blue-300">
-              <Star className="w-6 h-6 text-blue-600" />
+            <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/50 dark:to-blue-800/50 rounded-xl mr-4 group-hover:from-blue-200 group-hover:to-blue-300 dark:group-hover:from-blue-800/50 dark:group-hover:to-blue-700/50">
+              <Star className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">Write Beauty Blog</h3>
-              <p className="text-sm text-gray-600">Share beauty tips</p>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">Write Beauty Blog</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Share beauty tips</p>
             </div>
           </button>
 
           {/* View Analytics */}
           <button
             onClick={() => handleQuickAction('analytics')}
-            className="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gradient-to-br hover:from-emerald-50 hover:to-emerald-100 hover:border-emerald-300 transition-all duration-300 text-left group"
+            className="flex items-center p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gradient-to-br hover:from-emerald-50 hover:to-emerald-100 dark:hover:from-emerald-900/30 dark:hover:to-emerald-800/30 hover:border-emerald-300 dark:hover:border-emerald-700 transition-all duration-300 text-left group"
           >
-            <div className="p-3 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-xl mr-4 group-hover:from-emerald-200 group-hover:to-emerald-300">
-              <TrendingUp className="w-6 h-6 text-emerald-600" />
+            <div className="p-3 bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-xl mr-4 group-hover:from-emerald-200 group-hover:to-emerald-300 dark:group-hover:from-emerald-800/50 dark:group-hover:to-emerald-700/50">
+              <TrendingUp className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 group-hover:text-emerald-600">View Analytics</h3>
-              <p className="text-sm text-gray-600">Business insights</p>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">View Analytics</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Business insights</p>
             </div>
           </button>
 

@@ -105,36 +105,36 @@ const AboutPage = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen pt-20 bg-white dark:bg-gray-900 transition-colors duration-300">
       
       {/* Hero Section */}
       <section 
         ref={el => sectionRefs.current.hero = el}
-        className="py-24 bg-gradient-to-br from-pink-50 via-rose-50 to-orange-50 relative overflow-hidden"
+        className="py-24 bg-gradient-to-br from-pink-50 via-rose-50 to-orange-50 dark:from-gray-800 dark:via-gray-900 dark:to-black relative overflow-hidden"
       >
         {/* Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-pink-200/30 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-20 w-80 h-80 bg-rose-200/30 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+          <div className="absolute top-20 left-20 w-64 h-64 bg-pink-200/30 dark:bg-pink-900/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-80 h-80 bg-rose-200/30 dark:bg-rose-900/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className={`inline-flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg mb-8 transition-all duration-1000 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`inline-flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg mb-8 transition-all duration-1000 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <Heart className="h-5 w-5 text-pink-500" />
-              <span className="text-pink-600 font-medium tracking-wide uppercase text-sm">
+              <span className="text-pink-600 dark:text-pink-400 font-medium tracking-wide uppercase text-sm">
                 Our Story
               </span>
             </div>
 
-            <h1 className={`text-6xl lg:text-7xl font-bold text-gray-900 leading-tight mb-8 transition-all duration-1000 delay-100 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <h1 className={`text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-tight mb-8 transition-all duration-1000 delay-100 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               About Us – 
               <span className="block bg-gradient-to-r from-pink-500 via-rose-500 to-orange-500 bg-clip-text text-transparent">
                 Our Story ✨
               </span>
             </h1>
 
-            <p className={`text-2xl text-gray-600 leading-relaxed mb-12 transition-all duration-1000 delay-200 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <p className={`text-2xl text-gray-600 dark:text-gray-300 leading-relaxed mb-12 transition-all duration-1000 delay-200 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               The idea of Glow Services was born from a simple thought – every woman deserves to feel beautiful, confident, and cared for.
             </p>
 
@@ -144,10 +144,10 @@ const AboutPage = () => {
                 const IconComponent = stat.icon;
                 return (
                   <div key={index} className="text-center group">
-                    <div className="w-16 h-16 bg-white/80 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <div className="w-16 h-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                       <IconComponent className="h-8 w-8 text-pink-500" />
                     </div>
-                    <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{stat.number}</div>
                     <div className="text-gray-600 font-medium">{stat.label}</div>
                   </div>
                 );
@@ -160,7 +160,7 @@ const AboutPage = () => {
       {/* Story Section */}
       <section 
         ref={el => sectionRefs.current.story = el}
-        className="py-24 bg-white"
+        className="py-24 bg-white dark:bg-gray-900 transition-colors duration-300"
       >
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -168,12 +168,12 @@ const AboutPage = () => {
             {/* Story Content */}
             <div className={`space-y-8 transition-all duration-1000 ${isVisible.story ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
               <div>
-                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                   Every Woman Deserves 
                   <span className="block text-pink-500">Her Moment to Shine</span>
                 </h2>
                 
-                <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
+                <div className="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                   <p>
                     I noticed how many women, especially mothers, put their families first and forget to take time for themselves. A new mother, for example, spends her days and nights caring for her baby – often leaving no time to visit a salon.
                   </p>
@@ -182,7 +182,7 @@ const AboutPage = () => {
                     Yet, she too deserves those moments of self-care, relaxation, and glow.
                   </p>
                   
-                  <p className="text-xl font-semibold text-gray-800">
+                  <p className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                     That's when I decided to create Glow Services – Salon at Your Doorstep. 🌸
                   </p>
                   
@@ -193,12 +193,12 @@ const AboutPage = () => {
               </div>
 
               {/* Mission Statement */}
-              <div className="bg-gradient-to-r from-pink-100 to-rose-100 rounded-2xl p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+              <div className="bg-gradient-to-r from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 rounded-2xl p-8 border border-pink-200 dark:border-pink-900/50">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
                   <Target className="h-6 w-6 text-pink-500" />
                   <span>Our Mission</span>
                 </h3>
-                <p className="text-lg text-gray-700 leading-relaxed">
+                <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                   Our mission is to make beauty accessible, convenient, and affordable – because every woman deserves her glow. ✨
                 </p>
               </div>
@@ -206,15 +206,15 @@ const AboutPage = () => {
 
             {/* Visual Element */}
             <div className={`relative transition-all duration-1000 delay-200 ${isVisible.story ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
-              <div className="relative bg-gradient-to-br from-pink-100 to-rose-100 rounded-3xl p-8 shadow-2xl">
-                <div className="aspect-[4/5] bg-gradient-to-br from-pink-200 to-rose-200 rounded-2xl flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+              <div className="relative bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900/20 dark:to-rose-900/20 rounded-3xl p-8 shadow-2xl">
+                <div className="aspect-[4/5] bg-gradient-to-br from-pink-200 to-rose-200 dark:from-pink-800/40 dark:to-rose-800/40 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-white/10 dark:bg-black/10 backdrop-blur-sm"></div>
                   <div className="relative z-10 text-center">
-                    <div className="w-24 h-24 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6">
-                      <Heart className="h-12 w-12 text-pink-600" />
+                    <div className="w-24 h-24 bg-white/30 dark:bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Heart className="h-12 w-12 text-pink-600 dark:text-pink-400" />
                     </div>
-                    <h3 className="text-pink-700 font-bold text-xl mb-2">Beauty at Home</h3>
-                    <p className="text-pink-600">Comfort • Care • Convenience</p>
+                    <h3 className="text-pink-700 dark:text-pink-300 font-bold text-xl mb-2">Beauty at Home</h3>
+                    <p className="text-pink-600 dark:text-pink-400">Comfort • Care • Convenience</p>
                   </div>
                 </div>
               </div>
@@ -226,11 +226,11 @@ const AboutPage = () => {
       {/* Values Section */}
       <section 
         ref={el => sectionRefs.current.values = el}
-        className="py-24 bg-gradient-to-br from-purple-50 to-pink-50"
+        className="py-24 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300"
       >
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className={`text-4xl lg:text-5xl font-bold text-gray-900 mb-6 transition-all duration-1000 ${isVisible.values ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <h2 className={`text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-1000 ${isVisible.values ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               At Glow Services, 
               <span className="block text-pink-500">We Believe</span>
             </h2>
@@ -242,18 +242,18 @@ const AboutPage = () => {
               return (
                 <div
                   key={index}
-                  className={`bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group text-center ${isVisible.values ? `opacity-100 translate-y-0` : 'opacity-0 translate-y-8'}`}
+                  className={`bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group text-center ${isVisible.values ? `opacity-100 translate-y-0` : 'opacity-0 translate-y-8'}`}
                   style={{ animationDelay: `${400 + index * 150}ms` }}
                 >
                   <div className={`w-16 h-16 bg-gradient-to-r ${value.gradient} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`}>
                     <IconComponent className="h-8 w-8 text-white" />
                   </div>
                   
-                  <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-pink-600 transition-colors duration-300">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors duration-300">
                     💖 {value.title}
                   </h3>
                   
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                     {value.description}
                   </p>
                 </div>
@@ -266,15 +266,15 @@ const AboutPage = () => {
       {/* Timeline Section */}
       <section 
         ref={el => sectionRefs.current.timeline = el}
-        className="py-24 bg-white"
+        className="py-24 bg-white dark:bg-gray-900 transition-colors duration-300"
       >
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className={`text-4xl lg:text-5xl font-bold text-gray-900 mb-6 transition-all duration-1000 ${isVisible.timeline ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <h2 className={`text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-1000 ${isVisible.timeline ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               Our Journey
               <span className="block text-pink-500">Since 2021</span>
             </h2>
-            <p className={`text-xl text-gray-600 max-w-3xl mx-auto transition-all duration-1000 delay-200 ${isVisible.timeline ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <p className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto transition-all duration-1000 delay-200 ${isVisible.timeline ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               From a simple idea to Delhi NCR's trusted salon-at-home service
             </p>
           </div>
@@ -300,10 +300,10 @@ const AboutPage = () => {
                     </div>
                     
                     {/* Content */}
-                    <div className={`bg-white rounded-2xl shadow-xl p-8 ml-24 md:ml-0 md:w-5/12 ${isEven ? 'md:mr-auto md:ml-8' : 'md:ml-auto md:mr-8'} border border-gray-100 hover:shadow-2xl transition-shadow duration-300`}>
+                    <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 ml-24 md:ml-0 md:w-5/12 ${isEven ? 'md:mr-auto md:ml-8' : 'md:ml-auto md:mr-8'} border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-shadow duration-300`}>
                       <div className="text-3xl font-bold text-pink-500 mb-2">{milestone.year}</div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-4">{milestone.title}</h3>
-                      <p className="text-gray-600 leading-relaxed text-lg">{milestone.description}</p>
+                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{milestone.title}</h3>
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">{milestone.description}</p>
                     </div>
                   </div>
                 );
@@ -316,15 +316,15 @@ const AboutPage = () => {
       {/* Who We Are Section */}
       <section 
         ref={el => sectionRefs.current.whoWeAre = el}
-        className="py-24 bg-gradient-to-br from-gray-50 to-pink-50"
+        className="py-24 bg-gradient-to-br from-gray-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300"
       >
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className={`text-4xl lg:text-5xl font-bold text-gray-900 mb-8 transition-all duration-1000 ${isVisible.whoWeAre ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <h2 className={`text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-8 transition-all duration-1000 ${isVisible.whoWeAre ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               Who We Are 🌸
             </h2>
             
-            <div className={`space-y-8 text-lg text-gray-600 leading-relaxed transition-all duration-1000 delay-200 ${isVisible.whoWeAre ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`space-y-8 text-lg text-gray-600 dark:text-gray-300 leading-relaxed transition-all duration-1000 delay-200 ${isVisible.whoWeAre ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <p>
                 We are Glow Services, a passionate team dedicated to making beauty simple, safe, and accessible. Our goal is to bring professional salon services right to your doorstep, so you never have to compromise between your busy schedule and self-care.
               </p>
@@ -333,35 +333,35 @@ const AboutPage = () => {
                 Our beauticians are skilled, trained, and committed to providing you with the same experience you'd expect in a premium salon – but with the added comfort of your home. From facials and manicures to full beauty packages, every service is delivered with care, hygiene, and a personal touch.
               </p>
               
-              <p className="text-xl font-semibold text-gray-800">
+              <p className="text-xl font-semibold text-gray-800 dark:text-gray-100">
                 At Glow Services, we don't just provide beauty services – we create moments of relaxation, confidence, and glow for every woman. ✨
               </p>
             </div>
 
             {/* Trust Indicators */}
             <div className={`grid md:grid-cols-3 gap-8 mt-16 transition-all duration-1000 delay-400 ${isVisible.whoWeAre ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Certified Professionals</h3>
-                <p className="text-gray-600">Skilled and trained beauticians</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Certified Professionals</h3>
+                <p className="text-gray-600 dark:text-gray-400">Skilled and trained beauticians</p>
               </div>
               
-              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Premium Products</h3>
-                <p className="text-gray-600">High-quality, safe products</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Premium Products</h3>
+                <p className="text-gray-600 dark:text-gray-400">High-quality, safe products</p>
               </div>
               
-              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <Heart className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Personal Touch</h3>
-                <p className="text-gray-600">Care, hygiene, and attention</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Personal Touch</h3>
+                <p className="text-gray-600 dark:text-gray-400">Care, hygiene, and attention</p>
               </div>
             </div>
           </div>
@@ -371,7 +371,7 @@ const AboutPage = () => {
       {/* CTA Section */}
       <section 
         ref={el => sectionRefs.current.cta = el}
-        className="py-24 bg-gradient-to-r from-pink-500 via-rose-500 to-orange-500 relative overflow-hidden"
+        className="py-24 bg-gradient-to-r from-pink-500 via-rose-500 to-orange-500 dark:from-pink-900 dark:via-rose-900 dark:to-orange-900 relative overflow-hidden transition-colors duration-300"
       >
         <div className="absolute inset-0">
           <div className="absolute top-10 left-10 w-64 h-64 bg-white/10 rounded-full mix-blend-overlay filter blur-xl animate-pulse"></div>
@@ -391,7 +391,7 @@ const AboutPage = () => {
             <div className={`flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 transition-all duration-1000 delay-400 ${isVisible.cta ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <Link
                 to="/services"
-                className="group bg-white hover:bg-gray-50 text-pink-600 font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-2"
+                className="group bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-pink-600 dark:text-pink-400 font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-2"
               >
                 <Calendar className="h-5 w-5" />
                 <span>Book Your Service</span>

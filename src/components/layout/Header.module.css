@@ -168,7 +168,7 @@
 .authSection {
   display: none;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 @media (min-width: 1024px) {
@@ -267,4 +267,49 @@
   font-weight: 500;
   transition: all 0.2s ease;
   box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+}
+
+/* Dark Mode Overrides */
+:global(.dark) .headerScrolled {
+  background-color: rgba(31, 41, 55, 0.95); /* gray-800 */
+}
+
+:global(.dark) .logoText {
+  color: #f3f4f6; /* gray-100 */
+}
+
+:global(.dark) .navLink,
+:global(.dark) .dropdownButton,
+:global(.dark) .loginLink,
+:global(.dark) .cartButton,
+:global(.dark) .mobileMenuButton,
+:global(.dark) .mobileNavLink {
+  color: #e5e7eb; /* gray-200 */
+}
+
+:global(.dark) .navLink:hover,
+:global(.dark) .dropdownButton:hover,
+:global(.dark) .loginLink:hover,
+:global(.dark) .cartButton:hover,
+:global(.dark) .mobileMenuButton:hover,
+:global(.dark) .mobileNavLink:hover {
+  color: #ec4899;
+}
+
+:global(.dark) .dropdownMenu {
+  background-color: #1f2937; /* gray-800 */
+  border-color: #374151; /* gray-700 */
+}
+
+:global(.dark) .mobileMenu {
+  background-color: #1f2937; /* gray-800 */
+  border-color: #374151; /* gray-700 */
+}
+
+:global(.dark) .mobileNavLink:hover {
+  background-color: #374151; /* gray-700 */
+}
+
+:global(.dark) .mobileDivider {
+  border-color: #374151; /* gray-700 */
 }

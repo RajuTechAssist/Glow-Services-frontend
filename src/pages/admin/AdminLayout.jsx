@@ -13,7 +13,7 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex transition-colors duration-200">
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div 
@@ -23,7 +23,7 @@ const AdminLayout = () => {
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-0 ${
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-xl transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <AdminSidebar onClose={() => setSidebarOpen(false)} />
@@ -32,12 +32,12 @@ const AdminLayout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200">
+        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
           <div className="px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               {/* Mobile menu button */}
               <button
-                className="md:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+                className="md:hidden p-2 rounded-md text-gray-400 dark:text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 onClick={() => setSidebarOpen(true)}
               >
                 <Menu className="w-6 h-6" />
@@ -54,7 +54,7 @@ const AdminLayout = () => {
               {/* Right side */}
               <div className="flex items-center space-x-4">
                 {/* Notifications */}
-                <button className="p-2 text-gray-400 hover:text-gray-500 relative">
+                <button className="p-2 text-gray-400 dark:text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 relative">
                   <Bell className="w-6 h-6" />
                   <span className="absolute -top-1 -right-1 w-3 h-3 bg-pink-500 rounded-full"></span>
                 </button>
@@ -66,17 +66,17 @@ const AdminLayout = () => {
                       <User className="w-5 h-5 text-white" />
                     </div>
                     <div className="hidden md:block">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
                         {adminUser?.fullName || adminUser?.username || 'Admin'}
                       </p>
-                      <p className="text-xs text-gray-500">Administrator</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Administrator</p>
                     </div>
                   </div>
 
                   {/* Logout Button */}
                   <button
                     onClick={handleLogout}
-                    className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                    className="p-2 text-gray-400 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
                     title="Logout"
                   >
                     <LogOut className="w-5 h-5" />

@@ -56,7 +56,7 @@ const CallToActionSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className="py-24 bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 relative overflow-hidden"
+      className="py-24 bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 dark:from-pink-900 dark:via-rose-900 dark:to-orange-900 relative overflow-hidden transition-colors duration-300"
     >
       {/* Background Decorative Elements */}
       <div className="absolute inset-0">
@@ -98,7 +98,7 @@ const CallToActionSection = () => {
           <div className={`flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8 mb-20 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <Link
               to="/services"
-              className="group bg-white hover:bg-gray-50 text-pink-600 font-bold px-10 py-5 rounded-full shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 transition-all duration-300 flex items-center space-x-3 text-lg"
+              className="group bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-pink-600 dark:text-pink-400 font-bold px-10 py-5 rounded-full shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 transition-all duration-300 flex items-center space-x-3 text-lg"
             >
               <Calendar className="h-6 w-6" />
               <span>Book A Service</span>

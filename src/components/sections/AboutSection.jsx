@@ -34,35 +34,35 @@ const AboutSection = () => {
   }, []);
 
   const stats = [
-    { number: "5+", label: "Years Experience", color: "text-pink-600" },
-    { number: "50+", label: "Expert Professionals", color: "text-rose-600" },
-    { number: "15", label: "Cities Served", color: "text-orange-600" },
+    { number: "5+", label: "Years Experience", color: "text-pink-600 dark:text-pink-400" },
+    { number: "50+", label: "Expert Professionals", color: "text-rose-600 dark:text-rose-400" },
+    { number: "15", label: "Cities Served", color: "text-orange-600 dark:text-orange-400" },
   ];
 
   return (
     <section
       ref={sectionRef}
-      className="py-24 bg-gradient-to-br from-pink-50 via-rose-50 to-purple-50 relative overflow-hidden"
+      className="py-24 bg-gradient-to-br from-pink-50 via-rose-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden transition-colors duration-300"
     >
       {/* Background Decorative Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-64 h-64 bg-pink-200/30 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-80 h-80 bg-rose-200/30 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-200/20 rounded-full mix-blend-multiply filter blur-2xl"></div>
+        <div className="absolute top-20 left-20 w-64 h-64 bg-pink-200/30 dark:bg-pink-900/10 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-80 h-80 bg-rose-200/30 dark:bg-rose-900/10 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-xl animate-pulse"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-200/20 dark:bg-purple-900/10 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-2xl"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <div
-            className={`inline-flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg mb-6 transition-all duration-1000 ${
+            className={`inline-flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg mb-6 transition-all duration-1000 ${
               isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-8"
             }`}
           >
-            <Heart className="h-5 w-5 text-pink-500" />
-            <span className="text-pink-600 font-medium tracking-wide uppercase text-sm">
+            <Heart className="h-5 w-5 text-pink-500 dark:text-pink-400" />
+            <span className="text-pink-600 dark:text-pink-300 font-medium tracking-wide uppercase text-sm">
               Our Story
             </span>
           </div>
@@ -78,13 +78,13 @@ const AboutSection = () => {
             }`}
           >
             {/* Decorative Circle */}
-            <div className="absolute -top-8 -left-8 w-32 h-32 bg-gradient-to-br from-pink-200 to-rose-300 rounded-full opacity-60"></div>
+            <div className="absolute -top-8 -left-8 w-32 h-32 bg-gradient-to-br from-pink-200 to-rose-300 dark:from-gray-700 dark:to-gray-600 rounded-full opacity-60"></div>
 
             {/* Main Image Container */}
-            <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden">
-              <div className="aspect-[4/5] bg-gradient-to-br from-pink-100 to-rose-100 flex items-center justify-center relative">
+            <div className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden">
+              <div className="aspect-[4/5] bg-gradient-to-br from-pink-100 to-rose-100 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center relative">
                 {/* Placeholder for founder image */}
-                <div className="absolute inset-0 bg-gradient-to-br from-pink-200 to-rose-200">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-200 to-rose-200 dark:from-gray-600 dark:to-gray-500">
                   <img
                     src="/images/team/Raju.jpg" // path to your image
                     alt="Founder Raghuvendra Sahu"
@@ -103,19 +103,19 @@ const AboutSection = () => {
               </div>
 
               {/* Quote Card Overlay */}
-              <div className="absolute bottom-6 left-6 right-6 bg-white rounded-2xl p-6 shadow-xl">
+              <div className="absolute bottom-6 left-6 right-6 bg-white dark:bg-gray-700 rounded-2xl p-6 shadow-xl">
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <Quote className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-gray-900 mb-2">
+                    <div className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
                       Raghuvendra Sahu
                     </div>
-                    <div className="text-sm text-gray-700 mb-1">
+                    <div className="text-sm text-gray-700 dark:text-gray-300 mb-1">
                       Founder & CEO
                     </div>
-                    <p className="text-gray-600 italic leading-relaxed text-sm">
+                    <p className="text-gray-600 dark:text-gray-400 italic leading-relaxed text-sm">
                       "Beauty should be accessible, convenient, and luxurious
                       for everyone."
                     </p>
@@ -135,10 +135,10 @@ const AboutSection = () => {
           >
             {/* Main Heading */}
             <div>
-              <h2 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+              <h2 className="text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
                 Beauty That Comes to You
               </h2>
-              <p className="text-xl text-gray-600 leading-relaxed">
+              <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
                 Founded with a simple belief: everyone deserves access to
                 professional beauty services without compromising their
                 lifestyle. We've revolutionized the beauty industry by bringing
@@ -152,10 +152,10 @@ const AboutSection = () => {
                 <Heart className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
                   Our Mission
                 </h3>
-                <p className="text-gray-600 leading-relaxed text-lg">
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
                   To make professional beauty services accessible, convenient,
                   and luxurious for everyone, anywhere, anytime.
                 </p>
@@ -168,10 +168,10 @@ const AboutSection = () => {
                 <Target className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
                   Our Values
                 </h3>
-                <p className="text-gray-600 leading-relaxed text-lg">
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
                   Excellence, convenience, and authenticity guide everything we
                   do. We believe beauty is personal, and our services reflect
                   that philosophy.
@@ -185,10 +185,10 @@ const AboutSection = () => {
                 <Award className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
                   Our Promise
                 </h3>
-                <p className="text-gray-600 leading-relaxed text-lg">
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
                   Every service, every product, every interaction is designed to
                   make you feel beautiful, confident, and absolutely radiant.
                 </p>
@@ -204,7 +204,7 @@ const AboutSection = () => {
                   >
                     {stat.number}
                   </div>
-                  <div className="text-gray-600 font-medium">{stat.label}</div>
+                  <div className="text-gray-600 dark:text-gray-400 font-medium">{stat.label}</div>
                 </div>
               ))}
             </div>

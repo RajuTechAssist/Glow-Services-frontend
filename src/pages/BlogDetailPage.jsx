@@ -117,10 +117,10 @@ const BlogDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 pt-24 pb-12">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 pt-24 pb-12">
         <div className="flex flex-col items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
-          <span className="ml-4 text-gray-600 mt-4">Loading article...</span>
+          <span className="ml-4 text-gray-600 dark:text-gray-400 mt-4">Loading article...</span>
         </div>
       </div>
     );
@@ -128,11 +128,11 @@ const BlogDetailPage = () => {
 
   if (!blog) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 pt-24 pb-12">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 pt-24 pb-12">
         <div className="text-center max-w-md mx-auto px-4">
           <div className="text-6xl mb-4">😕</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Article not found</h2>
-          <p className="text-gray-600 mb-8">The blog post you are looking for might have been removed or is temporarily unavailable.</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Article not found</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">The blog post you are looking for might have been removed or is temporarily unavailable.</p>
           <Link to="/blog" className="inline-flex items-center text-pink-600 hover:text-pink-700 font-semibold">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Blog
@@ -143,12 +143,12 @@ const BlogDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 pt-24">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 pt-24">
       {/* Back Button */}
       <div className="max-w-4xl mx-auto px-4">
         <Link
           to="/blog"
-          className="inline-flex items-center text-gray-600 hover:text-pink-600 transition-colors mb-6"
+          className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to all blogs
@@ -185,27 +185,27 @@ const BlogDetailPage = () => {
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
             {blog.title}
           </h1>
 
           {/* Excerpt */}
           {blog.excerpt && (
-            <p className="text-xl text-gray-600 mb-6 leading-relaxed italic border-l-4 border-pink-300 pl-4">
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-6 leading-relaxed italic border-l-4 border-pink-300 dark:border-pink-700 pl-4">
               {blog.excerpt}
             </p>
           )}
 
           {/* Meta Information */}
-          <div className="flex flex-wrap items-center gap-6 text-gray-600 text-sm border-b border-gray-200 pb-6">
+          <div className="flex flex-wrap items-center gap-6 text-gray-600 dark:text-gray-400 text-sm border-b border-gray-200 dark:border-gray-700 pb-6">
             {/* Author */}
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
                 {blog.author ? blog.author.charAt(0) : 'A'}
               </div>
               <div>
-                <p className="font-medium text-gray-900">{blog.author}</p>
-                <p className="text-xs text-gray-500">Beauty Expert</p>
+                <p className="font-medium text-gray-900 dark:text-white">{blog.author}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">Beauty Expert</p>
               </div>
             </div>
 
@@ -236,18 +236,18 @@ const BlogDetailPage = () => {
         </header>
 
         {/* Article Body */}
-        <div className="prose prose-lg max-w-none mb-12">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
+        <div className="prose prose-lg max-w-none mb-12 dark:prose-invert">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-8 md:p-12">
             {/* SAFEGUARD: We ensure content is a string, preventing crash on null */}
             <ReactMarkdown
               components={{
-                h1: ({node, ...props}) => <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4" {...props} />,
-                h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4" {...props} />,
-                h3: ({node, ...props}) => <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3" {...props} />,
-                p: ({node, ...props}) => <p className="text-gray-700 leading-relaxed mb-4" {...props} />,
-                ul: ({node, ...props}) => <ul className="list-disc list-inside text-gray-700 mb-4 space-y-2" {...props} />,
+                h1: ({node, ...props}) => <h1 className="text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-4" {...props} />,
+                h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4" {...props} />,
+                h3: ({node, ...props}) => <h3 className="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3" {...props} />,
+                p: ({node, ...props}) => <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4" {...props} />,
+                ul: ({node, ...props}) => <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-4 space-y-2" {...props} />,
                 li: ({node, ...props}) => <li className="ml-4" {...props} />,
-                strong: ({node, ...props}) => <strong className="font-semibold text-gray-900" {...props} />,
+                strong: ({node, ...props}) => <strong className="font-semibold text-gray-900 dark:text-white" {...props} />,
               }}
             >
               {blog.content || ''}
@@ -258,7 +258,7 @@ const BlogDetailPage = () => {
         {/* Tags */}
         {blog.tags && blog.tags.length > 0 && (
           <div className="mb-12">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
               <Tag className="w-5 h-5 text-pink-500 mr-2" />
               Tags
             </h3>
@@ -266,7 +266,7 @@ const BlogDetailPage = () => {
               {blog.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-medium"
+                  className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-full text-sm font-medium"
                 >
                   #{tag}
                 </span>
@@ -276,14 +276,14 @@ const BlogDetailPage = () => {
         )}
 
         {/* Social Share & Like - Bottom */}
-        <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200">
+        <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
           <button
             onClick={handleLike}
             disabled={liked}
             className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-all shadow-sm ${
               liked
                 ? 'bg-pink-500 text-white'
-                : 'bg-white text-gray-700 hover:bg-pink-50 border border-gray-200'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-pink-50 dark:hover:bg-pink-900/20 border border-gray-200 dark:border-gray-600'
             }`}
           >
             <Heart className={`w-5 h-5 ${liked ? 'fill-current' : ''}`} />
@@ -294,25 +294,25 @@ const BlogDetailPage = () => {
           <div className="relative">
             <button
               onClick={() => setShowShareMenu(!showShareMenu)}
-              className="flex items-center space-x-2 px-6 py-3 bg-white text-gray-700 hover:bg-purple-50 border border-gray-200 rounded-full transition-all shadow-sm"
+              className="flex items-center space-x-2 px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 border border-gray-200 dark:border-gray-600 rounded-full transition-all shadow-sm"
             >
               <Share2 className="w-5 h-5" />
               <span className="font-medium">Share</span>
             </button>
 
             {showShareMenu && (
-              <div className="absolute bottom-full right-0 mb-2 bg-white rounded-xl shadow-xl border border-gray-200 p-2 z-10 min-w-[200px]">
-                <button onClick={() => shareOnSocial('facebook')} className="w-full flex items-center p-3 hover:bg-gray-50 rounded-lg text-left">
+              <div className="absolute bottom-full right-0 mb-2 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-2 z-10 min-w-[200px]">
+                <button onClick={() => shareOnSocial('facebook')} className="w-full flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-left text-gray-700 dark:text-gray-300">
                   <Facebook className="w-4 h-4 text-blue-600 mr-3" /> Facebook
                 </button>
-                <button onClick={() => shareOnSocial('twitter')} className="w-full flex items-center p-3 hover:bg-gray-50 rounded-lg text-left">
+                <button onClick={() => shareOnSocial('twitter')} className="w-full flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-left text-gray-700 dark:text-gray-300">
                   <Twitter className="w-4 h-4 text-sky-500 mr-3" /> Twitter
                 </button>
-                <button onClick={() => shareOnSocial('linkedin')} className="w-full flex items-center p-3 hover:bg-gray-50 rounded-lg text-left">
+                <button onClick={() => shareOnSocial('linkedin')} className="w-full flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-left text-gray-700 dark:text-gray-300">
                   <Linkedin className="w-4 h-4 text-blue-700 mr-3" /> LinkedIn
                 </button>
-                <button onClick={copyLink} className="w-full flex items-center p-3 hover:bg-gray-50 rounded-lg text-left border-t border-gray-100 mt-1">
-                  <Link2 className="w-4 h-4 text-gray-600 mr-3" /> Copy Link
+                <button onClick={copyLink} className="w-full flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-left border-t border-gray-100 dark:border-gray-600 mt-1 text-gray-700 dark:text-gray-300">
+                  <Link2 className="w-4 h-4 text-gray-600 dark:text-gray-400 mr-3" /> Copy Link
                 </button>
               </div>
             )}

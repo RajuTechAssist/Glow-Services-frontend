@@ -110,14 +110,14 @@ const BlogsPage = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+      <div className="flex items-center justify-center min-h-screen dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 dark:border-pink-400"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
       {/* Header */}
       <div className="bg-gradient-to-r from-pink-500 to-rose-600 text-white py-16">
         <div className="container mx-auto px-4">
@@ -141,19 +141,19 @@ const BlogsPage = () => {
         <div className="mb-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="relative">
-              <Search className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-3 top-3 text-gray-400 dark:text-gray-500 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search blogs..."
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
+                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className="flex items-center gap-2">
-              <Filter className="text-gray-600 w-5 h-5" />
+              <Filter className="text-gray-600 dark:text-gray-400 w-5 h-5" />
               <select
-                className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
+                className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
@@ -170,11 +170,11 @@ const BlogsPage = () => {
         {/* Blog Grid */}
         {filteredBlogs.length === 0 ? (
           <div className="text-center py-12">
-            <Sparkles className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">
+            <Sparkles className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
               No blogs found
             </h3>
-            <p className="text-gray-500">
+            <p className="text-gray-500 dark:text-gray-400">
               Try adjusting your search or filters
             </p>
           </div>
@@ -184,9 +184,9 @@ const BlogsPage = () => {
               <Link
                 key={blog.id}
                 to={`/blog/${blog.slug}`}
-                className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300"
+                className="group bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300"
               >
-                <div className="relative overflow-hidden h-56 bg-gray-200">
+                <div className="relative overflow-hidden h-56 bg-gray-200 dark:bg-gray-700">
                   <img
                     src={blog.featuredImage || "/api/placeholder/400/300"}
                     alt={blog.title}
@@ -201,16 +201,16 @@ const BlogsPage = () => {
 
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs font-semibold text-pink-600 bg-pink-50 px-3 py-1 rounded-full">
+                    <span className="text-xs font-semibold text-pink-600 dark:text-pink-300 bg-pink-50 dark:bg-pink-900/30 px-3 py-1 rounded-full">
                       {blog.category}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-pink-600 transition-colors">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">
                     {blog.title}
                   </h3>
 
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3">
                     {blog.excerpt}
                   </p>
 
@@ -221,7 +221,7 @@ const BlogsPage = () => {
                     </span>
                   </div> */}
 
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4 pb-4 border-b">
+                  <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4 pb-4 border-b dark:border-gray-700">
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
                         <Eye className="w-4 h-4" />
@@ -236,12 +236,12 @@ const BlogsPage = () => {
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-600">
+                      <User className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
                         {blog.author}
                       </span>
                     </div>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
                       {new Date(blog.publishDate).toLocaleDateString()}
                     </span>
                   </div>

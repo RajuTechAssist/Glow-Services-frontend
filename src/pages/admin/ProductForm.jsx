@@ -248,53 +248,53 @@ const ProductForm = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900/20 p-6">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
-          <span className="ml-4 text-gray-600">Loading product...</span>
+          <span className="ml-4 text-gray-600 dark:text-gray-400">Loading product...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900/20 p-6 transition-colors duration-200">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center space-x-4">
           <button
             onClick={() => navigate('/admin/products')}
-            className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+            className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="flex items-center">
             <span className="text-2xl mr-2">📦</span>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 dark:from-pink-400 dark:to-purple-400 bg-clip-text text-transparent">
               {isEdit ? 'Edit Product' : 'Create New Product'}
             </h1>
           </div>
         </div>
-        <p className="text-gray-600 mt-2 ml-12">
+        <p className="text-gray-600 dark:text-gray-400 mt-2 ml-12">
           {isEdit ? 'Update product information' : 'Add a new beauty product'}
         </p>
       </div>
 
       {/* Form */}
       <div className="max-w-4xl">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-200">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Basic Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Product Name *
                 </label>
                 <input
                   type="text"
                   value={form.name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 placeholder-gray-400 dark:placeholder-gray-500"
                   placeholder="Enter product name..."
                   required
                   disabled={saving}
@@ -302,14 +302,14 @@ const ProductForm = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Product Slug *
                 </label>
                 <input
                   type="text"
                   value={form.slug}
                   onChange={(e) => handleChange('slug', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 placeholder-gray-400 dark:placeholder-gray-500"
                   placeholder="product-slug"
                   required
                   disabled={saving || isEdit}

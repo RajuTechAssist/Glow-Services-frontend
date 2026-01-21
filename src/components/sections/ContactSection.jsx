@@ -188,16 +188,16 @@ const ContactSection = () => {
 
   if (isSubmitted) {
     return (
-      <section className="py-24 bg-gradient-to-br from-green-50 to-emerald-50 relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 relative overflow-hidden">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-2xl mx-auto">
             <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
               <CheckCircle className="h-10 w-10 text-white" />
             </div>
-            <h2 className="text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
               Thank You! 🎉
             </h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
               We've received your message and will get back to you within 2 hours. 
               Our team is excited to help you with your beauty needs!
             </p>
@@ -218,34 +218,34 @@ const ContactSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className="py-24 bg-gradient-to-br from-gray-50 to-slate-100 relative overflow-hidden"
+      className="py-24 bg-gradient-to-br from-gray-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden"
     >
       {/* Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-64 h-64 bg-blue-200/30 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-80 h-80 bg-purple-200/30 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-200/20 rounded-full mix-blend-multiply filter blur-2xl"></div>
+        <div className="absolute top-20 left-20 w-64 h-64 bg-blue-200/30 dark:bg-blue-900/10 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-80 h-80 bg-purple-200/30 dark:bg-purple-900/10 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-200/20 dark:bg-pink-900/10 rounded-full mix-blend-multiply filter blur-2xl"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className={`inline-flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg border border-gray-200 mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <MessageSquare className="h-5 w-5 text-gray-600" />
-            <span className="text-gray-700 font-medium tracking-wide uppercase text-sm">
+          <div className={`inline-flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg border border-gray-200 dark:border-gray-700 mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <MessageSquare className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+            <span className="text-gray-700 dark:text-gray-300 font-medium tracking-wide uppercase text-sm">
               Get in Touch
             </span>
           </div>
 
-          <h2 className={`text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6 transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <h2 className={`text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6 transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             Ready to Start Your
-            <span className="block bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 dark:from-gray-100 dark:via-gray-200 dark:to-gray-300 bg-clip-text text-transparent">
               Beauty Journey?
             </span>
           </h2>
 
-          <p className={`text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <p className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             Have questions about our services? Ready to book your first appointment? 
             Our friendly team is here to help you achieve your beauty goals.
           </p>
@@ -255,19 +255,19 @@ const ContactSection = () => {
           
           {/* Contact Form - 2/3 width */}
           <div className={`lg:col-span-2 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
-            <div className="bg-white rounded-3xl shadow-2xl p-10 border border-gray-100">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-10 border border-gray-100 dark:border-gray-700">
               <div className="flex items-center space-x-3 mb-8">
-                <div className="w-12 h-12 bg-gradient-to-r from-gray-700 to-gray-900 rounded-2xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-600 dark:to-gray-800 rounded-2xl flex items-center justify-center">
                   <Send className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900">Send us a Message</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Send us a Message</h3>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Name */}
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Full Name *
                     </label>
                     <div className="relative">
@@ -281,16 +281,16 @@ const ContactSection = () => {
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="Enter your full name"
-                        className={`block w-full pl-12 pr-4 py-4 text-gray-900 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
+                        className={`block w-full pl-12 pr-4 py-4 text-gray-900 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${errors.name ? 'border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-800' : 'border-gray-200'}`}
                         disabled={isLoading}
                       />
                     </div>
-                    {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+                    {errors.name && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.name}</p>}
                   </div>
 
                   {/* Email */}
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Email Address *
                     </label>
                     <div className="relative">
@@ -304,18 +304,18 @@ const ContactSection = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="Enter your email"
-                        className={`block w-full pl-12 pr-4 py-4 text-gray-900 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
+                        className={`block w-full pl-12 pr-4 py-4 text-gray-900 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${errors.email ? 'border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-800' : 'border-gray-200'}`}
                         disabled={isLoading}
                       />
                     </div>
-                    {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+                    {errors.email && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.email}</p>}
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Phone */}
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Phone Number *
                     </label>
                     <div className="relative">
@@ -329,16 +329,16 @@ const ContactSection = () => {
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="Enter your phone number"
-                        className={`block w-full pl-12 pr-4 py-4 text-gray-900 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
+                        className={`block w-full pl-12 pr-4 py-4 text-gray-900 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${errors.phone ? 'border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-800' : 'border-gray-200'}`}
                         disabled={isLoading}
                       />
                     </div>
-                    {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
+                    {errors.phone && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.phone}</p>}
                   </div>
 
                   {/* Service Type */}
                   <div>
-                    <label htmlFor="serviceType" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="serviceType" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Inquiry Type
                     </label>
                     <div className="relative">
@@ -350,7 +350,7 @@ const ContactSection = () => {
                         name="serviceType"
                         value={formData.serviceType}
                         onChange={handleInputChange}
-                        className="block w-full pl-12 pr-4 py-4 text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300"
+                        className="block w-full pl-12 pr-4 py-4 text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                         disabled={isLoading}
                       >
                         <option value="">Select inquiry type</option>
@@ -364,7 +364,7 @@ const ContactSection = () => {
 
                 {/* Subject */}
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Subject *
                   </label>
                   <input
@@ -374,15 +374,15 @@ const ContactSection = () => {
                     value={formData.subject}
                     onChange={handleInputChange}
                     placeholder="Brief subject of your message"
-                    className={`block w-full px-4 py-4 text-gray-900 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${errors.subject ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
+                    className={`block w-full px-4 py-4 text-gray-900 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${errors.subject ? 'border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-800' : 'border-gray-200'}`}
                     disabled={isLoading}
                   />
-                  {errors.subject && <p className="mt-1 text-sm text-red-600">{errors.subject}</p>}
+                  {errors.subject && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.subject}</p>}
                 </div>
 
                 {/* Message */}
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Message *
                   </label>
                   <textarea
@@ -392,10 +392,10 @@ const ContactSection = () => {
                     value={formData.message}
                     onChange={handleInputChange}
                     placeholder="Tell us more about your requirements..."
-                    className={`block w-full px-4 py-4 text-gray-900 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 resize-none ${errors.message ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
+                    className={`block w-full px-4 py-4 text-gray-900 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 resize-none dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${errors.message ? 'border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-800' : 'border-gray-200'}`}
                     disabled={isLoading}
                   />
-                  {errors.message && <p className="mt-1 text-sm text-red-600">{errors.message}</p>}
+                  {errors.message && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.message}</p>}
                 </div>
 
                 {/* Submit Button */}
@@ -414,7 +414,7 @@ const ContactSection = () => {
                       </>
                     )}
                   </button>
-                  {errors.submit && <p className="mt-2 text-sm text-red-600 text-center">{errors.submit}</p>}
+                  {errors.submit && <p className="mt-2 text-sm text-red-600 dark:text-red-400 text-center">{errors.submit}</p>}
                 </div>
               </form>
             </div>
@@ -424,8 +424,8 @@ const ContactSection = () => {
           <div className={`lg:col-span-1 space-y-8 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
             
             {/* Contact Methods */}
-            <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Contact Information</h3>
               <div className="space-y-6">
                 {contactInfo.map((info, index) => {
                   const IconComponent = info.icon;
@@ -433,15 +433,15 @@ const ContactSection = () => {
                     <div key={index} className="group">
                       <a 
                         href={info.action.startsWith('/') ? info.action : info.action}
-                        className="flex items-start space-x-4 p-4 rounded-2xl hover:bg-gray-50 transition-all duration-300 group-hover:-translate-y-1"
+                        className="flex items-start space-x-4 p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 group-hover:-translate-y-1"
                       >
                         <div className={`w-12 h-12 bg-gradient-to-r ${info.gradient} rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
                           <IconComponent className="h-6 w-6 text-white" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-1">{info.title}</h4>
-                          <p className="text-gray-800 font-medium">{info.info}</p>
-                          <p className="text-gray-500 text-sm">{info.subInfo}</p>
+                          <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{info.title}</h4>
+                          <p className="text-gray-800 dark:text-gray-300 font-medium">{info.info}</p>
+                          <p className="text-gray-500 dark:text-gray-400 text-sm">{info.subInfo}</p>
                         </div>
                       </a>
                     </div>
@@ -451,35 +451,35 @@ const ContactSection = () => {
             </div>
 
             {/* Business Hours */}
-            <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center">
                   <Clock className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">Business Hours</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Business Hours</h3>
               </div>
               <div className="space-y-4">
                 {businessHours.map((schedule, index) => (
                   <div key={index} className="flex justify-between items-center py-2">
-                    <span className="text-gray-700 font-medium">{schedule.day}</span>
-                    <span className="text-gray-900 font-semibold">{schedule.hours}</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{schedule.day}</span>
+                    <span className="text-gray-900 dark:text-gray-200 font-semibold">{schedule.hours}</span>
                   </div>
                 ))}
               </div>
-              <div className="mt-6 p-4 bg-emerald-50 rounded-2xl">
-                <p className="text-emerald-700 text-sm font-medium text-center">
+              <div className="mt-6 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl">
+                <p className="text-emerald-700 dark:text-emerald-400 text-sm font-medium text-center">
                   ✨ Emergency services available 24/7 for existing clients
                 </p>
               </div>
             </div>
 
             {/* Social Media */}
-            <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center">
                   <Sparkles className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">Follow Us</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Follow Us</h3>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 {socialLinks.map((social, index) => {
