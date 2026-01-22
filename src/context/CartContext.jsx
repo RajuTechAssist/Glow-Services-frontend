@@ -53,24 +53,33 @@ const initialState = {
   isOpen: false
 };
 
-export const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
-
-  // Save cart to localStorage
-  useEffect(() => {
-    localStorage.setItem('glowServicesCart', JSON.stringify(state.items));
-  }, [state.items]);
-
-  // Load cart from localStorage on mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem('glowServicesCart');
-    if (savedCart) {
-      const items = JSON.parse(savedCart);
-      items.forEach(item => {
-        dispatch({ type: 'ADD_TO_CART', payload: item });
-      });
+const loadInitialCart = () => {
+  if (typeof window === 'undefined') return initialState;
+  try {
+    const saved = localStorage.getItem('glowServicesCart');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        return { ...initialState, items: parsed };
+      }
     }
-  }, []);
+  } catch (_) {
+    // ignore corrupted storage and start fresh
+  }
+  return initialState;
+};
+
+export const CartProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(cartReducer, initialState, loadInitialCart);
+
+  // Persist cart to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('glowServicesCart', JSON.stringify(state.items));
+    } catch (_) {
+      // storage might be unavailable; fail silently
+    }
+  }, [state.items]);
 
   const addToCart = (service, quantity = 1) => {
     const cartItem = {
