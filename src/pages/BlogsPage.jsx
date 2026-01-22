@@ -68,7 +68,7 @@ const BlogsPage = () => {
   const listBlogs = featuredBlog ? filteredBlogs.filter(b => b._id !== featuredBlog._id) : filteredBlogs;
 
   return (
-    <div className="min-h-screen bg-pink-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-pink-50 dark:bg-gray-900 transition-colors duration-300 pt-24">
         <div className="container mx-auto px-4 py-8">
             {/* Hero Section */}
             <HeroSection post={featuredBlog} isLoading={loading} />

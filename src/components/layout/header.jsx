@@ -8,11 +8,13 @@ import CartDropdown from '../../components/CartDropdown';
 import { useCustomerAuth } from '../../context/CustomerAuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import ProductsApi from '../../services/ProductsApiService';
+import BookingChoiceModal from '../BookingChoiceModal';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null); // For desktop hover/click
+  const [isBookingChoiceOpen, setIsBookingChoiceOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
   
   // NEW: State for mobile accordion menus
@@ -250,12 +252,18 @@ const Header = () => {
                   <button onClick={() => navigate('/customer/register')} className={styles.loginLink}>Register</button>
                 </>
               )}
-              <Link to="/book" className={styles.bookButton}>Book Now</Link>
-              
-              {/* Theme Toggle Button */}
-              <button
+              <button 
+                onClick={() => setIsBookingChoiceOpen(true)} 
+                className={styles.bookButton}
+              >
+                Book Now
+              </button>
+            </div>
+
+             {/* Theme Toggle Button */}
+             <button
                 onClick={toggleTheme}
-                className="ml-4 p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
                 aria-label="Toggle dark mode"
                 title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
               >
@@ -265,7 +273,6 @@ const Header = () => {
                   <Moon className="h-5 w-5 text-gray-700" />
                 )}
               </button>
-            </div>
 
             {/* Mobile Menu Button */}
             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={styles.mobileMenuButton}>
@@ -401,13 +408,12 @@ const Header = () => {
                   </div>
                 )}
                 
-                <Link 
-                  to="/book" 
+                <button 
+                  onClick={() => { setIsBookingChoiceOpen(true); setIsMobileMenuOpen(false); }}
                   className="block w-full py-3 text-center text-white font-bold bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-95"
-                  onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Book Appointment Now
-                </Link>
+                </button>
 
                 {/* Mobile Theme Toggle */}
                 <button
@@ -433,6 +439,7 @@ const Header = () => {
           </div>
         )}
       </div>
+      <BookingChoiceModal isOpen={isBookingChoiceOpen} onClose={() => setIsBookingChoiceOpen(false)} />
     </header>
   );
 };
