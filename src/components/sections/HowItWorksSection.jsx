@@ -13,10 +13,12 @@ import {
   ArrowRight,
   Play
 } from 'lucide-react';
+import BookingChoiceModal from '../BookingChoiceModal';
 
 const HowItWorksSection = () => {
   const [activeTab, setActiveTab] = useState('services');
   const [isVisible, setIsVisible] = useState(false);
+  const [isBookingChoiceOpen, setIsBookingChoiceOpen] = useState(false);
   const sectionRef = useRef(null);
 
   // Intersection Observer for animations
@@ -254,9 +256,12 @@ const HowItWorksSection = () => {
             and luxury of our premium beauty services.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <button className="group bg-white dark:bg-gray-800 text-pink-600 dark:text-pink-400 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-2">
+            <button 
+              onClick={() => setIsBookingChoiceOpen(true)}
+              className="group bg-white dark:bg-gray-800 text-pink-600 dark:text-pink-400 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-2"
+            >
               <span>
-                {activeTab === 'services' ? 'Book a Service' : 'Shop Products'}
+                {activeTab === 'services' ? 'Book now' : 'Shop Products'}
               </span>
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
@@ -268,6 +273,8 @@ const HowItWorksSection = () => {
           </div>
         </div>
       </div>
+      <BookingChoiceModal isOpen={isBookingChoiceOpen} onClose={() => setIsBookingChoiceOpen(false)} />
+
     </section>
   );
 };

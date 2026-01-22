@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Home, 
   Clock, 
@@ -11,9 +12,11 @@ import {
   Star,
   Zap
 } from 'lucide-react';
+import BookingChoiceModal from '../BookingChoiceModal';
 
 const WhyChooseSection = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isBookingChoiceOpen, setIsBookingChoiceOpen] = useState(false);
   const sectionRef = useRef(null);
 
   // Intersection Observer for animations
@@ -175,18 +178,26 @@ const WhyChooseSection = () => {
             Ready to experience the Glow difference?
           </h3>
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <button className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-2">
-              <span>Book Your Service Now</span>
+            <button 
+              onClick={() => setIsBookingChoiceOpen(true)}
+              className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-2"
+            >
+              <span>Book Now</span>
               <CheckCircle className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
             </button>
             
-            <button className="bg-white dark:bg-gray-800 border-2 border-pink-200 dark:border-pink-700 text-pink-600 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-700 hover:border-pink-300 dark:hover:border-pink-500 px-8 py-4 rounded-full font-semibold transition-all duration-300 flex items-center space-x-2">
+            <Link 
+              to="/about"
+              className="bg-white dark:bg-gray-800 border-2 border-pink-200 dark:border-pink-700 text-pink-600 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-700 hover:border-pink-300 dark:hover:border-pink-500 px-8 py-4 rounded-full font-semibold transition-all duration-300 flex items-center space-x-2"
+            >
               <span>Learn More</span>
               <Sparkles className="h-5 w-5" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
+      <BookingChoiceModal isOpen={isBookingChoiceOpen} onClose={() => setIsBookingChoiceOpen(false)} />
+
 
       {/* Custom CSS for blob animation */}
       <style jsx>{`
