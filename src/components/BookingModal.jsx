@@ -18,7 +18,7 @@ const NCR_CITIES = [
   "Sonipat", "Panipat", "Meerut", "Rohtak", "Gautam Buddha Nagar" // Add other NCR cities here
 ];
 
-const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
+const BookingModal = ({ isOpen, onClose, service, quantity = 1, onSuccess }) => {
   const { customerUser, isCustomerLoggedIn } = useCustomerAuth();
 
   const [bookingData, setBookingData] = useState({
@@ -151,6 +151,7 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1 }) => {
 
       if (response.ok) {
         alert(`🎉 Booking Confirmed! \nWe sent the details to ${bookingData.email}`);
+        if (onSuccess) onSuccess();
         onClose();
       } else {
         alert(`Booking Failed: ${data.error || 'Unknown error'}`);

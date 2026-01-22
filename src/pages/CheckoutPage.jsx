@@ -176,6 +176,11 @@ const CheckoutPage = () => {
           onClose={() => setShowBookingModal(false)}
           service={selectedService}
           quantity={selectedService.quantity}
+          onSuccess={() => {
+            clearCart();
+            setShowBookingModal(false);
+            navigate('/customer/orders');
+          }}
         />
       )}
     </div>
