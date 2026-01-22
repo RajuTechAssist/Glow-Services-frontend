@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import { AdminAuthProvider } from "./context/AdminAuthContext";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
@@ -71,6 +72,7 @@ import WhatsAppButton from "./components/WhatsAppButton";
 
 import BlogsPage from "./pages/BlogsPage";
 import BlogDetailPage from "./pages/BlogDetailPage";
+import { initAnalytics, trackPageView } from "./utils/analytics";
 
 // Home Page Component
 const Home = () => (
@@ -118,6 +120,25 @@ const Contact = () => (
   </div>
 );
 
+const AnalyticsListener = () => {
+  const location = useLocation();
+  useEffect(() => {
+    const gaId = import.meta.env.VITE_GA_ID;
+    if (gaId) {
+      initAnalytics(gaId);
+    }
+  }, []);
+
+  useEffect(() => {
+    const gaId = import.meta.env.VITE_GA_ID;
+    if (gaId) {
+      trackPageView(gaId, `${location.pathname}${location.search}`);
+    }
+  }, [location]);
+
+  return null;
+};
+
 function App() {
   return (
     <ThemeProvider>
@@ -125,6 +146,7 @@ function App() {
         <CustomerAuthProvider>
           <CartProvider>
             <Router>
+              <AnalyticsListener />
               <div className="App">
               <main>
                 <KeepAlive />
