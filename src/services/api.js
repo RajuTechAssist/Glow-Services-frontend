@@ -3,16 +3,32 @@ import config from '../config';
 const API_BASE_URL = config.API_BASE_URL;
 
 class ApiService {
+  getHeaders(isMultipart = false) {
+    const headers = {
+      'Accept': 'application/json',
+    };
+    
+    // Only set Content-Type if NOT multipart (FormData handles its own Content-Type)
+    if (!isMultipart) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    // Add Authorization header if token exists
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return headers;
+  }
+
   async get(endpoint) {
     try {
       console.log(`🔥 Making GET request to: ${API_BASE_URL}${endpoint}`);
       
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
+        headers: this.getHeaders(),
         mode: 'cors',
       });
       
@@ -50,10 +66,7 @@ class ApiService {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'PUT', // ✅ Use PUT here
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
+        headers: this.getHeaders(),
         mode: 'cors',
         body: JSON.stringify(data),
       });
@@ -73,10 +86,7 @@ class ApiService {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
+        headers: this.getHeaders(),
         mode: 'cors',
         body: JSON.stringify(data),
       });
@@ -130,8 +140,7 @@ class ApiService {
 
       const response = await fetch(`${API_BASE_URL}/upload`, {
         method: 'POST',
-        // Note: Do NOT set Content-Type header for FormData, 
-        // the browser sets it automatically with the boundary
+        headers: this.getHeaders(true),
         body: formData,
       });
 
@@ -155,6 +164,10 @@ class ApiService {
   async getPublishedBlogs() {
     // Fetch only published blogs for the public view
     return this.get('/blogs/published');
+  }
+
+  async subscribeToNewsletter(email) {
+    return this.post('/newsletter/subscribe', { email });
   }
 }
 

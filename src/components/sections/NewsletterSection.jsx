@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import config from '../../config';
 import { 
   Mail,
   Gift,
@@ -37,6 +39,17 @@ const NewsletterSection = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Auto revert subscription message after 5 seconds
+  useEffect(() => {
+    let timer;
+    if (isSubscribed) {
+      timer = setTimeout(() => {
+        setIsSubscribed(false);
+      }, 5000);
+    }
+    return () => clearTimeout(timer);
+  }, [isSubscribed]);
+
   // Email validation
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -61,16 +74,13 @@ const NewsletterSection = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual newsletter API call
-      // await subscribeToNewsletter(email);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await axios.post(`${config.API_BASE_URL}/newsletter/subscribe`, { email });
       
       setIsSubscribed(true);
       setEmail('');
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      console.error(err);
+      setError(err.response?.data?.message || 'Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }

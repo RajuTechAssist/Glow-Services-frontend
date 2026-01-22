@@ -285,20 +285,20 @@ const BlogForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+      <div className="bg-white dark:bg-slate-800 shadow-sm border-b border-gray-200 dark:border-slate-700 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => navigate("/admin/blogs")}
-              className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+              className="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div className="flex items-center">
               <Sparkles className="w-6 h-6 text-pink-600 mr-2" />
-              <h1 className="text-xl font-bold text-gray-900">
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
                 {isEditMode ? "Edit Blog Post" : "Create New Blog Post"}
               </h1>
             </div>
@@ -308,7 +308,7 @@ const BlogForm = () => {
             <button
               onClick={() => handleSave("DRAFT")}
               disabled={loading}
-              className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 font-medium disabled:opacity-50"
+              className="px-4 py-2 text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-slate-700 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 font-medium disabled:opacity-50"
             >
               Save Draft
             </button>
@@ -334,8 +334,8 @@ const BlogForm = () => {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-6">
               {/* Basic Information */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 p-6">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                   <Star className="w-5 h-5 text-pink-600 mr-2" />
                   Basic Information
                 </h2>
@@ -343,7 +343,7 @@ const BlogForm = () => {
                 <div className="space-y-4">
                   {/* Title */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Blog Title *
                     </label>
                     <input
@@ -351,7 +351,7 @@ const BlogForm = () => {
                       name="title"
                       value={formData.title}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       placeholder="Enter an engaging title for your beauty blog post..."
                       required
                     />
@@ -359,7 +359,7 @@ const BlogForm = () => {
 
                   {/* Excerpt */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Excerpt *
                     </label>
                     <textarea
@@ -367,11 +367,11 @@ const BlogForm = () => {
                       value={formData.excerpt}
                       onChange={handleInputChange}
                       rows="3"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       placeholder="Write a compelling excerpt that summarizes your blog post..."
                       required
                     />
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                       This will appear in blog listings and search results
                       (150-160 characters recommended)
                     </p>
@@ -379,7 +379,7 @@ const BlogForm = () => {
 
                   {/* Author */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Author *
                     </label>
                     <input
@@ -387,7 +387,7 @@ const BlogForm = () => {
                       name="author"
                       value={formData.author}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       placeholder="Author name..."
                       required
                     />
@@ -396,9 +396,9 @@ const BlogForm = () => {
               </div>
 
               {/* Content Editor */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
                     <TrendingUp className="w-5 h-5 text-pink-600 mr-2" />
                     Blog Content
                   </h2>
@@ -423,14 +423,14 @@ const BlogForm = () => {
                   </button>
                 </div>
 
-                <div className="border border-gray-200 rounded-lg overflow-hidden">
+                <div className="border border-gray-200 dark:border-slate-700 rounded-lg overflow-hidden">
                   {/* Content Area */}
                   <textarea
                     name="content"
                     value={formData.content}
                     onChange={handleInputChange}
                     rows="20"
-                    className="w-full px-4 py-4 border-0 focus:ring-0 resize-none"
+                    className="w-full px-4 py-4 border-0 focus:ring-0 resize-none dark:bg-slate-700 dark:text-white dark:placeholder-gray-400"
                     placeholder="Write your beauty blog content here... 
 
 # Use Markdown for formatting
@@ -443,7 +443,7 @@ Share your beauty expertise, tips, and insights!"
                   />
                 </div>
 
-                <div className="mt-3 text-sm text-gray-500">
+                <div className="mt-3 text-sm text-gray-500 dark:text-gray-400">
                   <p>
                     💡 <strong>Beauty Blog Tips:</strong>
                   </p>
@@ -460,8 +460,8 @@ Share your beauty expertise, tips, and insights!"
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Publish Settings */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                   <Calendar className="w-5 h-5 text-pink-600 mr-2" />
                   Publish Settings
                 </h3>
@@ -469,14 +469,14 @@ Share your beauty expertise, tips, and insights!"
                 <div className="space-y-4">
                   {/* Status */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Status
                     </label>
                     <select
                       name="status"
                       value={formData.status}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                     >
                       <option value="DRAFT">Draft</option>
                       <option value="PUBLISHED">Published</option>
@@ -487,14 +487,14 @@ Share your beauty expertise, tips, and insights!"
 
                   {/* Category */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Category *
                     </label>
                     <select
                       name="category"
                       value={formData.category}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       required
                     >
                       <option value="">Select Category</option>

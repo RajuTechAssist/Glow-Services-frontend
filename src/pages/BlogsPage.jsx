@@ -65,7 +65,16 @@ const BlogsPage = () => {
   });
 
   const featuredBlog = blogs.find((b) => b.featured) || blogs[0];
-  const listBlogs = featuredBlog ? filteredBlogs.filter(b => b._id !== featuredBlog._id) : filteredBlogs;
+  // Fix: Handle both 'id' (SQL) and '_id' (Mongo) to prevent filtering all posts if properties mismatch
+  const listBlogs = featuredBlog 
+    ? filteredBlogs.filter(b => {
+        const bId = b.id || b._id;
+        const fId = featuredBlog.id || featuredBlog._id;
+        // Compare loosely or check for existence
+        if (!bId || !fId) return true; // Keep if IDs are missing to be safe (or false? usually unique IDs exist)
+        return bId !== fId;
+    }) 
+    : filteredBlogs;
 
   return (
     <div className="min-h-screen bg-pink-50 dark:bg-gray-900 transition-colors duration-300 pt-24">

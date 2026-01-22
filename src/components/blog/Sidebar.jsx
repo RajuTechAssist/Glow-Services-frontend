@@ -1,8 +1,37 @@
-import React from 'react';
-import { Search, Mail } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Mail, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ApiService from '../../services/api';
 
 const Sidebar = ({ searchTerm, setSearchTerm, categories, selectedCategory, setSelectedCategory, popularPosts }) => {
+    const [email, setEmail] = useState('');
+    const [status, setStatus] = useState('idle'); // idle, loading, success, error
+    const [message, setMessage] = useState('');
+
+    const handleSubscribe = async (e) => {
+        e.preventDefault();
+        if (!email) return;
+
+        setStatus('loading');
+        setMessage('');
+
+        try {
+            await ApiService.subscribeToNewsletter(email);
+            setStatus('success');
+            setMessage('Thanks for joining!');
+            setEmail('');
+            // Reset success message after 5 seconds
+            setTimeout(() => {
+                setStatus('idle');
+                setMessage('');
+            }, 5000);
+        } catch (error) {
+            console.error(error);
+            setStatus('error');
+            setMessage('Failed to subscribe. Try again.');
+        }
+    };
+
     return (
         <aside className="space-y-8">
             {/* Search Widget */}
@@ -29,16 +58,46 @@ const Sidebar = ({ searchTerm, setSearchTerm, categories, selectedCategory, setS
                     </div>
                     <h3 className="font-bold text-xl mb-2 text-gray-900 dark:text-white">Join the Glow Club</h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Get weekly beauty tips and exclusive offers delivered to your inbox.</p>
-                    <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-                        <input 
-                            type="email" 
-                            placeholder="Your email address" 
-                            className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg py-2.5 px-4 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none dark:text-white"
-                        />
-                        <button type="submit" className="w-full bg-pink-500 text-white py-2.5 rounded-lg font-medium hover:bg-pink-600 transition-colors shadow-lg shadow-pink-500/30">
-                            Subscribe Now
-                        </button>
-                    </form>
+                    
+                    {status === 'success' ? (
+                        <div className="bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 p-4 rounded-xl flex flex-col items-center animate-fade-in">
+                            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white mb-2 shadow-sm">
+                                <Check className="w-5 h-5" />
+                            </div>
+                            <p className="font-medium">You're on the list!</p>
+                            <p className="text-xs opacity-80 mt-1">Check your inbox for a welcome gift.</p>
+                        </div>
+                    ) : (
+                        <form className="space-y-3" onSubmit={handleSubscribe}>
+                            <input 
+                                type="email" 
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Your email address" 
+                                required
+                                disabled={status === 'loading'}
+                                className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg py-2.5 px-4 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none dark:text-white disabled:opacity-60"
+                            />
+                            <button 
+                                type="submit" 
+                                disabled={status === 'loading'}
+                                className="w-full bg-pink-500 text-white py-2.5 rounded-lg font-medium hover:bg-pink-600 transition-colors shadow-lg shadow-pink-500/30 disabled:opacity-70 flex justify-center items-center gap-2"
+                            >
+                                {status === 'loading' ? (
+                                    <>
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        Subscribing...
+                                    </>
+                                ) : 'Subscribe Now'}
+                            </button>
+                            {status === 'error' && (
+                                <p className="text-red-500 text-xs flex items-center justify-center gap-1 mt-2">
+                                    <AlertCircle className="w-3 h-3" />
+                                    {message}
+                                </p>
+                            )}
+                        </form>
+                    )}
                 </div>
             </div>
 
