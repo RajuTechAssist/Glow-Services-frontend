@@ -1,27 +1,68 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { User, Mail, Phone, MapPin, Calendar, Camera, Save, Edit3 } from 'lucide-react';
 import { useCustomerAuth } from '../../context/CustomerAuthContext';
+import config from '../../config';
 
 const CustomerProfile = () => {
   const { customerUser } = useCustomerAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [form, setForm] = useState({
-    fullName: customerUser?.fullName || 'Priya Sharma',
-    email: customerUser?.email || 'priya.sharma@email.com',
-    phone: customerUser?.phone || '+91 9876543210',
-    dateOfBirth: '1995-06-15',
+    fullName: '',
+    email: '',
+    phone: '',
+    dateOfBirth: '',
     gender: 'female',
-    address: '123 Park Street, Mumbai',
-    city: 'Mumbai',
-    state: 'Maharashtra',
-    pincode: '400001',
+    address: '',
+    city: '',
+    state: '',
+    pincode: '',
     preferences: {
       skinType: 'combination',
-      allergies: 'None',
+      allergies: '',
       preferredTime: 'afternoon',
-      specialInstructions: 'Please use organic products only'
+      specialInstructions: ''
     }
   });
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!customerUser?.id) {
+        setLoading(false);
+        return;
+      }
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`${config.API_BASE_URL}/customers/${customerUser.id}/profile`);
+        if (!res.ok) throw new Error('Unable to load profile');
+        const data = await res.json();
+        setForm(prev => ({
+          ...prev,
+          ...data,
+          fullName: data.fullName || '',
+          email: data.email || '',
+          phone: data.phone || '',
+          dateOfBirth: data.dateOfBirth || '',
+          gender: data.gender || 'female',
+          address: data.address || '',
+          city: data.city || '',
+          state: data.state || '',
+          pincode: data.pincode || '',
+          preferences: prev.preferences
+        }));
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [customerUser]);
 
   const handleChange = (field, value) => {
     if (field.includes('.')) {
@@ -36,16 +77,75 @@ const CustomerProfile = () => {
   };
 
   const handleSave = async () => {
-    // TODO: API call to update profile
-    console.log('Saving profile:', form);
-    setIsEditing(false);
-    alert('Profile updated successfully!');
+    if (!customerUser?.id) return;
+    setSaving(true);
+    setError(null);
+    setSuccess(null);
+    const payload = {
+      fullName: form.fullName,
+      email: form.email,
+      phone: form.phone,
+      dateOfBirth: form.dateOfBirth,
+      gender: form.gender,
+      address: form.address,
+      city: form.city,
+      state: form.state,
+      pincode: form.pincode,
+      specialInstructions: form.preferences.specialInstructions
+    };
+
+    try {
+      const res = await fetch(`${config.API_BASE_URL}/customers/${customerUser.id}/profile`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('Unable to update profile');
+      const data = await res.json();
+      setForm(prev => ({
+        ...prev,
+        ...data,
+        preferences: prev.preferences
+      }));
+      setIsEditing(false);
+      setSuccess('Profile updated successfully.');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (!customerUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <p className="text-gray-700 dark:text-gray-200">Please sign in to view your profile.</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <p className="text-gray-700 dark:text-gray-200">Loading your profile...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 transition-colors duration-200">
       <div className="container mx-auto px-4 max-w-4xl">
-        
+        {error && (
+          <div className="mb-4 rounded-lg bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200 p-4">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="mb-4 rounded-lg bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200 p-4">
+            {success}
+          </div>
+        )}
+
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -68,7 +168,7 @@ const CustomerProfile = () => {
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center transition-colors duration-200">
               <div className="relative mb-6">
                 <div className="w-32 h-32 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center mx-auto text-white text-4xl font-bold">
-                  {form.fullName.charAt(0)}
+                  {form.fullName?.charAt(0) || '?'}
                 </div>
                 {isEditing && (
                   <button className="absolute bottom-0 right-0 w-10 h-10 bg-pink-500 text-white rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors duration-200">
@@ -300,10 +400,11 @@ const CustomerProfile = () => {
                 </button>
                 <button
                   onClick={handleSave}
-                  className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg hover:from-pink-600 hover:to-purple-600 transition-all duration-200"
+                  disabled={saving}
+                  className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg hover:from-pink-600 hover:to-purple-600 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <Save className="h-5 w-5" />
-                  <span>Save Changes</span>
+                  <span>{saving ? 'Saving...' : 'Save Changes'}</span>
                 </button>
               </div>
             )}

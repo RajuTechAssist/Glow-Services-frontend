@@ -15,54 +15,77 @@ import {
   Award
 } from 'lucide-react';
 import { useCustomerAuth } from '../../context/CustomerAuthContext';
+import config from '../../config';
 
 const CustomerDashboard = () => {
   const { customerUser } = useCustomerAuth();
   const [dashboardData, setDashboardData] = useState({
-    upcomingBookings: [
-      {
-        id: 1,
-        service: 'Facial Treatment',
-        date: '2025-09-10',
-        time: '2:00 PM',
-        staff: 'Priya Sharma',
-        status: 'confirmed'
-      },
-      {
-        id: 2,
-        service: 'Professional Manicure',
-        date: '2025-09-15',
-        time: '11:00 AM',
-        staff: 'Anjali Verma',
-        status: 'confirmed'
-      }
-    ],
-    recentOrders: [
-      {
-        id: 'ORD-001',
-        date: '2025-09-01',
-        items: ['Facial Treatment', 'Hair Styling'],
-        total: 1800,
-        status: 'completed'
-      },
-      {
-        id: 'ORD-002',
-        date: '2025-08-28',
-        items: ['Professional Manicure'],
-        total: 500,
-        status: 'completed'
-      }
-    ],
-    loyaltyPoints: 1250,
-    totalSpent: 8450,
-    servicesCompleted: 12,
-    favoriteServices: ['Facial Treatment', 'Professional Manicure', 'Hair Styling']
+    upcomingBookings: [],
+    recentOrders: [],
+    loyaltyPoints: 0,
+    tier: 'Basic',
+    totalSpent: 0,
+    servicesCompleted: 0,
+    favoriteServices: [],
+    memberSince: null
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      if (!customerUser?.id) return;
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`${config.API_BASE_URL}/customers/${customerUser.id}/dashboard`);
+        if (!res.ok) throw new Error('Unable to load dashboard');
+        const data = await res.json();
+        setDashboardData({
+          upcomingBookings: data.upcomingBookings || [],
+          recentOrders: data.recentOrders || [],
+          loyaltyPoints: data.loyaltyPoints || 0,
+          tier: data.tier || 'Basic',
+          totalSpent: data.totalSpent || 0,
+          servicesCompleted: data.servicesCompleted || 0,
+          favoriteServices: (data.favoriteServices || []).filter(Boolean),
+          memberSince: data.memberSince || null
+        });
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+  }, [customerUser]);
+
+  if (!customerUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <p className="text-gray-700 dark:text-gray-200">Please sign in to view your dashboard.</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <p className="text-gray-700 dark:text-gray-200">Loading your dashboard...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 transition-colors duration-200">
       <div className="container mx-auto px-4">
-        
+        {error && (
+          <div className="mb-4 rounded-lg bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200 p-4">
+            {error}
+          </div>
+        )}
+
         {/* Welcome Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -126,14 +149,14 @@ const CustomerDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Member Since</p>
-                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">Jan 2024</p>
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{dashboardData.memberSince ? new Date(dashboardData.memberSince).toLocaleDateString() : '—'}</p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
                 <Award className="h-6 w-6 text-white" />
               </div>
             </div>
             <div className="mt-4">
-              <span className="text-purple-600 dark:text-purple-400 text-sm font-medium">Loyal Customer</span>
+              <span className="text-purple-600 dark:text-purple-400 text-sm font-medium">{dashboardData.tier} Member</span>
             </div>
           </div>
         </div>
@@ -157,6 +180,9 @@ const CustomerDashboard = () => {
               </div>
               
               <div className="space-y-4">
+                {dashboardData.upcomingBookings.length === 0 && (
+                  <div className="text-gray-600 dark:text-gray-400 text-sm">No upcoming appointments yet. Book your first service to get started.</div>
+                )}
                 {dashboardData.upcomingBookings.map((booking) => (
                   <div key={booking.id} className="border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-pink-300 dark:hover:border-pink-500 transition-colors duration-200">
                     <div className="flex items-center justify-between">
@@ -204,16 +230,19 @@ const CustomerDashboard = () => {
               </div>
               
               <div className="space-y-4">
+                {dashboardData.recentOrders.length === 0 && (
+                  <div className="text-gray-600 dark:text-gray-400 text-sm">No orders yet. Once you book a service, it will show up here.</div>
+                )}
                 {dashboardData.recentOrders.map((order) => (
                   <div key={order.id} className="border border-gray-200 dark:border-gray-700 rounded-xl p-4 transition-colors duration-200">
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="font-semibold text-gray-900 dark:text-white">Order #{order.id}</h4>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{order.items.join(', ')}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{new Date(order.date).toLocaleDateString()}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{(order.items || []).join(', ')}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{order.date ? new Date(order.date).toLocaleDateString() : '—'}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-gray-900 dark:text-white">₹{order.total}</p>
+                        <p className="font-bold text-gray-900 dark:text-white">₹{Number(order.total || 0).toLocaleString()}</p>
                         <span className="px-2 py-1 bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300 rounded-full text-xs transition-colors duration-200">
                           {order.status}
                         </span>
@@ -280,6 +309,9 @@ const CustomerDashboard = () => {
                 Your Favorites
               </h3>
               <div className="space-y-3">
+                {dashboardData.favoriteServices.length === 0 && (
+                  <div className="text-gray-600 dark:text-gray-400 text-sm">No favorites yet. Book services to see your favorites here.</div>
+                )}
                 {dashboardData.favoriteServices.map((service, index) => (
                   <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg transition-colors duration-200">
                     <span className="font-medium text-gray-900 dark:text-white">{service}</span>

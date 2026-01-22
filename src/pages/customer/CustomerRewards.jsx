@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Gift, Star, Award, CheckCircle } from 'lucide-react';
 import { useCustomerAuth } from '../../context/CustomerAuthContext';
+import config from '../../config';
 
 const CustomerRewards = () => {
   const { customerUser } = useCustomerAuth();
   const [rewardsData, setRewardsData] = useState({
-    points: 1250,
-    tier: 'Gold',
-    nextTierPoints: 2000,
-    redemptions: [
-      { id: 1, name: '₹100 Off', cost: 500, redeemed: false },
-      { id: 2, name: 'Free Manicure', cost: 800, redeemed: false },
-      { id: 3, name: 'Exclusive Gift Kit', cost: 1500, redeemed: true }
-    ],
-    history: [
-      { id: 3, reward: 'Exclusive Gift Kit', date: '2025-08-10' }
-    ]
+    points: 0,
+    tier: 'Basic',
+    nextTierPoints: 0,
+    redemptions: [],
+    history: []
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleRedeem = (reward) => {
     if (rewardsData.points < reward.cost) return;
@@ -30,10 +27,60 @@ const CustomerRewards = () => {
     }));
   };
 
+  useEffect(() => {
+    const fetchRewards = async () => {
+      if (!customerUser?.id) {
+        setLoading(false);
+        return;
+      }
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`${config.API_BASE_URL}/customers/${customerUser.id}/rewards`);
+        if (!res.ok) throw new Error('Unable to load rewards');
+        const data = await res.json();
+        setRewardsData({
+          points: data.points || 0,
+          tier: data.tier || 'Basic',
+          nextTierPoints: data.nextTierPoints || 0,
+          redemptions: data.redemptions || [],
+          history: data.history || []
+        });
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRewards();
+  }, [customerUser]);
+
+  if (!customerUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <p className="text-gray-700 dark:text-gray-200">Please sign in to view rewards.</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <p className="text-gray-700 dark:text-gray-200">Loading rewards...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 transition-colors duration-200">
       <div className="container mx-auto px-4 max-w-3xl space-y-8">
-        
+        {error && (
+          <div className="rounded-lg bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200 p-4">
+            {error}
+          </div>
+        )}
+
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Your Rewards</h1>
