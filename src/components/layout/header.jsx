@@ -9,6 +9,7 @@ import { useCustomerAuth } from '../../context/CustomerAuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import ProductsApi from '../../services/ProductsApiService';
 import BookingChoiceModal from '../BookingChoiceModal';
+import LotusIcon from '../icons/LotusIcon';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -145,7 +146,9 @@ const Header = () => {
           
           {/* Logo */}
           <Link to="/" className={styles.logo}>
-            <div className={styles.logoIcon}>G</div>
+            <div className={styles.logoIcon}>
+              <LotusIcon size={44} />
+            </div>
             <span className={styles.logoText}>Glow Services</span>
           </Link>
 

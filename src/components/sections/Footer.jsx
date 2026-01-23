@@ -19,6 +19,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import LotusIcon from '../icons/LotusIcon';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
@@ -176,8 +177,8 @@ const Footer = () => {
             <div className="lg:col-span-2">
               {/* Logo */}
               <Link to="/" className="flex items-center mb-6 group">
-                <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-white font-bold text-xl">G</span>
+                <div className="w-12 h-12 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <LotusIcon size={48} />
                 </div>
                 <span className="ml-3 text-2xl font-bold text-gray-900 dark:text-white">Glow Services</span>
               </Link>
