@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense, lazy } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -27,51 +27,46 @@ import BlogSection from "./components/sections/BlogSection";
 import ContactSection from "./components/sections/ContactSection";
 import Footer from "./components/sections/Footer";
 import { CartProvider } from "./context/CartContext";
-import CheckoutPage from "./pages/CheckoutPage";
 
-// Admin components
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminLayout from "./pages/admin/AdminLayout";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import ServicesAdminPage from "./pages/admin/ServicesAdminPage";
-import ServiceForm from "./pages/admin/ServiceForm";
-import ProductsAdminPage from "./pages/admin/ProductsAdminPage";
-import ProductForm from "./pages/admin/ProductForm";
-import CustomersAdminPage from "./pages/admin/CustomersAdminPage";
-import CustomerForm from "./pages/admin/CustomerForm";
-import CategoriesAdminPage from "./pages/admin/CategoriesAdminPage";
-import CategoryForm from "./pages/admin/CategoryForm";
-import BlogsAdminPage from "./pages/admin/BlogsAdminPage";
-import BlogForm from "./pages/admin/BlogForm";
-import BookingsAdminPage from './pages/admin/BookingsAdminPage';
+// Lazy-loaded routes (deferred)
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const ServicesAdminPage = lazy(() => import("./pages/admin/ServicesAdminPage"));
+const ServiceForm = lazy(() => import("./pages/admin/ServiceForm"));
+const ProductsAdminPage = lazy(() => import("./pages/admin/ProductsAdminPage"));
+const ProductForm = lazy(() => import("./pages/admin/ProductForm"));
+const CustomersAdminPage = lazy(() => import("./pages/admin/CustomersAdminPage"));
+const CustomerForm = lazy(() => import("./pages/admin/CustomerForm"));
+const CategoriesAdminPage = lazy(() => import("./pages/admin/CategoriesAdminPage"));
+const CategoryForm = lazy(() => import("./pages/admin/CategoryForm"));
+const BlogsAdminPage = lazy(() => import("./pages/admin/BlogsAdminPage"));
+const BlogForm = lazy(() => import("./pages/admin/BlogForm"));
+const BookingsAdminPage = lazy(() => import('./pages/admin/BookingsAdminPage'));
 
-// Customer components
-import CustomerLogin from "./pages/customer/CustomerLogin";
-import CustomerRegister from "./pages/customer/CustomerRegister";
-import CustomerLayout from "./pages/customer/CustomerLayout";
-import CustomerDashboard from "./pages/customer/CustomerDashboard";
-import CustomerProfile from "./pages/customer/CustomerProfile";
-import CustomerOrders from "./pages/customer/CustomerOrders";
-import CustomerRewards from "./pages/customer/CustomerRewards";
-import CustomerHistory from "./pages/customer/CustomerHistory";
+const CustomerLogin = lazy(() => import("./pages/customer/CustomerLogin"));
+const CustomerRegister = lazy(() => import("./pages/customer/CustomerRegister"));
+const CustomerLayout = lazy(() => import("./pages/customer/CustomerLayout"));
+const CustomerDashboard = lazy(() => import("./pages/customer/CustomerDashboard"));
+const CustomerProfile = lazy(() => import("./pages/customer/CustomerProfile"));
+const CustomerOrders = lazy(() => import("./pages/customer/CustomerOrders"));
+const CustomerRewards = lazy(() => import("./pages/customer/CustomerRewards"));
+const CustomerHistory = lazy(() => import("./pages/customer/CustomerHistory"));
 
-// Import the new About Page
-import AboutPage from "./pages/AboutPage";
-// Services
-import ServicesPage from "./pages/ServicesPage";
-import ServiceDetailPage from "./pages/ServiceDetailPage";
-
-// NEW: Products
-import ProductsPage from "./pages/ProductsPage";
-import ProductDetailPage from "./pages/ProductDetailPage";
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const ServicesPage = lazy(() => import("./pages/ServicesPage"));
+const ServiceDetailPage = lazy(() => import("./pages/ServiceDetailPage"));
+const ProductsPage = lazy(() => import("./pages/ProductsPage"));
+const ProductDetailPage = lazy(() => import("./pages/ProductDetailPage"));
+const BlogsPage = lazy(() => import("./pages/BlogsPage"));
+const BlogDetailPage = lazy(() => import("./pages/BlogDetailPage"));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
 
 // KeepAlive Component to ping backend
 import KeepAlive from "./components/KeepAlive";
 
 import WhatsAppButton from "./components/WhatsAppButton";
 
-import BlogsPage from "./pages/BlogsPage";
-import BlogDetailPage from "./pages/BlogDetailPage";
 import { initAnalytics, trackPageView } from "./utils/analytics";
 import StructuredData from "./components/Seo/StructuredData";
 
@@ -194,216 +189,213 @@ function App() {
                 <KeepAlive />
 
                 <WhatsAppButton />
-
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
-                        <Header />
-                        <HeroSection />
-                        <WhyChooseSection />
-                        <HowItWorksSection />
-                        <ServicesSection />
-                        <ProductsSection />
-                        <AboutSection />
-                        <TestimonialsSection />
-                        <CallToActionSection />
-                        <NewsletterSection />
-                        <BlogSection />
-                        <ContactSection />
-                        <Footer />
-                        {/* We'll add more sections here */}
-                      </div>
-                    }
-                  />
-                  <Route
-                    path="/about"
-                    element={
-                      <div className="min-h-screen bg-white">
-                        <Header />
-                        <AboutPage />
-                        <Footer />
-                      </div>
-                    }
-                  />
-                  <Route
-                    path="/services"
-                    element={
-                      <div className="min-h-screen bg-white">
-                        <Header />
-                        <ServicesPage />
-                        <Footer />
-                      </div>
-                    }
-                  />
-                  <Route
-                    path="/services/:slug"
-                    element={
-                      <div className="min-h-screen bg-white">
-                        <Header />
-                        <ServiceDetailPage />
-                        <Footer />
-                      </div>
-                    }
-                  />
-                  {/* ===== NEW: PRODUCTS ROUTES ===== */}
-                  <Route
-                    path="/products"
-                    element={
-                      <div className="min-h-screen bg-white">
-                        <Header />
-                        <ProductsPage />
-                        <Footer />
-                      </div>
-                    }
-                  />
-
-                  <Route
-                    path="/products/:slug"
-                    element={
-                      <div className="min-h-screen bg-white">
-                        <Header />
-                        <ProductDetailPage />
-                        <Footer />
-                      </div>
-                    }
-                  />
-
-                  <Route
-                    path="/blog"
-                    element={
-                      <div className="min-h-screen bg-white">
-                        <Header />
-                        <BlogsPage /> {/* Points to the full page you edited */}
-                        <Footer />
-                      </div>
-                    }
-                  />
-
-                  <Route
-                    path="/blog/:slug"
-                    element={
-                      <div className="min-h-screen bg-white">
-                        <Header />
-                        <BlogDetailPage />
-                        <Footer />
-                      </div>
-                    }
-                  />
-
-                  <Route
-                    path="/contact"
-                    element={
-                      <div className="min-h-screen bg-white">
-                        <Header />
-                        <ContactSection />
-                        <Footer />
-                      </div>
-                    }
-                  />
-                  <Route
-                    path="/checkout"
-                    element={
-                      <div className="min-h-screen bg-white">
-                        <Header />
-                        <CheckoutPage />
-                        <Footer />
-                      </div>
-                    }
-                  />
-
-                  {/* Admin Login (Public) */}
-                  <Route path="/admin/login" element={<AdminLogin />} />
-
-                  {/* Protected Admin Routes */}
-                  <Route
-                    path="/admin"
-                    element={
-                      <ProtectedAdminRoute>
-                        <AdminLayout />
-                      </ProtectedAdminRoute>
-                    }
-                  >
-                    {/* Nested Admin Routes - These will render in <Outlet /> */}
+                <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+                  <Routes>
                     <Route
-                      index
-                      element={<Navigate to="dashboard" replace />}
-                    />
-                    <Route path="dashboard" element={<AdminDashboard />} />
-
-                    {/* Services */}
-                    <Route path="services" element={<ServicesAdminPage />} />
-                    <Route path="services/create" element={<ServiceForm />} />
-                    <Route path="services/edit/:id" element={<ServiceForm />} />
-
-                    {/* Products */}
-                    <Route path="products" element={<ProductsAdminPage />} />
-                    <Route path="products/create" element={<ProductForm />} />
-                    <Route path="products/edit/:id" element={<ProductForm />} />
-
-                    {/* Customers */}
-                    <Route path="customers" element={<CustomersAdminPage />} />
-                    <Route path="customers/create" element={<CustomerForm />} />
-                    <Route
-                      path="customers/edit/:id"
-                      element={<CustomerForm />}
-                    />
-
-                    {/* Categories */}
-                    <Route
-                      path="categories"
-                      element={<CategoriesAdminPage />}
+                      path="/"
+                      element={
+                        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+                          <Header />
+                          <HeroSection />
+                          <WhyChooseSection />
+                          <HowItWorksSection />
+                          <ServicesSection />
+                          <ProductsSection />
+                          <AboutSection />
+                          <TestimonialsSection />
+                          <CallToActionSection />
+                          <NewsletterSection />
+                          <BlogSection />
+                          <ContactSection />
+                          <Footer />
+                          {/* We'll add more sections here */}
+                        </div>
+                      }
                     />
                     <Route
-                      path="categories/create"
-                      element={<CategoryForm />}
+                      path="/about"
+                      element={
+                        <div className="min-h-screen bg-white">
+                          <Header />
+                          <AboutPage />
+                          <Footer />
+                        </div>
+                      }
                     />
                     <Route
-                      path="categories/edit/:id"
-                      element={<CategoryForm />}
+                      path="/services"
+                      element={
+                        <div className="min-h-screen bg-white">
+                          <Header />
+                          <ServicesPage />
+                          <Footer />
+                        </div>
+                      }
                     />
-
-                    {/* ✅ NEW: Blog Management */}
-                    <Route path="blogs" element={<BlogsAdminPage />} />
-                    <Route path="blogs/create" element={<BlogForm />} />
-                    <Route path="blogs/edit/:id" element={<BlogForm />} />
-
-                    <Route path="/admin/bookings" element={<BookingsAdminPage />} />
-                  </Route>
-                    
-                    
-
-
-                  {/* CUSTOMER AUTH ROUTES - Public */}
-                  <Route path="/customer/login" element={<CustomerLogin />} />
-                  <Route
-                    path="/customer/register"
-                    element={<CustomerRegister />}
-                  />
-                  {/* PROTECTED CUSTOMER ROUTES */}
-                  <Route
-                    path="/customer"
-                    element={
-                      <ProtectedCustomerRoute>
-                        <CustomerLayout />
-                      </ProtectedCustomerRoute>
-                    }
-                  >
                     <Route
-                      index
-                      element={<Navigate to="/customer/dashboard" replace />}
+                      path="/services/:slug"
+                      element={
+                        <div className="min-h-screen bg-white">
+                          <Header />
+                          <ServiceDetailPage />
+                          <Footer />
+                        </div>
+                      }
                     />
-                    <Route path="dashboard" element={<CustomerDashboard />} />
-                    <Route path="profile" element={<CustomerProfile />} />
-                    <Route path="orders" element={<CustomerOrders />} />
-                    <Route path="rewards" element={<CustomerRewards />} />
-                    <Route path="history" element={<CustomerHistory />} />
-                  </Route>
+                    {/* ===== PRODUCTS ROUTES ===== */}
+                    <Route
+                      path="/products"
+                      element={
+                        <div className="min-h-screen bg-white">
+                          <Header />
+                          <ProductsPage />
+                          <Footer />
+                        </div>
+                      }
+                    />
 
-                  {/* Redirect any unknown routes to home */}
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
+                    <Route
+                      path="/products/:slug"
+                      element={
+                        <div className="min-h-screen bg-white">
+                          <Header />
+                          <ProductDetailPage />
+                          <Footer />
+                        </div>
+                      }
+                    />
+
+                    <Route
+                      path="/blog"
+                      element={
+                        <div className="min-h-screen bg-white">
+                          <Header />
+                          <BlogsPage />
+                          <Footer />
+                        </div>
+                      }
+                    />
+
+                    <Route
+                      path="/blog/:slug"
+                      element={
+                        <div className="min-h-screen bg-white">
+                          <Header />
+                          <BlogDetailPage />
+                          <Footer />
+                        </div>
+                      }
+                    />
+
+                    <Route
+                      path="/contact"
+                      element={
+                        <div className="min-h-screen bg-white">
+                          <Header />
+                          <ContactSection />
+                          <Footer />
+                        </div>
+                      }
+                    />
+                    <Route
+                      path="/checkout"
+                      element={
+                        <div className="min-h-screen bg-white">
+                          <Header />
+                          <CheckoutPage />
+                          <Footer />
+                        </div>
+                      }
+                    />
+
+                    {/* Admin Login (Public) */}
+                    <Route path="/admin/login" element={<AdminLogin />} />
+
+                    {/* Protected Admin Routes */}
+                    <Route
+                      path="/admin"
+                      element={
+                        <ProtectedAdminRoute>
+                          <AdminLayout />
+                        </ProtectedAdminRoute>
+                      }
+                    >
+                      <Route
+                        index
+                        element={<Navigate to="dashboard" replace />}
+                      />
+                      <Route path="dashboard" element={<AdminDashboard />} />
+
+                      {/* Services */}
+                      <Route path="services" element={<ServicesAdminPage />} />
+                      <Route path="services/create" element={<ServiceForm />} />
+                      <Route path="services/edit/:id" element={<ServiceForm />} />
+
+                      {/* Products */}
+                      <Route path="products" element={<ProductsAdminPage />} />
+                      <Route path="products/create" element={<ProductForm />} />
+                      <Route path="products/edit/:id" element={<ProductForm />} />
+
+                      {/* Customers */}
+                      <Route path="customers" element={<CustomersAdminPage />} />
+                      <Route path="customers/create" element={<CustomerForm />} />
+                      <Route
+                        path="customers/edit/:id"
+                        element={<CustomerForm />}
+                      />
+
+                      {/* Categories */}
+                      <Route
+                        path="categories"
+                        element={<CategoriesAdminPage />}
+                      />
+                      <Route
+                        path="categories/create"
+                        element={<CategoryForm />}
+                      />
+                      <Route
+                        path="categories/edit/:id"
+                        element={<CategoryForm />}
+                      />
+
+                      {/* Blog Management */}
+                      <Route path="blogs" element={<BlogsAdminPage />} />
+                      <Route path="blogs/create" element={<BlogForm />} />
+                      <Route path="blogs/edit/:id" element={<BlogForm />} />
+
+                      <Route path="/admin/bookings" element={<BookingsAdminPage />} />
+                    </Route>
+
+                    {/* CUSTOMER AUTH ROUTES - Public */}
+                    <Route path="/customer/login" element={<CustomerLogin />} />
+                    <Route
+                      path="/customer/register"
+                      element={<CustomerRegister />}
+                    />
+                    {/* PROTECTED CUSTOMER ROUTES */}
+                    <Route
+                      path="/customer"
+                      element={
+                        <ProtectedCustomerRoute>
+                          <CustomerLayout />
+                        </ProtectedCustomerRoute>
+                      }
+                    >
+                      <Route
+                        index
+                        element={<Navigate to="/customer/dashboard" replace />}
+                      />
+                      <Route path="dashboard" element={<CustomerDashboard />} />
+                      <Route path="profile" element={<CustomerProfile />} />
+                      <Route path="orders" element={<CustomerOrders />} />
+                      <Route path="rewards" element={<CustomerRewards />} />
+                      <Route path="history" element={<CustomerHistory />} />
+                    </Route>
+
+                    {/* Redirect any unknown routes to home */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </Suspense>
               </main>
             </div>
           </Router>
