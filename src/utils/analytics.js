@@ -27,3 +27,8 @@ export const trackPageView = (id, path) => {
     page_path: path,
   });
 };
+
+export const trackEvent = (id, name, params = {}) => {
+  if (!id || typeof window === 'undefined' || !window.gtag) return;
+  window.gtag('event', name, params);
+};

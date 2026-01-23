@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Plus, Minus, Trash2, Calendar } from 'lucide-react';
 import BookingModal from '../components/BookingModal';
+import { trackEvent } from '../utils/analytics';
 
 const CheckoutPage = () => {
   const { items, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
   const [selectedService, setSelectedService] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (items.length > 0) {
+      const gaId = import.meta.env.VITE_GA_ID;
+      trackEvent(gaId, 'checkout_view', {
+        items: items.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price })),
+        value: getTotalPrice(),
+        currency: 'INR'
+      });
+    }
+  }, [items, getTotalPrice]);
 
   if (items.length === 0) {
     return (
@@ -30,6 +42,12 @@ const CheckoutPage = () => {
 
   const handleBookService = (service) => {
     const serviceWithQuantity = items.find(item => item.id === service.id);
+    const gaId = import.meta.env.VITE_GA_ID;
+    trackEvent(gaId, 'booking_started', {
+      service_id: service.id,
+      service_name: service.name,
+      quantity: serviceWithQuantity?.quantity || 1
+    });
     setSelectedService({ ...service, quantity: serviceWithQuantity.quantity });
     setShowBookingModal(true);
   };

@@ -8,6 +8,7 @@ import 'react-calendar/dist/Calendar.css';
 import { format } from 'date-fns';
 import config from '../config';
 import { useCustomerAuth } from '../context/CustomerAuthContext';
+import { trackEvent } from '../utils/analytics';
 
 // ✅ NEW: Import Location Library
 import { State, City } from 'country-state-city';
@@ -55,6 +56,17 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1, onSuccess }) => 
     const indiaStates = State.getStatesOfCountry('IN');
     setStates(indiaStates);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      const gaId = import.meta.env.VITE_GA_ID;
+      trackEvent(gaId, 'booking_started', {
+        service_id: service?.id,
+        service_name: service?.name,
+        quantity
+      });
+    }
+  }, [isOpen, service, quantity]);
 
   // 2. Auto-fill user details if logged in
   useEffect(() => {
@@ -151,6 +163,14 @@ const BookingModal = ({ isOpen, onClose, service, quantity = 1, onSuccess }) => 
 
       if (response.ok) {
         alert(`🎉 Booking Confirmed! \nWe sent the details to ${bookingData.email}`);
+        const gaId = import.meta.env.VITE_GA_ID;
+        trackEvent(gaId, 'booking_submitted', {
+          service_id: service?.id,
+          service_name: service?.name,
+          quantity,
+          value: totalPrice,
+          currency: 'INR'
+        });
         if (onSuccess) onSuccess();
         onClose();
       } else {

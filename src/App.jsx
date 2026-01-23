@@ -73,6 +73,7 @@ import WhatsAppButton from "./components/WhatsAppButton";
 import BlogsPage from "./pages/BlogsPage";
 import BlogDetailPage from "./pages/BlogDetailPage";
 import { initAnalytics, trackPageView } from "./utils/analytics";
+import StructuredData from "./components/Seo/StructuredData";
 
 // Home Page Component
 const Home = () => (
@@ -140,12 +141,53 @@ const AnalyticsListener = () => {
 };
 
 function App() {
+  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://glow-service.studio';
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Glow Services",
+      "url": siteUrl,
+      "logo": `${siteUrl}/logo.png`,
+      "sameAs": []
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": siteUrl,
+      "name": "Glow Services",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${siteUrl}/search?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Glow Services",
+      "url": siteUrl,
+      "image": `${siteUrl}/logo.png`,
+      "priceRange": "₹₹",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IN"
+      },
+      "areaServed": "IN",
+      "makesOffer": {
+        "@type": "Offer",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+  ];
+
   return (
     <ThemeProvider>
       <AdminAuthProvider>
         <CustomerAuthProvider>
           <CartProvider>
             <Router>
+              <StructuredData data={structuredData} />
               <AnalyticsListener />
               <div className="App">
               <main>
