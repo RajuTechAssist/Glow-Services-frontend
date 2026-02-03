@@ -18,6 +18,7 @@ const CartDropdown = ({ isOpen, onClose }) => {
         </h3>
         <button
           onClick={onClose}
+          aria-label="Close cart"
           className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors duration-200"
         >
           <X className="h-4 w-4 text-gray-500 dark:text-gray-400" />
@@ -55,6 +56,7 @@ const CartDropdown = ({ isOpen, onClose }) => {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    aria-label={`Decrease quantity of ${item.name}`}
                     className="w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-600 border border-gray-200 dark:border-gray-500 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-500 text-gray-600 dark:text-gray-200"
                   >
                     <Minus className="h-3 w-3" />
@@ -62,6 +64,7 @@ const CartDropdown = ({ isOpen, onClose }) => {
                   <span className="w-8 text-center text-sm font-medium text-gray-900 dark:text-white">{item.quantity}</span>
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    aria-label={`Increase quantity of ${item.name}`}
                     className="w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-600 border border-gray-200 dark:border-gray-500 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-500 text-gray-600 dark:text-gray-200"
                   >
                     <Plus className="h-3 w-3" />
@@ -70,6 +73,7 @@ const CartDropdown = ({ isOpen, onClose }) => {
                 
                 <button
                   onClick={() => removeFromCart(item.id)}
+                  aria-label={`Remove ${item.name} from cart`}
                   className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200"
                 >
                   <Trash2 className="h-4 w-4" />
